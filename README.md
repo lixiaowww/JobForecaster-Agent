@@ -153,14 +153,14 @@ See **[docs/DEPLOY.md](docs/DEPLOY.md)** for setup (Pages, `GROQ_API_KEY` secret
 
 ### Interactive dashboard (Hugging Face Spaces)
 
-Deploy the Streamlit UI (Job Radar, accuracy tabs) on HF free tier:
+> HF 已弃用原生 Streamlit SDK（2025-04）→ 创建 Space 时选 **Docker**，仓库内已含 `Dockerfile`。
 
 ```bash
-streamlit run dashboard.py    # local
-# or: streamlit run app.py     # same UI (HF Spaces entry)
+streamlit run app.py          # local
+docker build -t jobforecaster . && docker run -p 8501:8501 jobforecaster  # optional
 ```
 
-See **[docs/HUGGINGFACE.md](docs/HUGGINGFACE.md)** — connect repo `app.py` to a new Streamlit Space.
+See **[docs/HUGGINGFACE.md](docs/HUGGINGFACE.md)**.
 
 ---
 
