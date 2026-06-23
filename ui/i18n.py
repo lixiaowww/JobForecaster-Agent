@@ -321,6 +321,12 @@ Compare your AI scenario with **15+ historical tech transitions**.
               "reduction, and scenario demand — not a fixed list.",
         "zh": "转型路径由 8 维技能向量距离、自动化风险下降与情景需求**实时推导**，并非固定清单。",
     },
+    "radar_field_calibrated": {
+        "en": "📊 Risk calibrated by {n} real field responses: {base:.0f}% → {cal:.0f}% "
+              "(sample-size–weighted, bounded).",
+        "zh": "📊 风险已由 {n} 条真实现场反馈校准：{base:.0f}% → {cal:.0f}%"
+              "（按样本量加权，且有上限约束）。",
+    },
     "radar_ai_badge": {"en": " (AI estimate)", "zh": "（AI 估算）"},
     "radar_matrix": {"en": "Occupation impact matrix", "zh": "职业影响矩阵"},
     "radar_at_risk": {"en": "At-risk & transforming roles", "zh": "高风险与转型中岗位"},

@@ -45,6 +45,22 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
     kb_path = job_radar_cfg.get("kb_path", "data/jobs_kb.json")
     all_jobs = job_radar.load_knowledge_base(kb_path)
 
+    # Field-feedback calibration: blend real user-submitted outcomes into
+    # displacement risk before scoring. No-op when there is no real data yet.
+    empirical_data: dict = {}
+    try:
+        from services.job_market import (
+            compute_field_calibration,
+            merge_field_calibration_into_jobs,
+        )
+
+        empirical_data = job_radar.get_empirical_metrics()
+        _field_recs = compute_field_calibration(all_jobs, empirical_data)
+        if _field_recs:
+            all_jobs = merge_field_calibration_into_jobs(all_jobs, _field_recs)
+    except Exception:
+        empirical_data = {}
+
     if not all_jobs:
         st.warning(t("radar_kb_missing"))
     else:
@@ -253,8 +269,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 current_job_obj, all_jobs, scenario_input, top_k=3
             )
             
-            # Load empirical metrics for the selected job
-            empirical_data = job_radar.get_empirical_metrics()
+            # Empirical metrics for the selected job (reuse the calibration query)
             job_emp = empirical_data.get(current_job_obj["title"])
             
             if job_emp:
@@ -270,6 +285,16 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     </p>
                 </div>
                 """, unsafe_allow_html=True)
+
+            # Transparency: show when field feedback actually moved the risk number.
+            fc = current_job_obj.get("field_calibration")
+            if fc:
+                st.caption(t(
+                    "radar_field_calibrated",
+                    n=fc["n_responses"],
+                    base=fc["displacement_risk_base"] * 100,
+                    cal=fc["displacement_risk_calibrated"] * 100,
+                ))
 
             st.markdown(f"<br><b>{t('radar_trans_paths')}:</b>", unsafe_allow_html=True)
             st.caption(t("radar_trans_method"))

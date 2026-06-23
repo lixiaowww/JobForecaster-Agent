@@ -58,6 +58,87 @@ class CalibrationRecord:
     agreement: str
 
 
+@dataclass(frozen=True)
+class FieldCalibrationRecord:
+    """Calibration of KB displacement risk against real, user-submitted field outcomes."""
+    displacement_risk_base: float
+    displacement_risk_calibrated: float
+    delta: float
+    n_responses: int
+    empirical_rate: float
+    avg_confidence: float
+    trust: float
+    calibrated_at: str
+
+
+def compute_field_calibration(
+    jobs: list[dict],
+    empirical_metrics: dict[str, dict] | None,
+    *,
+    min_responses: int = 5,
+    blend_weight: float = 0.4,
+    max_delta: float = 0.15,
+    shrinkage: int = 10,
+) -> dict[str, "FieldCalibrationRecord"]:
+    """Blend real field-feedback displacement rates into KB risk (keyed by job id).
+
+    Honesty guardrails:
+      * `min_responses` gate — ignore titles with too few real responses.
+      * sample-size shrinkage — small samples barely move the needle.
+      * `max_delta` cap — field data nudges, never overwrites, the prior.
+    Returns {} when there is no qualifying real data (graceful no-op).
+    """
+    if not empirical_metrics:
+        return {}
+    by_title = {j.get("title"): j for j in jobs if j.get("id")}
+    out: dict[str, FieldCalibrationRecord] = {}
+    for title, m in empirical_metrics.items():
+        job = by_title.get(title)
+        if not job:
+            continue
+        n = int(m.get("total_responses", 0))
+        if n < min_responses:
+            continue
+        kb_risk = float(job.get("displacement_risk", 0.5))
+        empirical_rate = float(m.get("empirical_displacement_rate", kb_risk))
+        # Shrinkage: trust grows with sample size but saturates < 1.
+        trust = n / (n + shrinkage)
+        raw_delta = blend_weight * trust * (empirical_rate - kb_risk)
+        delta = max(-max_delta, min(max_delta, round(raw_delta, 4)))
+        if delta == 0.0:
+            continue
+        calibrated = round(max(0.0, min(1.0, kb_risk + delta)), 4)
+        out[job["id"]] = FieldCalibrationRecord(
+            displacement_risk_base=kb_risk,
+            displacement_risk_calibrated=calibrated,
+            delta=delta,
+            n_responses=n,
+            empirical_rate=round(empirical_rate, 4),
+            avg_confidence=round(float(m.get("average_confidence", 0.0)), 4),
+            trust=round(trust, 4),
+            calibrated_at=datetime.now(timezone.utc).isoformat(),
+        )
+    return out
+
+
+def merge_field_calibration_into_jobs(
+    jobs: list[dict],
+    records: dict[str, "FieldCalibrationRecord"] | None,
+) -> list[dict]:
+    """Apply field-feedback calibration so scoring/UI see the empirically-adjusted risk."""
+    if not records:
+        return jobs
+    merged: list[dict] = []
+    for job in jobs:
+        copy = dict(job)
+        rec = records.get(copy.get("id", ""))
+        if rec:
+            copy["field_calibration"] = asdict(rec)
+            copy["displacement_risk"] = rec.displacement_risk_calibrated
+        merged.append(copy)
+    return merged
+
+
 class JobMarketSource(Protocol):
     name: str
 

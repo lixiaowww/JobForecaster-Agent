@@ -123,3 +123,60 @@ def test_bls_verify_wrapper_compat():
     jobs = _sample_jobs()
     dashboard = bls_verify.compare_kb_to_bls(jobs)
     assert "fin_credit_analyst" in dashboard or isinstance(dashboard, dict)
+
+
+# --- field-feedback calibration (P2) -----------------------------------------
+
+def _field_jobs():
+    return [
+        {"id": "ret_cashier", "title": "Cashier", "displacement_risk": 0.40},
+        {"id": "tech_dev", "title": "Software Developer", "displacement_risk": 0.30},
+    ]
+
+
+def test_field_calibration_no_data_is_noop():
+    assert jm.compute_field_calibration(_field_jobs(), {}) == {}
+    assert jm.compute_field_calibration(_field_jobs(), None) == {}
+
+
+def test_field_calibration_min_responses_gate():
+    metrics = {"Cashier": {"total_responses": 2, "empirical_displacement_rate": 0.9,
+                           "average_confidence": 0.5}}
+    # below the default min_responses=5 threshold → ignored
+    assert jm.compute_field_calibration(_field_jobs(), metrics) == {}
+
+
+def test_field_calibration_moves_toward_empirical_but_bounded():
+    metrics = {"Cashier": {"total_responses": 50, "empirical_displacement_rate": 0.95,
+                           "average_confidence": 0.4}}
+    recs = jm.compute_field_calibration(_field_jobs(), metrics, max_delta=0.15)
+    rec = recs["ret_cashier"]
+    # empirical (0.95) > kb (0.40) → risk nudged UP, but capped by max_delta
+    assert rec.delta > 0
+    assert rec.delta <= 0.15
+    assert rec.displacement_risk_calibrated > 0.40
+    assert rec.displacement_risk_calibrated <= 0.40 + 0.15 + 1e-9
+
+
+def test_field_calibration_shrinkage_small_sample_moves_less():
+    big = {"Cashier": {"total_responses": 200, "empirical_displacement_rate": 0.9,
+                       "average_confidence": 0.5}}
+    small = {"Cashier": {"total_responses": 6, "empirical_displacement_rate": 0.9,
+                         "average_confidence": 0.5}}
+    d_big = jm.compute_field_calibration(_field_jobs(), big)["ret_cashier"].delta
+    d_small = jm.compute_field_calibration(_field_jobs(), small)["ret_cashier"].delta
+    assert abs(d_small) < abs(d_big)
+
+
+def test_merge_field_calibration_into_jobs():
+    metrics = {"Cashier": {"total_responses": 50, "empirical_displacement_rate": 0.95,
+                           "average_confidence": 0.4}}
+    recs = jm.compute_field_calibration(_field_jobs(), metrics)
+    merged = jm.merge_field_calibration_into_jobs(_field_jobs(), recs)
+    cashier = next(j for j in merged if j["id"] == "ret_cashier")
+    assert cashier["displacement_risk"] == recs["ret_cashier"].displacement_risk_calibrated
+    assert cashier["field_calibration"]["n_responses"] == 50
+    # untouched job keeps its original risk and gains no calibration block
+    dev = next(j for j in merged if j["id"] == "tech_dev")
+    assert dev["displacement_risk"] == 0.30
+    assert "field_calibration" not in dev
