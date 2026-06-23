@@ -448,12 +448,65 @@ def find_best_match(query: str, jobs: list[dict], embedder=None) -> tuple[float,
     return best_sim, best_job
 
 
+# --------------------------------------------------------------------------- #
+# LLM profile cache — the only token-spending path. Cache by an order-independent
+# query signature so synonyms/word-order variants reuse a generation instead of
+# re-prompting the model. (Persists within the container; cleared on rebuild.)
+# --------------------------------------------------------------------------- #
+
+_LLM_CACHE_PATH = "data/llm_job_cache.json"
+
+
+def _query_signature(query: str) -> str:
+    """Order-independent normalized key: lowercased, de-punctuated, sorted tokens."""
+    toks = re.findall(r"[a-z0-9]+", (query or "").lower())
+    return " ".join(sorted(toks))
+
+
+def _load_llm_cache(path: str | None = None) -> dict[str, dict]:
+    path = path or _LLM_CACHE_PATH
+    if not os.path.exists(path):
+        return {}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+
+def _save_llm_cache(cache: dict[str, dict], path: str | None = None) -> None:
+    path = path or _LLM_CACHE_PATH
+    try:
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(cache, f, indent=2, ensure_ascii=False)
+    except Exception:
+        pass  # cache is best-effort; never break the request path
+
+
+def get_cached_job_profile(query: str, path: str | None = None) -> dict | None:
+    """Return a previously generated profile for an equivalent query, else None."""
+    sig = _query_signature(query)
+    if not sig:
+        return None
+    return _load_llm_cache(path).get(sig)
+
+
 def generate_job_profile_via_llm(query: str) -> dict | None:
     """Use the LLM to generate a full KB-compatible job profile for an unknown role.
 
-    Returns a dict matching the KB schema, or None on failure.
-    The generated profile is also appended to data/jobs_kb.json on disk.
+    Returns a dict matching the KB schema, or None on failure. Results are cached
+    by query signature (token-sorted) so equivalent queries skip the LLM call,
+    and appended to data/jobs_kb.json on disk.
     """
+    # Cache hit → zero tokens.
+    cached = get_cached_job_profile(query)
+    if cached is not None:
+        cached = dict(cached)
+        cached["_from_cache"] = True
+        _append_to_kb(cached)  # ensure KB has it (idempotent by id)
+        return cached
+
     try:
         from forecast import call_llm
     except ImportError:
@@ -517,7 +570,10 @@ Be realistic and well-calibrated with displacement_risk."""
             profile.get("transition_targets", [])
         )
 
-        # Append to on-disk KB
+        # Persist: query-signature cache (skip future LLM calls) + KB append.
+        cache = _load_llm_cache()
+        cache[_query_signature(query)] = profile
+        _save_llm_cache(cache)
         _append_to_kb(profile)
 
         return profile

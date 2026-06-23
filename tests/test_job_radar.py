@@ -233,6 +233,47 @@ def test_kb_not_ai_dominated():
     assert len(ai) / len(emerging) < 0.7, "emerging roles skew too AI-heavy"
 
 
+# --------------------------------------------------------------------------- #
+# LLM profile cache (token-saving)
+# --------------------------------------------------------------------------- #
+
+def test_query_signature_order_independent():
+    sig = job_radar._query_signature
+    assert sig("Data Scientist") == sig("scientist, data!")
+    assert sig("Senior Project Manager") == sig("manager project senior")
+    assert sig("") == ""
+
+
+def test_llm_cache_round_trip(tmp_path, monkeypatch):
+    cache_file = str(tmp_path / "llm_cache.json")
+    monkeypatch.setattr(job_radar, "_LLM_CACHE_PATH", cache_file)
+    assert job_radar.get_cached_job_profile("quantum chef") is None
+    cache = {job_radar._query_signature("quantum chef"): {"id": "qc", "title": "Quantum Chef"}}
+    job_radar._save_llm_cache(cache)
+    hit = job_radar.get_cached_job_profile("Chef, Quantum")  # different order/case
+    assert hit is not None and hit["id"] == "qc"
+
+
+def test_generate_uses_cache_and_skips_llm(tmp_path, monkeypatch):
+    cache_file = str(tmp_path / "llm_cache.json")
+    monkeypatch.setattr(job_radar, "_LLM_CACHE_PATH", cache_file)
+    monkeypatch.setattr(job_radar, "_append_to_kb", lambda *a, **k: None)
+
+    profile = {"id": "astro_farmer", "title": "Astro Farmer", "industry": "Agriculture",
+               "category": "emerging", "description": "d", "sensitivity": {},
+               "displacement_risk": 0.2, "required_skills": ["x"]}
+    job_radar._save_llm_cache({job_radar._query_signature("astro farmer"): profile})
+
+    # If the LLM were called, this would raise — proving zero-token cache hit.
+    import forecast
+    monkeypatch.setattr(forecast, "call_llm",
+                        lambda *a, **k: (_ for _ in ()).throw(AssertionError("LLM called")))
+
+    out = job_radar.generate_job_profile_via_llm("Astro Farmer")
+    assert out is not None and out["id"] == "astro_farmer"
+    assert out.get("_from_cache") is True
+
+
 def test_normalize_transition_targets_skips_invalid_entries():
     out = job_radar._normalize_transition_targets([
         "fin_risk_manager",
