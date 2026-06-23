@@ -9,20 +9,12 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+from ui.i18n import t
+
 
 def render(scenario_input: dict, prior, job_radar_cfg: dict):
-    st.subheader("Historical analogy and transition regimes")
-    st.markdown("""
-    **What is this?**
-    Compare your AI scenario against **15+ major historical tech transitions** (steam engine, assembly line, PCs, etc.)
-    to reason about how jobs may evolve.
-
-    * **The chart:** Historical cases in PCA space; your scenario is the **red diamond**.
-    * **Three axes:**
-        1. **Complementarity (PCA1):** How much technology augments vs replaces workers.
-        2. **Transition friction (PCA2):** Difficulty of retraining or relocating displaced workers.
-        3. **Demand expansion (PCA3):** Whether lower costs create new demand and jobs.
-    """)
+    st.subheader(t("bench_title"))
+    st.markdown(t("bench_intro"))
 
     # Live GMM/PCA computation
     cases = ev.CASE_LIBRARY
@@ -71,18 +63,26 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
     # Select visualization
     col_vis, col_meta = st.columns([3, 2])
 
+    none_label = t("filter_none")
+    plot_modes = ("3d", "2d")
+
     with col_vis:
         col_radio, col_select = st.columns([1, 1])
         with col_radio:
-            plot_dim = st.radio("Visualization Dimension", ["3D PCA Space", "2D Projection (PCA1 vs PCA2)"], horizontal=True)
+            plot_key = st.radio(
+                t("bench_plot_label"),
+                plot_modes,
+                format_func=lambda k: t(f"bench_plot_{k}"),
+                horizontal=True,
+            )
         with col_select:
             highlight_case = st.selectbox(
-                "Highlight historical case",
-                ["None"] + list(df_cases["Name"].unique()),
+                t("bench_highlight"),
+                [none_label] + list(df_cases["Name"].unique()),
                 index=0,
             )
 
-        if plot_dim == "3D PCA Space":
+        if plot_key == "3d":
             fig_3d = go.Figure()
             for label_val in sorted(df_cases["Cluster Label"].unique()):
                 df_c = df_cases[df_cases["Cluster Label"] == label_val]
@@ -100,12 +100,12 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 x=[z_scenario[0]], y=[z_scenario[1]], z=[z_scenario[2]],
                 mode='markers',
                 marker=dict(size=14, color='#ff5555', symbol='diamond', line=dict(color='#ffffff', width=2)),
-                name='Simulated AI Scenario',
-                text=["Simulated AI Scenario<br>Mahalanobis Distance: " + str(prior.current_scenario_ood["min_mahalanobis"])],
+                name=t("bench_sim_scenario"),
+                text=[t("bench_sim_scenario") + "<br>Mahalanobis: " + str(prior.current_scenario_ood["min_mahalanobis"])],
                 hoverinfo='text'
             ))
 
-            if highlight_case != "None":
+            if highlight_case != none_label:
                 selected_row = df_cases[df_cases["Name"] == highlight_case].iloc[0]
                 fig_3d.add_trace(go.Scatter3d(
                     x=[selected_row["PCA1"]],
@@ -143,18 +143,18 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 hover_name="Name",
                 hover_data=["Technology", "Net Job Multiplier", "Lag Years"],
                 color_discrete_sequence=px.colors.qualitative.Safe,
-                title="PCA Projection (2D)"
+                title="PCA 2D",
             )
             fig_2d.add_trace(go.Scatter(
                 x=[z_scenario[0]], y=[z_scenario[1]],
                 mode='markers',
                 marker=dict(size=14, color='#ff5555', symbol='diamond', line=dict(color='#ffffff', width=2)),
-                name='Simulated AI Scenario',
+                name=t("bench_sim_scenario"),
                 hoverinfo='text',
-                text=["Simulated AI Scenario<br>Distance: " + str(prior.current_scenario_ood["min_mahalanobis"])]
+                text=[t("bench_sim_scenario") + "<br>Distance: " + str(prior.current_scenario_ood["min_mahalanobis"])]
             ))
 
-            if highlight_case != "None":
+            if highlight_case != none_label:
                 selected_row = df_cases[df_cases["Name"] == highlight_case].iloc[0]
                 fig_2d.add_trace(go.Scatter(
                     x=[selected_row["PCA1"]],
@@ -179,8 +179,8 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             st.plotly_chart(fig_2d, use_container_width=True)
 
     with col_meta:
-        st.markdown("### Job transition regimes")
-        st.markdown(f"**Pattern match confidence:** `{prior.bootstrap_stability*100:.1f}%` *(target > 70%)*")
+        st.markdown(f"### {t('bench_regimes')}")
+        st.markdown(t("bench_confidence", p=prior.bootstrap_stability * 100))
         
         profile_data = []
         for c in prior.clusters:
@@ -192,15 +192,13 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             })
         st.dataframe(pd.DataFrame(profile_data), use_container_width=True, hide_index=True)
         
-        st.markdown("""
-        💡 *We group historical cases into clusters using machine learning. This table shows the average job growth multiplier and transition time (lag) for each technological transition pattern.*
-        """)
+        st.markdown(t("bench_regimes_tip"))
 
-        if highlight_case != "None":
+        if highlight_case != none_label:
             selected_row = df_cases[df_cases["Name"] == highlight_case].iloc[0]
             st.markdown(f"""
             <div style="border: 1px solid #f1c40f; border-radius: 6px; padding: 15px; background-color: #161b22; margin-top: 15px;">
-                <h4 style="color:#f1c40f; margin-top:0; margin-bottom:10px;">🔍 Highlighted Case Details</h4>
+                <h4 style="color:#f1c40f; margin-top:0; margin-bottom:10px;">{t("bench_highlight_details")}</h4>
                 <table style="width:100%; border-collapse:collapse; font-size:13px; color:#c9d1d9;">
                     <tr style="border-bottom: 1px solid #21262d;"><td style="padding:6px 0; color:#8b949e;"><b>Event / Job:</b></td><td style="padding:6px 0;">{selected_row['Name']} ({selected_row['Period']})</td></tr>
                     <tr style="border-bottom: 1px solid #21262d;"><td style="padding:6px 0; color:#8b949e;"><b>Technology:</b></td><td style="padding:6px 0;">{selected_row['Technology']}</td></tr>
@@ -214,7 +212,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             """, unsafe_allow_html=True)
 
     st.markdown("---")
-    with st.expander("📚 View Historical Cases Library (N=15 Bootstrap)"):
+    with st.expander(t("bench_library")):
         st.dataframe(
             df_cases[["Name", "Cluster Name", "Period", "Technology", "Displaced Occupation", "Net Job Multiplier", "Lag Years", "Notes", "Sources"]],
             use_container_width=True, hide_index=True

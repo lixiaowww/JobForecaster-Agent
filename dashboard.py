@@ -15,9 +15,12 @@ sys.path = [p for p in sys.path if p != "/home/sean"]
 from services.config_loader import load_config
 from services.dashboard_data import build_evolution_prior
 from services.dashboard_seed import ensure_demo_registry
+from ui.i18n import init_language, lang, t
 from ui.sidebar import render_sidebar
 from ui.styles import CUSTOM_CSS
 from ui.tabs import accuracy, benchmarks, guard, radar
+
+init_language()
 
 st.set_page_config(
     page_title="JobForecast Agent",
@@ -40,25 +43,27 @@ job_radar_cfg = config.get("job_radar", {
 scenario_input = render_sidebar()
 
 
-@st.cache_resource(show_spinner="Computing GMM clustering...")
-def get_cached_prior(scenario: dict):
+@st.cache_resource(show_spinner=False)
+def get_cached_prior(scenario: dict, _lang: str):
+    del _lang  # bust cache when language changes (UI strings only; prior is language-agnostic)
     return build_evolution_prior(scenario)
 
 
-prior = get_cached_prior(scenario_input)
+with st.spinner(t("gmm_spinner")):
+    prior = get_cached_prior(scenario_input, lang())
 
-st.markdown("""
+st.markdown(f"""
 <div class="header-container">
     <div class="main-title">JobForecast Agent</div>
-    <div class="subtitle">Autonomous AI × economy forecasting system dashboard</div>
+    <div class="subtitle">{t("page_subtitle")}</div>
 </div>
 """, unsafe_allow_html=True)
 
 tab_radar, tab_accuracy, tab_benchmarks, tab_guard = st.tabs([
-    "🎯 Job Forecast Radar",
-    "📈 Forecast Accuracy",
-    "🧬 Historical Benchmarks",
-    "🚨 Plausibility Guard",
+    f"🎯 {t('tab_radar')}",
+    f"📈 {t('tab_accuracy')}",
+    f"🧬 {t('tab_benchmarks')}",
+    f"🚨 {t('tab_guard')}",
 ])
 
 with tab_radar:
