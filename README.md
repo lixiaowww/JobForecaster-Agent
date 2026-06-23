@@ -5,14 +5,9 @@ colorFrom: blue
 colorTo: purple
 sdk: docker
 app_port: 8501
-license: other
+python_version: "3.12"
 pinned: false
 short_description: Streamlit Job Radar and AI economy forecast dashboard
-tags:
-  - streamlit
-  - docker
-  - economics
-  - job-market
 ---
 
 # forecaster-agent

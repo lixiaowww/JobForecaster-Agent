@@ -58,10 +58,11 @@ git push origin main
 
 或 GitHub → **Actions** → **Sync to Hugging Face Space** → **Run workflow**
 
-Workflow 文件：`.github/workflows/sync-hf-space.yml`  
+Workflow：`.github/workflows/sync-hf-space.yml`（使用官方 `huggingface/hub-sync` 上传，含 `README.md` 顶部 YAML）
+
 目标 Space：`https://huggingface.co/spaces/lixiaowww/JobForecaster-Agent`
 
-> GitHub 是代码唯一来源；同步会 `--force` 覆盖 HF 上的旧文件（含 Streamlit 演示模板）。
+> 若 Space 报 `Missing configuration in README`，说明 HF 上 README 还是旧版；确认 `HF_TOKEN` 已设且 workflow 成功跑完。
 
 ### 方式 B：本地手动 push（备用）
 
