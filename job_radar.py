@@ -97,6 +97,33 @@ def get_hybrid_scores(jobs: list[dict], query: str, alpha: float, beta: float, e
         
     return jobs
 
+def _normalize_transition_target(target) -> dict | None:
+    """Accept KB dict entries or bare target_id strings (common LLM output)."""
+    if isinstance(target, str):
+        return {
+            "target_id": target,
+            "skill_bridge": None,
+            "retrain_months": None,
+            "salary_delta": None,
+        }
+    if isinstance(target, dict):
+        tid = target.get("target_id")
+        if isinstance(tid, str):
+            return target
+    return None
+
+
+def _normalize_transition_targets(targets) -> list[dict]:
+    if not targets:
+        return []
+    out: list[dict] = []
+    for raw in targets:
+        norm = _normalize_transition_target(raw)
+        if norm:
+            out.append(norm)
+    return out
+
+
 def get_transition_details(current_job_id: str, all_jobs: list[dict]) -> list[dict]:
     """
     Finds transition paths for a current job ID and returns detailed profiles of target jobs.
@@ -108,7 +135,10 @@ def get_transition_details(current_job_id: str, all_jobs: list[dict]) -> list[di
         return []
         
     transitions = []
-    for target in current_job.get("transition_targets", []):
+    for raw in current_job.get("transition_targets", []):
+        target = _normalize_transition_target(raw)
+        if not target:
+            continue
         target_id = target["target_id"]
         target_job = jobs_map.get(target_id)
         if target_job:
@@ -321,6 +351,10 @@ Be realistic and well-calibrated with displacement_risk."""
                      "sensitivity", "displacement_risk", "required_skills"]
         if not all(k in profile for k in required):
             return None
+
+        profile["transition_targets"] = _normalize_transition_targets(
+            profile.get("transition_targets", [])
+        )
 
         # Append to on-disk KB
         _append_to_kb(profile)

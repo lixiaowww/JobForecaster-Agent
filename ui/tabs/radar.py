@@ -211,19 +211,21 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         st.markdown(t("radar_transition_help"))
 
         dropdown_jobs = sorted(all_jobs, key=lambda x: job_title(x))
-        job_options = [job_title(j) + " (" + industry_label(j["industry"]) + ")" for j in dropdown_jobs]
+        job_by_id = {j["id"]: j for j in dropdown_jobs}
+        job_ids = [j["id"] for j in dropdown_jobs]
 
-        selected_job_label = st.selectbox(t("radar_select_role"), job_options)
-        
-        # Find ID of selected job
-        current_job_id = None
-        current_job_obj = None
-        for j in all_jobs:
-            if job_title(j) + " (" + industry_label(j["industry"]) + ")" == selected_job_label:
-                current_job_id = j["id"]
-                current_job_obj = j
-                break
-                
+        selected_job_id = st.selectbox(
+            t("radar_select_role"),
+            job_ids,
+            format_func=lambda jid: job_title(job_by_id[jid])
+            + " ("
+            + industry_label(job_by_id[jid]["industry"])
+            + ")",
+        )
+
+        current_job_id = selected_job_id
+        current_job_obj = job_by_id[selected_job_id]
+
         if current_job_obj:
             # Display current job stats
             col_curr_lbl, col_curr_desc = st.columns([1, 3])
