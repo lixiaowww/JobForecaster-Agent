@@ -174,7 +174,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                             
         # 2. Transition Explorer
         st.markdown("---")
-        st.subheader("🔄 Career Transition Path Explorer (职业转型路径探索)")
+        st.subheader("Career transition path explorer")
         st.markdown("""
         Select your current role below. The system will compare your current skill set with other occupations and recommend the best career transition paths that require the least amount of retraining, along with the specific skills you need to build (the "skill bridge").
         """)

@@ -83,7 +83,10 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         
         st.plotly_chart(fig, use_container_width=True)
     else:
-        st.info("No calibration data available. Ensure there are resolved predictions in the registry.")
+        st.info(
+            "No calibration data yet. Resolved predictions are needed to plot the reliability curve. "
+            "On Hugging Face Spaces, demo seed data loads automatically when the registry is empty."
+        )
     st.markdown("---")
     st.subheader("🔍 Explore Predictions")
 
@@ -136,14 +139,14 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
 
     # ── P3: Prediction Market ──────────────────────────────────────────────────
     st.markdown("---")
-    st.subheader("🎲 Crowd Consensus & Prediction Competition (预测市场竞猜)")
+    st.subheader("Crowd consensus and prediction market")
     st.markdown("""
     **What is this?**
-    Here you can challenge or support the AI's forecasts by casting your vote (placing a "bet" with virtual points).
+    Challenge or support the AI's forecasts by staking virtual points on open predictions.
 
-    *   **Crowd Wisdom (群体智慧):** The **Consensus Probability** represents the combined judgment of all human forecasters and the AI. Combined crowd consensus is statistically proven to be more accurate than any single AI or human expert.
-    *   **How to participate:** Select an active prediction, estimate the probability of it happening (0% to 100%), and stake virtual points.
-    *   **Rewards & Leaderboard:** When the forecast target date is reached and outcomes are verified in the real world, points are distributed. Accurately calibrated predictions yield higher scores. Top forecasters rise on the leaderboard!
+    * **Crowd wisdom:** The consensus probability aggregates human and AI estimates.
+    * **How to participate:** Pick an open prediction, set your probability (0–100%), and stake points.
+    * **Leaderboard:** Points settle when predictions resolve against real-world outcomes.
     """)
 
     try:
@@ -153,15 +156,15 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             col_market, col_lb = st.columns([3, 2])
 
             with col_market:
-                st.markdown("#### 🗳️ Submit Your Forecast Vote (参与预测下注)")
+                st.markdown("#### Submit your forecast vote")
                 bettor_id = st.text_input(
-                    "Your Nickname / Forecaster Name (你的竞猜昵称):",
+                    "Your forecaster name",
                     value="anonymous",
                     key="bettor_id",
-                    help="Used for the leaderboard. Does not need to be real."
+                    help="Used for the leaderboard. Does not need to be real.",
                 )
                 pred_labels = {f"{p.statement[:70]}… [{p.horizon}]": p.id for p in all_open}
-                chosen_label = st.selectbox("Choose a forecast statement to vote on (选择你要研判的预测):", list(pred_labels.keys()))
+                chosen_label = st.selectbox("Choose a forecast to vote on", list(pred_labels.keys()))
                 chosen_id = pred_labels[chosen_label]
 
                 mkt_prob = market.market_probability(chosen_id)
@@ -170,24 +173,24 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     st.markdown(
                         f'<div class="metric-card" style="border-color:#bc8cff;">'
                         f'<div class="metric-value" style="color:#bc8cff;">{mkt_prob*100:.1f}%</div>'
-                        f'<div class="metric-label">Market Consensus Probability (共识成真概率, {n_bets} votes)</div>'
+                        f'<div class="metric-label">Market consensus ({n_bets} votes)</div>'
                         f'</div>',
                         unsafe_allow_html=True
                     )
 
                 bet_prob = st.slider(
-                    "Your estimate of probability this event will happen (你认为该事件成真的概率):",
+                    "Your probability this event happens",
                     min_value=0.01, max_value=0.99, value=0.50, step=0.01,
                     format="%.0f%%",
-                    key="bet_prob_slider"
+                    key="bet_prob_slider",
                 )
                 stake_pts = st.slider(
-                    "Stake amount (Virtual Points) / 下注筹码 (虚拟积分):",
+                    "Stake (virtual points)",
                     min_value=1, max_value=100, value=10, step=1,
-                    key="bet_stake_slider"
+                    key="bet_stake_slider",
                 )
 
-                if st.button("🎲 Submit Vote / 提交预测", key="place_bet_btn", type="primary"):
+                if st.button("Submit vote", key="place_bet_btn", type="primary"):
                     try:
                         market.place_bet(chosen_id, bettor_id, bet_prob, stake_pts)
                         st.success(f"Vote submitted successfully! Your estimate is {bet_prob*100:.0f}% probability, staking {stake_pts} points.")

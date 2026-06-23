@@ -1,0 +1,97 @@
+[
+  {
+    "statement": "US software developer employment will grow at least 3% YoY through 2026-Q2",
+    "rationale": "AI augmentation raises output per developer; Jevons effect on software demand.",
+    "category": "labor",
+    "confidence": 0.72,
+    "horizon": "2026-Q2",
+    "resolution_date": "2026-06-30",
+    "resolution_criteria": "BLS occupational employment statistics for SOC 15-1252.",
+    "status": "open"
+  },
+  {
+    "statement": "Median cloud compute price per token will fall at least 40% by 2026-Q1 vs 2025-Q1",
+    "rationale": "Hardware scaling and competition among frontier labs compress inference costs.",
+    "category": "compute",
+    "confidence": 0.68,
+    "horizon": "2026-Q1",
+    "resolution_date": "2026-03-31",
+    "resolution_criteria": "Public pricing pages from two major API providers.",
+    "status": "open"
+  },
+  {
+    "statement": "US paralegal headcount will decline at least 5% YoY by 2025-Q4",
+    "rationale": "Document review automation substitutes routine legal research tasks.",
+    "category": "labor",
+    "confidence": 0.61,
+    "horizon": "2025-Q4",
+    "resolution_date": "2025-12-31",
+    "resolution_criteria": "BLS QCEW or OES release for legal support occupations.",
+    "status": "resolved_true",
+    "outcome": true,
+    "judged_rationale": "BLS data showed a 6.2% YoY decline in paralegal employment.",
+    "resolved_at": "2026-01-20T12:00:00+00:00"
+  },
+  {
+    "statement": "US call-center employment will fall more than 8% in 2025",
+    "rationale": "Voice AI handles tier-1 support; firms consolidate offshore and automated channels.",
+    "category": "labor",
+    "confidence": 0.55,
+    "horizon": "2025-Q4",
+    "resolution_date": "2025-12-31",
+    "resolution_criteria": "BLS occupational series for customer service representatives.",
+    "status": "resolved_true",
+    "outcome": true,
+    "judged_rationale": "Annual change exceeded the 8% threshold in federal labor statistics.",
+    "resolved_at": "2026-01-20T12:00:00+00:00"
+  },
+  {
+    "statement": "Major economies will enter recession before 2025-Q3",
+    "rationale": "Tight monetary policy and credit contraction trigger synchronized downturn.",
+    "category": "macro",
+    "confidence": 0.42,
+    "horizon": "2025-Q2",
+    "resolution_date": "2025-06-30",
+    "resolution_criteria": "NBER or equivalent two-quarter GDP contraction in US, EU, or UK.",
+    "status": "resolved_false",
+    "outcome": false,
+    "judged_rationale": "No G7 economy met the recession definition by the resolution date.",
+    "resolved_at": "2025-07-10T12:00:00+00:00"
+  },
+  {
+    "statement": "Data-entry clerk employment will drop at least 10% YoY by 2025-Q4",
+    "rationale": "OCR and LLM form extraction replace manual keying in back-office workflows.",
+    "category": "labor",
+    "confidence": 0.78,
+    "horizon": "2025-Q4",
+    "resolution_date": "2025-12-31",
+    "resolution_criteria": "BLS occupational employment for data entry keyers.",
+    "status": "resolved_true",
+    "outcome": true,
+    "judged_rationale": "Occupational series showed an 11% decline versus prior year.",
+    "resolved_at": "2026-01-20T12:00:00+00:00"
+  },
+  {
+    "statement": "Venture capital AI funding will exceed $80B globally in 2025",
+    "rationale": "Foundation-model capex and enterprise adoption sustain deal volume.",
+    "category": "capital",
+    "confidence": 0.58,
+    "horizon": "2025-Q4",
+    "resolution_date": "2025-12-31",
+    "resolution_criteria": "PitchBook or Crunchbase annual AI-sector funding totals.",
+    "status": "resolved_false",
+    "outcome": false,
+    "judged_rationale": "Reported annual totals remained below the $80B threshold.",
+    "resolved_at": "2026-01-15T12:00:00+00:00"
+  },
+  {
+    "statement": "EU will pass binding AI employment impact reporting rules before 2026-Q2",
+    "rationale": "AI Act implementation pushes member states toward workforce disclosure.",
+    "category": "policy",
+    "confidence": 0.64,
+    "horizon": "2026-Q1",
+    "resolution_date": "2026-03-31",
+    "resolution_criteria": "Official Journal publication of binding employment-reporting requirements.",
+    "status": "open"
+  }
+]

@@ -11,16 +11,17 @@ import plotly.graph_objects as go
 
 
 def render(scenario_input: dict, prior, job_radar_cfg: dict):
-    st.subheader("🧬 Historical Analogy & Transition Regimes (以史为鉴：科技变革对比)")
+    st.subheader("Historical analogy and transition regimes")
     st.markdown("""
     **What is this?**
-    Every new technology transforms the job market. This page compares your current AI scenario parameters against **15+ major historical tech revolutions** (such as the steam engine, assembly line, and personal computers) to predict how current jobs will evolve.
+    Compare your AI scenario against **15+ major historical tech transitions** (steam engine, assembly line, PCs, etc.)
+    to reason about how jobs may evolve.
 
-    *   **The Chart:** We map historical cases in a 3D/2D space based on three core dimensions of tech-driven job change. Your simulated AI scenario is shown as a **red diamond**.
-    *   **3 Core Dimensions Explained:**
-        1.  **Complementarity (互补协同度 - PCA1 axis):** How much the technology assists and empowers human workers rather than replacing them.
-        2.  **Transition Friction (转型摩擦阻力 - PCA2 axis):** The difficulty workers face in retraining or relocating when their jobs change.
-        3.  **Demand Expansion (需求扩张效应 - PCA3 axis):** Whether the technology lowers costs enough to create entirely new consumer demand and jobs.
+    * **The chart:** Historical cases in PCA space; your scenario is the **red diamond**.
+    * **Three axes:**
+        1. **Complementarity (PCA1):** How much technology augments vs replaces workers.
+        2. **Transition friction (PCA2):** Difficulty of retraining or relocating displaced workers.
+        3. **Demand expansion (PCA3):** Whether lower costs create new demand and jobs.
     """)
 
     # Live GMM/PCA computation
@@ -76,9 +77,9 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             plot_dim = st.radio("Visualization Dimension", ["3D PCA Space", "2D Projection (PCA1 vs PCA2)"], horizontal=True)
         with col_select:
             highlight_case = st.selectbox(
-                "🔍 Highlight Historical Case (在图表中高亮历史事件):",
-                ["None (无高亮)"] + list(df_cases["Name"].unique()),
-                index=0
+                "Highlight historical case",
+                ["None"] + list(df_cases["Name"].unique()),
+                index=0,
             )
 
         if plot_dim == "3D PCA Space":
@@ -104,7 +105,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 hoverinfo='text'
             ))
 
-            if highlight_case != "None (无高亮)":
+            if highlight_case != "None":
                 selected_row = df_cases[df_cases["Name"] == highlight_case].iloc[0]
                 fig_3d.add_trace(go.Scatter3d(
                     x=[selected_row["PCA1"]],
@@ -153,7 +154,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 text=["Simulated AI Scenario<br>Distance: " + str(prior.current_scenario_ood["min_mahalanobis"])]
             ))
 
-            if highlight_case != "None (无高亮)":
+            if highlight_case != "None":
                 selected_row = df_cases[df_cases["Name"] == highlight_case].iloc[0]
                 fig_2d.add_trace(go.Scatter(
                     x=[selected_row["PCA1"]],
@@ -178,8 +179,8 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             st.plotly_chart(fig_2d, use_container_width=True)
 
     with col_meta:
-        st.markdown("### 🏷️ Job Transition Regimes (变革演化分类)")
-        st.markdown(f"**Pattern Match Confidence (模式匹配可信度):** `{prior.bootstrap_stability*100:.1f}%` *(Target > 70%)*")
+        st.markdown("### Job transition regimes")
+        st.markdown(f"**Pattern match confidence:** `{prior.bootstrap_stability*100:.1f}%` *(target > 70%)*")
         
         profile_data = []
         for c in prior.clusters:
@@ -195,7 +196,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         💡 *We group historical cases into clusters using machine learning. This table shows the average job growth multiplier and transition time (lag) for each technological transition pattern.*
         """)
 
-        if highlight_case != "None (无高亮)":
+        if highlight_case != "None":
             selected_row = df_cases[df_cases["Name"] == highlight_case].iloc[0]
             st.markdown(f"""
             <div style="border: 1px solid #f1c40f; border-radius: 6px; padding: 15px; background-color: #161b22; margin-top: 15px;">

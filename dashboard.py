@@ -14,6 +14,7 @@ sys.path = [p for p in sys.path if p != "/home/sean"]
 
 from services.config_loader import load_config
 from services.dashboard_data import build_evolution_prior
+from services.dashboard_seed import ensure_demo_registry
 from ui.sidebar import render_sidebar
 from ui.styles import CUSTOM_CSS
 from ui.tabs import accuracy, benchmarks, guard, radar
@@ -25,6 +26,8 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
+
+ensure_demo_registry()
 
 config = load_config()
 job_radar_cfg = config.get("job_radar", {
