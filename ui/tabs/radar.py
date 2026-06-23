@@ -177,10 +177,14 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     imp_val = j["impact_score"]
                     color_style = "color: #55ff55;" if imp_val > 0.5 else "color: #58a6ff;"
                     rating_badge = _opp_badge(imp_val)
+                    is_ai = job_radar.is_ai_role(j)
+                    ai_badge = t("badge_ai") if is_ai else t("badge_non_ai")
+                    ai_color = "#bc8cff" if is_ai else "#3fb950"
+                    ai_tag_html = f'<span style="font-size:0.65rem; border:1px solid {ai_color}; color:{ai_color} !important; padding:1px 6px; border-radius:10px; margin-left:6px;">{ai_badge}</span>'
                     st.markdown(f"""
                     <div class="metric-card" style="text-align: left; margin-bottom: 0.8rem; border-color: #224422; background: rgba(15, 30, 15, 0.4);">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h4 style="margin: 0; font-size: 1.1rem; color: #88ff88 !important;">{job_title(j)} <span style="font-size: 0.85rem; color: #8b949e !important;">({industry_label(j["industry"])})</span></h4>
+                            <h4 style="margin: 0; font-size: 1.1rem; color: #88ff88 !important;">{job_title(j)} <span style="font-size: 0.85rem; color: #8b949e !important;">({industry_label(j["industry"])})</span>{ai_tag_html}</h4>
                             <span style="font-weight: bold; {color_style}">{rating_badge} ({'+' if imp_val >= 0 else ''}{imp_val:.2f})</span>
                         </div>
                         <p style="font-size: 0.9rem; margin: 0.4rem 0; color: #c9d1d9 !important; line-height: 1.4;">{job_description(j)}</p>
@@ -271,16 +275,37 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 with col_trans_cards[idx]:
                     salary_color = "#55ff55" if tr["salary_delta"] > 0 else "#ff5555"
                     cat_badge = t("status_emerging") if tr["category"] == "emerging" else t("status_transforming")
+                    ai_badge = t("badge_ai") if tr.get("is_ai") else t("badge_non_ai")
+                    ai_color = "#bc8cff" if tr.get("is_ai") else "#3fb950"
                     tr_title = job_title(tr)
                     tr_desc = job_description(tr)
+
+                    # Reasoning signals (transparency)
+                    cur_risk = (tr.get("current_displacement_risk") or 0.0) * 100
+                    tgt_risk = (tr.get("target_displacement_risk") or 0.0) * 100
+                    overlap = tr.get("skill_overlap", 0)
+                    rationale_bits = []
+                    if tgt_risk < cur_risk:
+                        rationale_bits.append(t("rationale_low_risk", frm=cur_risk, to=tgt_risk))
+                    if overlap > 0:
+                        rationale_bits.append(t("rationale_skills", n=overlap))
+                    rationale_bits.append(t("rationale_theory"))
+                    rationale_html = "; ".join(rationale_bits)
+
                     st.markdown(f"""
                     <div class="metric-card" style="text-align: left; height: 100%; border-color: #30363d;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                             <span style="font-size: 0.75rem; background: #1f2328; padding: 2px 6px; border-radius: 4px; color: #8b949e !important;">{cat_badge} · {industry_label(tr["industry"])}</span>
                             <span style="font-size: 0.9rem; font-weight: bold; color: {salary_color} !important;">{t("lbl_salary")}: {tr["salary_delta"]*100:+.0f}%</span>
                         </div>
+                        <div style="margin-bottom: 0.4rem;">
+                            <span style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid {ai_color}; color: {ai_color} !important; padding: 1px 6px; border-radius: 10px;">{ai_badge}</span>
+                        </div>
                         <h4 style="margin-top: 0; color: #58a6ff !important; font-size: 1.1rem;">{tr_title}</h4>
                         <p style="font-size: 0.85rem; color: #c9d1d9 !important; line-height: 1.4; min-height: 50px;">{tr_desc}</p>
+                        <div style="background: rgba(63, 185, 80, 0.06); border-left: 2px solid #3fb950; padding: 6px 10px; margin-bottom: 0.6rem; font-size: 0.78rem; color: #f0f6fc !important;">
+                            <strong>{t("lbl_rationale")}:</strong> {rationale_html}
+                        </div>
                         <div style="background: rgba(88, 166, 255, 0.05); border-left: 2px solid #58a6ff; padding: 6px 10px; margin-bottom: 0.8rem; font-size: 0.8rem; color: #f0f6fc !important;">
                             <strong>{t("lbl_skill_bridge")}:</strong> {', '.join(tr.get('required_skills_preview', [tr_title]))}
                         </div>

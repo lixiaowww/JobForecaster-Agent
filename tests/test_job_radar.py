@@ -165,6 +165,30 @@ def test_transition_unknown_job_returns_empty():
     assert job_radar.get_transition_details("nope", _mini_jobs()) == []
 
 
+def test_transition_includes_reasoning_signals():
+    jobs = _mini_jobs()
+    tr = job_radar.get_transition_details("role_a", jobs)[0]
+    assert "is_ai" in tr and "skill_overlap" in tr
+    assert tr["current_displacement_risk"] == 0.8
+    assert tr["target_displacement_risk"] == 0.2
+    assert tr["skill_overlap"] == 0  # Role A {Python,SQL} vs Role B {ML}
+
+
+def test_is_ai_role():
+    assert job_radar.is_ai_role({"title": "AI Infrastructure Architect"})
+    assert job_radar.is_ai_role({"title": "Autonomous Fleet Coordinator"})
+    assert not job_radar.is_ai_role({"title": "Mixed Arable Farmer"})
+    assert not job_radar.is_ai_role({"title": "Palliative & Hospice Care Nurse"})
+
+
+def test_kb_not_ai_dominated():
+    """Guardrail: the opportunity set must not be overwhelmingly AI-native."""
+    kb = _kb()
+    emerging = [j for j in kb if j["category"] == "emerging"]
+    ai = [j for j in emerging if job_radar.is_ai_role(j)]
+    assert len(ai) / len(emerging) < 0.7, "emerging roles skew too AI-heavy"
+
+
 def test_normalize_transition_targets_skips_invalid_entries():
     out = job_radar._normalize_transition_targets([
         "fin_risk_manager",

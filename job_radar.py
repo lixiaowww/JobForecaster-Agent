@@ -1,6 +1,7 @@
 import json
 import math
 import os
+import re
 from crowd import HashingEmbedder
 
 def load_knowledge_base(
@@ -147,6 +148,24 @@ def _normalize_transition_targets(targets) -> list[dict]:
     return out
 
 
+_AI_TITLE_PAT = re.compile(
+    r"\b(AI|LLM|Prompt|Robot|Roboticist|Algorithmic|Autonomous|Digital Twin|Agent|Machine Learning)\b",
+    re.IGNORECASE,
+)
+
+
+def is_ai_role(job: dict) -> bool:
+    """Heuristic: does the role's title denote an AI-native occupation?"""
+    return bool(_AI_TITLE_PAT.search(job.get("title", "")))
+
+
+def _skill_overlap(a: dict, b: dict) -> int:
+    """Count shared required skills (case-insensitive) between two jobs."""
+    sa = {s.strip().lower() for s in a.get("required_skills", [])}
+    sb = {s.strip().lower() for s in b.get("required_skills", [])}
+    return len(sa & sb)
+
+
 def get_transition_details(current_job_id: str, all_jobs: list[dict]) -> list[dict]:
     """
     Finds transition paths for a current job ID and returns detailed profiles of target jobs.
@@ -180,6 +199,11 @@ def get_transition_details(current_job_id: str, all_jobs: list[dict]) -> list[di
                 "description_zh": target_job.get("description_zh"),
                 # First 2 required skills for Skill Bridge summary line
                 "required_skills_preview": target_job.get("required_skills", [])[:2],
+                # Reasoning signals (transparency: why this path is suggested)
+                "is_ai": is_ai_role(target_job),
+                "skill_overlap": _skill_overlap(current_job, target_job),
+                "current_displacement_risk": current_job.get("displacement_risk"),
+                "target_displacement_risk": target_job.get("displacement_risk"),
             }
             transitions.append(detail)
             

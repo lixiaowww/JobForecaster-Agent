@@ -288,8 +288,27 @@ Compare your AI scenario with **15+ historical tech transitions**.
         "zh": "无法生成画像，请配置 `GROQ_API_KEY` 或 `ANTHROPIC_API_KEY`。",
     },
     "radar_search_hit": {
-        "en": "Best match **{title}** (similarity {sim:.2f}) for «{q}»",
-        "zh": "最佳匹配 **{title}**（相似度 {sim:.2f}），关键词「{q}」",
+        "en": "Most relevant role for «{q}»: **{title}** (search relevance {sim:.2f}). "
+              "This is a text-search match, not a career recommendation.",
+        "zh": "与「{q}」最相关的岗位：**{title}**（检索相关度 {sim:.2f}）。"
+              "这是文本检索匹配，并非职业推荐。",
+    },
+    "badge_ai": {"en": "AI-native", "zh": "AI 原生"},
+    "badge_non_ai": {"en": "Non-AI", "zh": "非 AI"},
+    "lbl_skill_overlap": {"en": "Skill overlap", "zh": "技能重叠度"},
+    "lbl_risk_change": {"en": "Displacement risk", "zh": "替代风险"},
+    "lbl_rationale": {"en": "Why this path", "zh": "推理依据"},
+    "rationale_low_risk": {
+        "en": "lower automation risk ({frm:.0f}%→{to:.0f}%)",
+        "zh": "自动化风险更低（{frm:.0f}%→{to:.0f}%）",
+    },
+    "rationale_skills": {
+        "en": "{n} shared skill(s)",
+        "zh": "{n} 项可迁移技能",
+    },
+    "rationale_theory": {
+        "en": "Autor task model: redeploys human-complementary tasks",
+        "zh": "Autor 任务模型：迁移至人类互补型任务",
     },
     "radar_ai_badge": {"en": " (AI estimate)", "zh": "（AI 估算）"},
     "radar_matrix": {"en": "Occupation impact matrix", "zh": "职业影响矩阵"},
