@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import math
 
+import evolution as ev
 import job_radar
 
 
@@ -179,6 +180,49 @@ def test_is_ai_role():
     assert job_radar.is_ai_role({"title": "Autonomous Fleet Coordinator"})
     assert not job_radar.is_ai_role({"title": "Mixed Arable Farmer"})
     assert not job_radar.is_ai_role({"title": "Palliative & Hospice Care Nurse"})
+
+
+def test_compute_transition_paths_basic_contract():
+    kb = _kb()
+    cur = next(j for j in kb if j["id"] == "fin_credit_analyst")
+    paths = job_radar.compute_transition_paths(cur, kb, dict(ev.CURRENT_AI_SCENARIO), top_k=3)
+    assert len(paths) == 3
+    # excludes self and at_risk targets
+    assert all(p["id"] != cur["id"] for p in paths)
+    assert all(p["category"] != "at_risk" for p in paths)
+    # sorted by transition_score desc
+    scores = [p["transition_score"] for p in paths]
+    assert scores == sorted(scores, reverse=True)
+
+
+def test_compute_transition_paths_derived_fields_sane():
+    kb = _kb()
+    cur = next(j for j in kb if j["id"] == "fin_credit_analyst")
+    for p in job_radar.compute_transition_paths(cur, kb, dict(ev.CURRENT_AI_SCENARIO)):
+        assert 0.0 <= p["skill_distance"] <= 1.0
+        assert 0.0 <= p["skill_proximity"] <= 1.0
+        assert 3 <= p["retrain_months"] <= 24
+        assert isinstance(p["skill_bridge_skills"], list)
+        assert p["current_displacement_risk"] == cur["displacement_risk"]
+
+
+def test_compute_transition_paths_scenario_sensitive():
+    """Genuine model derivation: demand_outlook responds to the scenario."""
+    kb = _kb()
+    cur = next(j for j in kb if j["id"] == "fin_credit_analyst")
+    base = job_radar.compute_transition_paths(cur, kb, {"diffusion_years": 5.0})
+    agi = job_radar.compute_transition_paths(
+        cur, kb, {"augmentation_ratio": 0.9, "task_frontier_open": 1.0, "diffusion_years": 3.0},
+    )
+    base_d = {p["id"]: p["demand_outlook"] for p in base}
+    agi_d = {p["id"]: p["demand_outlook"] for p in agi}
+    shared = set(base_d) & set(agi_d)
+    assert shared and any(base_d[i] != agi_d[i] for i in shared)
+
+
+def test_skill_distance_self_is_zero():
+    job = {"skill_vector": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]}
+    assert job_radar._skill_distance(job, job) == 0.0
 
 
 def test_kb_not_ai_dominated():

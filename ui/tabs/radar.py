@@ -247,8 +247,11 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 st.markdown(f"**{t('radar_role_desc')}:** {job_description(current_job_obj)}")
                 st.markdown(f"**{t('radar_skill_tags')}:** " + " ".join([f"`{s}`" for s in current_job_obj["required_skills"]]))
                 
-            # Get transitions
-            transitions = job_radar.get_transition_details(current_job_id, all_jobs)
+            # Transition paths derived live from skill-vector distance,
+            # risk reduction and scenario demand (not a static KB list).
+            transitions = job_radar.compute_transition_paths(
+                current_job_obj, all_jobs, scenario_input, top_k=3
+            )
             
             # Load empirical metrics for the selected job
             empirical_data = job_radar.get_empirical_metrics()
@@ -269,34 +272,38 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 """, unsafe_allow_html=True)
 
             st.markdown(f"<br><b>{t('radar_trans_paths')}:</b>", unsafe_allow_html=True)
-            
+            st.caption(t("radar_trans_method"))
+
             col_trans_cards = st.columns(3)
             for idx, tr in enumerate(transitions[:3]):
                 with col_trans_cards[idx]:
-                    salary_color = "#55ff55" if tr["salary_delta"] > 0 else "#ff5555"
+                    demand = tr.get("demand_outlook", 0.0)
+                    demand_color = "#55ff55" if demand > 0 else "#ff5555"
                     cat_badge = t("status_emerging") if tr["category"] == "emerging" else t("status_transforming")
                     ai_badge = t("badge_ai") if tr.get("is_ai") else t("badge_non_ai")
                     ai_color = "#bc8cff" if tr.get("is_ai") else "#3fb950"
                     tr_title = job_title(tr)
                     tr_desc = job_description(tr)
 
-                    # Reasoning signals (transparency)
+                    # Reasoning signals — all model-derived
                     cur_risk = (tr.get("current_displacement_risk") or 0.0) * 100
                     tgt_risk = (tr.get("target_displacement_risk") or 0.0) * 100
-                    overlap = tr.get("skill_overlap", 0)
-                    rationale_bits = []
+                    proximity = tr.get("skill_proximity", 0.0) * 100
+                    rationale_bits = [t("rationale_skill_match", pct=proximity)]
                     if tgt_risk < cur_risk:
                         rationale_bits.append(t("rationale_low_risk", frm=cur_risk, to=tgt_risk))
-                    if overlap > 0:
-                        rationale_bits.append(t("rationale_skills", n=overlap))
                     rationale_bits.append(t("rationale_theory"))
                     rationale_html = "; ".join(rationale_bits)
+
+                    bridge_skills = tr.get("skill_bridge_skills") or tr.get("required_skills_preview", [])
+                    bridge_html = ", ".join(bridge_skills) if bridge_skills else "—"
+                    match_pct = tr.get("transition_score", 0.0) * 100
 
                     st.markdown(f"""
                     <div class="metric-card" style="text-align: left; height: 100%; border-color: #30363d;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                             <span style="font-size: 0.75rem; background: #1f2328; padding: 2px 6px; border-radius: 4px; color: #8b949e !important;">{cat_badge} · {industry_label(tr["industry"])}</span>
-                            <span style="font-size: 0.9rem; font-weight: bold; color: {salary_color} !important;">{t("lbl_salary")}: {tr["salary_delta"]*100:+.0f}%</span>
+                            <span style="font-size: 0.85rem; font-weight: bold; color: #58a6ff !important;">{t("lbl_match_score")}: {match_pct:.0f}%</span>
                         </div>
                         <div style="margin-bottom: 0.4rem;">
                             <span style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid {ai_color}; color: {ai_color} !important; padding: 1px 6px; border-radius: 10px;">{ai_badge}</span>
@@ -307,10 +314,11 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                             <strong>{t("lbl_rationale")}:</strong> {rationale_html}
                         </div>
                         <div style="background: rgba(88, 166, 255, 0.05); border-left: 2px solid #58a6ff; padding: 6px 10px; margin-bottom: 0.8rem; font-size: 0.8rem; color: #f0f6fc !important;">
-                            <strong>{t("lbl_skill_bridge")}:</strong> {', '.join(tr.get('required_skills_preview', [tr_title]))}
+                            <strong>{t("lbl_skill_bridge")}:</strong> {bridge_html}
                         </div>
-                        <div style="font-size: 0.8rem; color: #8b949e !important; border-top: 1px solid #21262d; padding-top: 0.5rem; text-align: right;">
-                            {t("lbl_retrain")}: <strong style="color: #bc8cff;">{tr["retrain_months"]} {t("lbl_months")}</strong>
+                        <div style="font-size: 0.8rem; color: #8b949e !important; border-top: 1px solid #21262d; padding-top: 0.5rem; display: flex; justify-content: space-between;">
+                            <span>{t("lbl_demand_outlook")}: <strong style="color: {demand_color};">{demand:+.2f}</strong></span>
+                            <span>{t("lbl_retrain")}: <strong style="color: #bc8cff;">{tr["retrain_months"]} {t("lbl_months")}</strong></span>
                         </div>
                     </div>
                     """, unsafe_allow_html=True)

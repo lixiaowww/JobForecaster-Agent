@@ -209,6 +209,123 @@ def get_transition_details(current_job_id: str, all_jobs: list[dict]) -> list[di
             
     return transitions
 
+# --------------------------------------------------------------------------- #
+# Real-time transition derivation (model-based, not static KB lists)
+# --------------------------------------------------------------------------- #
+
+# Default weights for the composite transition score. Override via
+# config.yaml -> job_radar.transition.{skill,overlap,risk,demand}.
+_TRANSITION_WEIGHTS = {
+    "skill": 0.40,    # skill-vector proximity (ease of transition)
+    "overlap": 0.15,  # shared concrete skills (Jaccard)
+    "risk": 0.25,     # reduction in automation/displacement risk
+    "demand": 0.20,   # target's forward demand under the active scenario
+}
+
+# Skill vectors live in [0, 1]^8, so the max Euclidean distance is sqrt(8).
+_MAX_SKILL_DIST = math.sqrt(8.0)
+
+
+def _skill_distance(a: dict, b: dict) -> float:
+    """Normalised Euclidean distance between two 8-dim skill vectors → [0, 1]."""
+    va = a.get("skill_vector") or []
+    vb = b.get("skill_vector") or []
+    n = min(len(va), len(vb))
+    if n == 0:
+        return 1.0
+    dist = math.sqrt(sum((va[i] - vb[i]) ** 2 for i in range(n)))
+    return min(1.0, dist / _MAX_SKILL_DIST)
+
+
+def _skill_jaccard(a: dict, b: dict) -> float:
+    sa = {s.strip().lower() for s in a.get("required_skills", [])}
+    sb = {s.strip().lower() for s in b.get("required_skills", [])}
+    if not sa or not sb:
+        return 0.0
+    return len(sa & sb) / len(sa | sb)
+
+
+def _skill_gap(current: dict, target: dict, limit: int = 3) -> list[str]:
+    """Target skills the current role lacks — the concrete bridge to close."""
+    have = {s.strip().lower() for s in current.get("required_skills", [])}
+    gap = [s for s in target.get("required_skills", []) if s.strip().lower() not in have]
+    return gap[:limit]
+
+
+def compute_transition_paths(
+    current_job: dict,
+    all_jobs: list[dict],
+    scenario: dict,
+    *,
+    top_k: int = 3,
+    weights: dict | None = None,
+) -> list[dict]:
+    """Derive transition targets live from skill-vector distance, risk reduction
+    and scenario-driven demand — instead of reading static ``transition_targets``.
+
+    Returns detail dicts compatible with the radar transition cards, with extra
+    transparency fields (skill_distance, transition_score, demand_outlook).
+    """
+    w = {**_TRANSITION_WEIGHTS, **(weights or {})}
+    cur_risk = float(current_job.get("displacement_risk") or 0.0)
+
+    # Score every other job under the active scenario in one pass.
+    scored = compute_impact_scores(all_jobs, scenario)
+    impact_by_id = {j["id"]: j["impact_score"] for j in scored}
+
+    demands = [impact_by_id.get(j["id"], 0.0) for j in all_jobs if j["id"] != current_job.get("id")]
+    d_min, d_max = (min(demands), max(demands)) if demands else (0.0, 1.0)
+    d_span = (d_max - d_min) or 1.0
+
+    candidates = []
+    for tgt in all_jobs:
+        if tgt.get("id") == current_job.get("id"):
+            continue
+        # Don't recommend jumping into another high-displacement (dying) role.
+        if tgt.get("category") == "at_risk":
+            continue
+
+        dist = _skill_distance(current_job, tgt)
+        proximity = 1.0 - dist
+        jacc = _skill_jaccard(current_job, tgt)
+        tgt_risk = float(tgt.get("displacement_risk") or 0.0)
+        risk_reduction = max(0.0, cur_risk - tgt_risk)
+        demand_raw = impact_by_id.get(tgt["id"], 0.0)
+        demand_norm = (demand_raw - d_min) / d_span
+
+        score = (
+            w["skill"] * proximity
+            + w["overlap"] * jacc
+            + w["risk"] * risk_reduction
+            + w["demand"] * demand_norm
+        )
+
+        candidates.append({
+            "id": tgt["id"],
+            "title": tgt.get("title"),
+            "title_zh": tgt.get("title_zh"),
+            "industry": tgt.get("industry"),
+            "category": tgt.get("category"),
+            "description": tgt.get("description"),
+            "description_zh": tgt.get("description_zh"),
+            "is_ai": is_ai_role(tgt),
+            "skill_overlap": _skill_overlap(current_job, tgt),
+            "skill_distance": round(dist, 3),
+            "skill_proximity": round(proximity, 3),
+            "transition_score": round(score, 3),
+            "current_displacement_risk": cur_risk,
+            "target_displacement_risk": tgt_risk,
+            "demand_outlook": round(demand_raw, 3),
+            # Retraining time scales with skill distance: 3..24 months.
+            "retrain_months": int(round(3 + 21 * dist)),
+            "skill_bridge_skills": _skill_gap(current_job, tgt),
+            "required_skills_preview": tgt.get("required_skills", [])[:2],
+        })
+
+    candidates.sort(key=lambda c: c["transition_score"], reverse=True)
+    return candidates[:top_k]
+
+
 def compute_timeline(jobs: list[dict], diffusion_years: float) -> list[dict]:
     """
     Calculates projected emergence years for emerging jobs.

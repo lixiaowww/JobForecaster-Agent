@@ -310,6 +310,17 @@ Compare your AI scenario with **15+ historical tech transitions**.
         "en": "Autor task model: redeploys human-complementary tasks",
         "zh": "Autor 任务模型：迁移至人类互补型任务",
     },
+    "rationale_skill_match": {
+        "en": "{pct:.0f}% skill-vector proximity",
+        "zh": "技能向量贴近度 {pct:.0f}%",
+    },
+    "lbl_demand_outlook": {"en": "Demand outlook", "zh": "需求前景"},
+    "lbl_match_score": {"en": "Match", "zh": "匹配度"},
+    "radar_trans_method": {
+        "en": "Paths are derived live from 8-D skill-vector distance, automation-risk "
+              "reduction, and scenario demand — not a fixed list.",
+        "zh": "转型路径由 8 维技能向量距离、自动化风险下降与情景需求**实时推导**，并非固定清单。",
+    },
     "radar_ai_badge": {"en": " (AI estimate)", "zh": "（AI 估算）"},
     "radar_matrix": {"en": "Occupation impact matrix", "zh": "职业影响矩阵"},
     "radar_at_risk": {"en": "At-risk & transforming roles", "zh": "高风险与转型中岗位"},
