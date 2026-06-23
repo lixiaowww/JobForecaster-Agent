@@ -124,6 +124,14 @@ git push hf main --force
 
 正常。请选 **Docker**，本项目已提供 `Dockerfile`（[官方说明](https://huggingface.co/docs/hub/spaces-sdks-docker)）。
 
+### 黑屏 / 蓝屏（Running 但内容区全黑）
+
+多为 **Streamlit 在 HF iframe 里未关闭 XSRF/CORS**，前端 JS 无法加载（与 Groq key 无关）。
+
+已在本仓库 `Dockerfile` 中通过启动参数修复。请 `git push origin main` 触发重建，或 Actions → **Sync to Hugging Face Space**。
+
+本地自检：浏览器 DevTools → **Network**，若大量 `*.js` / `*.css` 为 404，即为此问题。
+
 ### 503 / Preparing Space 一直转
 
 检查三处端口一致为 **8501**：

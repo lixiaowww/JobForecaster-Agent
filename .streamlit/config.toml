@@ -1,8 +1,9 @@
 [server]
 headless = true
-# Hugging Face Spaces sets PORT; Streamlit picks it up automatically.
+# HF Spaces embeds the app in an iframe on *.hf.space — cookies/XSRF break without these.
 enableCORS = false
 enableXsrfProtection = false
+baseUrlPath = ""
 
 [browser]
 gatherUsageStats = false
