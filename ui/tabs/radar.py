@@ -236,7 +236,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid #30363d; border-radius: 8px; padding: 1rem; text-align: center;">
                     <span style="font-size: 0.8rem; color: #8b949e !important;">{t("radar_role_class")}</span>
                     <h4 style="margin: 0.2rem 0; color: {status_color} !important;">{status_label}</h4>
-                    <span style="font-size: 0.8rem; color: #8b949e !important;">{t("radar_baseline_growth")}: {current_job_obj["base_demand_trend"]*100:+.1f}%</span>
+                    <span style="font-size: 0.8rem; color: #8b949e !important;">{t("radar_baseline_growth")}: {current_job_obj.get("base_demand_trend", 0.0)*100:+.1f}%</span>
                 </div>
                 """, unsafe_allow_html=True)
             with col_curr_desc:
@@ -343,11 +343,18 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         none_lbl = t("filter_none")
         with st.form("job_feedback_form", clear_on_submit=True):
             col_f1, col_f2 = st.columns(2)
+            # Map localized labels back to canonical English titles so saved
+            # feedback keys match get_empirical_metrics() (which groups by title).
+            title_by_label = {}
+            for j in all_jobs:
+                title_by_label.setdefault(job_title(j), j.get("title", job_title(j)))
+            sorted_labels = sorted(title_by_label.keys())
             with col_f1:
-                fb_job = st.selectbox(
+                fb_job_label = st.selectbox(
                     t("radar_fb_job"),
-                    sorted(list(set(job_title(j) for j in all_jobs))),
+                    sorted_labels,
                 )
+                fb_job = title_by_label[fb_job_label]
                 fb_industry = st.selectbox(
                     t("radar_fb_industry"),
                     list(INDUSTRY_CODES),
@@ -368,9 +375,13 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 fb_confidence = st.slider(
                     t("radar_fb_confidence"), min_value=0, max_value=100, value=50,
                 ) / 100.0
-                fb_target = st.selectbox(
+                fb_target_label = st.selectbox(
                     t("radar_fb_target"),
-                    [none_lbl] + sorted(list(set(job_title(j) for j in all_jobs))),
+                    [none_lbl] + sorted_labels,
+                )
+                fb_target = (
+                    none_lbl if fb_target_label == none_lbl
+                    else title_by_label[fb_target_label]
                 )
 
             submit_btn = st.form_submit_button(t("radar_fb_submit"))

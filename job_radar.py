@@ -172,8 +172,10 @@ def get_transition_details(current_job_id: str, all_jobs: list[dict]) -> list[di
                 "industry": target_job.get("industry"),
                 "category": target_job.get("category"),
                 "skill_bridge": target.get("skill_bridge"),
-                "retrain_months": target.get("retrain_months"),
-                "salary_delta": target.get("salary_delta"),
+                # Coerce None (e.g. from bare-string LLM targets) to safe numerics
+                # so the UI can compare/format without TypeError.
+                "retrain_months": target.get("retrain_months") if target.get("retrain_months") is not None else 0,
+                "salary_delta": target.get("salary_delta") if target.get("salary_delta") is not None else 0.0,
                 "description": target_job.get("description"),
                 "description_zh": target_job.get("description_zh"),
                 # First 2 required skills for Skill Bridge summary line
