@@ -15,8 +15,6 @@ tags:
   - job-market
 ---
 
-# JobForecaster Agent — Interactive Dashboard
-
-Copy this file to the **root `README.md`** of your Hugging Face Space repo, or ensure your linked GitHub Space uses **SDK: Docker** with `app_port: 8501`.
+Copy metadata lives in the **repo root `README.md`** (YAML frontmatter for HF Spaces).
 
 Static reports: [GitHub Pages](https://lixiaowww.github.io/JobForecaster-Agent/)
