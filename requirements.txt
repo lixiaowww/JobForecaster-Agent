@@ -22,5 +22,5 @@ numpy>=1.26
 # Publishing
 markdown>=3.5
 
-# Dashboard (optional: pip install -r requirements-dashboard.txt)
-# streamlit, plotly, pandas — see requirements-dashboard.txt
+# Dashboard / Hugging Face Spaces (streamlit run app.py or dashboard.py)
+-r requirements-dashboard.txt

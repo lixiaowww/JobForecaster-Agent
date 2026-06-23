@@ -151,6 +151,17 @@ python run.py once --config config.ci.yaml --mock   # local preview of CI output
 
 See **[docs/DEPLOY.md](docs/DEPLOY.md)** for setup (Pages, `GROQ_API_KEY` secret, `config.ci.yaml`).
 
+### Interactive dashboard (Hugging Face Spaces)
+
+Deploy the Streamlit UI (Job Radar, accuracy tabs) on HF free tier:
+
+```bash
+streamlit run dashboard.py    # local
+# or: streamlit run app.py     # same UI (HF Spaces entry)
+```
+
+See **[docs/HUGGINGFACE.md](docs/HUGGINGFACE.md)** — connect repo `app.py` to a new Streamlit Space.
+
 ---
 
 ## Configuration (`config.yaml`)

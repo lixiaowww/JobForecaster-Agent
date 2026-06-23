@@ -1,12 +1,11 @@
 [server]
 headless = true
-port = 8501
-enableCORS = true
-enableXsrfProtection = true
+# Hugging Face Spaces sets PORT; Streamlit picks it up automatically.
+enableCORS = false
+enableXsrfProtection = false
 
 [browser]
 gatherUsageStats = false
-serverAddress = "localhost"
 
 [theme]
 base = "dark"
