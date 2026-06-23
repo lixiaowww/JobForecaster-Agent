@@ -8,7 +8,17 @@ import job_radar
 import bls_verify
 from datetime import datetime, timedelta, timezone
 from schemas import JobFeedback
-from ui.i18n import filter_all_label, job_description, job_title, t
+from ui.i18n import (
+    EMPLOYMENT_STATUS_CODES,
+    INDUSTRY_CODES,
+    employment_status_label,
+    filter_all_label,
+    industry_label,
+    job_category_label,
+    job_description,
+    job_title,
+    t,
+)
 
 
 def _risk_badge(imp_val: float) -> str:
@@ -54,7 +64,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             selected_industry = st.selectbox(
                 t("radar_industry"),
                 industry_options,
-                format_func=lambda x: filter_all_label() if x == "All" else x,
+                format_func=lambda x: filter_all_label() if x == "All" else industry_label(x),
             )
             
         # Get hybrid score
@@ -131,7 +141,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     st.markdown(f"""
                     <div class="metric-card" style="text-align: left; margin-bottom: 0.8rem; border-color: #442222; background: rgba(30, 15, 15, 0.4);">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h4 style="margin: 0; font-size: 1.1rem; color: #ff8888 !important;">{title} <span style="font-size: 0.85rem; color: #8b949e !important;">({j["industry"]})</span>{bls_badge_html}</h4>
+                            <h4 style="margin: 0; font-size: 1.1rem; color: #ff8888 !important;">{title} <span style="font-size: 0.85rem; color: #8b949e !important;">({industry_label(j["industry"])})</span>{bls_badge_html}</h4>
                             <span style="font-weight: bold; {color_style}">{rating_badge} ({imp_val:.2f})</span>
                         </div>
                         <p style="font-size: 0.9rem; margin: 0.4rem 0; color: #c9d1d9 !important; line-height: 1.4;">{desc}</p>
@@ -151,7 +161,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                             st.markdown(f"""
                             <div class="metric-card" style="text-align: left; margin-bottom: 0.8rem; border-color: #30363d;">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <h5 style="margin: 0; color: #ff8888 !important;">{job_title(j)} ({j["industry"]})</h5>
+                                    <h5 style="margin: 0; color: #ff8888 !important;">{job_title(j)} ({industry_label(j["industry"])})</h5>
                                     <span style="font-weight: bold; {color_style}">{rating_badge} ({imp_val:.2f})</span>
                                 </div>
                                 <p style="font-size: 0.85rem; margin: 0.3rem 0; color: #c9d1d9 !important;">{job_description(j)}</p>
@@ -170,12 +180,12 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     st.markdown(f"""
                     <div class="metric-card" style="text-align: left; margin-bottom: 0.8rem; border-color: #224422; background: rgba(15, 30, 15, 0.4);">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h4 style="margin: 0; font-size: 1.1rem; color: #88ff88 !important;">{job_title(j)} <span style="font-size: 0.85rem; color: #8b949e !important;">({j["industry"]})</span></h4>
+                            <h4 style="margin: 0; font-size: 1.1rem; color: #88ff88 !important;">{job_title(j)} <span style="font-size: 0.85rem; color: #8b949e !important;">({industry_label(j["industry"])})</span></h4>
                             <span style="font-weight: bold; {color_style}">{rating_badge} ({'+' if imp_val >= 0 else ''}{imp_val:.2f})</span>
                         </div>
                         <p style="font-size: 0.9rem; margin: 0.4rem 0; color: #c9d1d9 !important; line-height: 1.4;">{job_description(j)}</p>
                         <div style="font-size: 0.8rem; color: #8b949e !important; padding-top: 0.3rem; border-top: 1px solid #223322;">
-                            <strong>{t("lbl_category")}:</strong> {j["category"].upper()}<br>
+                            <strong>{t("lbl_category")}:</strong> {job_category_label(j["category"])}<br>
                             <strong>{t("lbl_skills")}:</strong> {", ".join(j["required_skills"])}
                         </div>
                     </div>
@@ -189,7 +199,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                             st.markdown(f"""
                             <div class="metric-card" style="text-align: left; margin-bottom: 0.8rem; border-color: #30363d;">
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <h5 style="margin: 0; color: #88ff88 !important;">{job_title(j)} ({j["industry"]})</h5>
+                                    <h5 style="margin: 0; color: #88ff88 !important;">{job_title(j)} ({industry_label(j["industry"])})</h5>
                                     <span style="font-weight: bold; {color_style}">{rating_badge} ({'+' if imp_val >= 0 else ''}{imp_val:.2f})</span>
                                 </div>
                                 <p style="font-size: 0.85rem; margin: 0.3rem 0; color: #c9d1d9 !important;">{job_description(j)}</p>
@@ -201,7 +211,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         st.markdown(t("radar_transition_help"))
 
         dropdown_jobs = sorted(all_jobs, key=lambda x: job_title(x))
-        job_options = [job_title(j) + " (" + j["industry"] + ")" for j in dropdown_jobs]
+        job_options = [job_title(j) + " (" + industry_label(j["industry"]) + ")" for j in dropdown_jobs]
 
         selected_job_label = st.selectbox(t("radar_select_role"), job_options)
         
@@ -209,7 +219,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         current_job_id = None
         current_job_obj = None
         for j in all_jobs:
-            if job_title(j) + " (" + j["industry"] + ")" == selected_job_label:
+            if job_title(j) + " (" + industry_label(j["industry"]) + ")" == selected_job_label:
                 current_job_id = j["id"]
                 current_job_obj = j
                 break
@@ -264,7 +274,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     st.markdown(f"""
                     <div class="metric-card" style="text-align: left; height: 100%; border-color: #30363d;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                            <span style="font-size: 0.75rem; background: #1f2328; padding: 2px 6px; border-radius: 4px; color: #8b949e !important;">{cat_badge} · {tr["industry"]}</span>
+                            <span style="font-size: 0.75rem; background: #1f2328; padding: 2px 6px; border-radius: 4px; color: #8b949e !important;">{cat_badge} · {industry_label(tr["industry"])}</span>
                             <span style="font-size: 0.9rem; font-weight: bold; color: {salary_color} !important;">{t("lbl_salary")}: {tr["salary_delta"]*100:+.0f}%</span>
                         </div>
                         <h4 style="margin-top: 0; color: #58a6ff !important; font-size: 1.1rem;">{tr_title}</h4>
@@ -289,7 +299,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 "Job Title": job_title(row),
                 "Projected Emergence Year": row["projected_emergence_year"],
                 "Opportunity Score": max(0.01, row["impact_score"]),
-                "Industry": row["industry"],
+                "Industry": industry_label(row["industry"]),
             } for row in timeline_data])
             
             # Scatter plot for timeline
@@ -318,7 +328,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 height=450,
                 margin=dict(l=40, r=40, t=60, b=40)
             )
-            st.plotly_chart(fig_timeline, use_container_width=True)
+            st.plotly_chart(fig_timeline, width="stretch")
             
             st.caption(t("radar_timeline_note"))
         else:
@@ -338,8 +348,8 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 )
                 fb_industry = st.selectbox(
                     t("radar_fb_industry"),
-                    ["Finance", "Tech", "Manufacturing", "Healthcare", "Education", "Legal",
-                     "Logistics", "Retail", "Agriculture", "Construction", "Hospitality", "Government", "Media"],
+                    list(INDUSTRY_CODES),
+                    format_func=industry_label,
                 )
                 fb_company = st.text_input(t("radar_fb_company"))
                 fb_email = st.text_input(
@@ -348,7 +358,11 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     help=t("radar_fb_email_help"),
                 )
             with col_f2:
-                fb_status = st.selectbox(t("radar_fb_status"), ["Employed", "Unemployed", "Transitioning"])
+                fb_status = st.selectbox(
+                    t("radar_fb_status"),
+                    list(EMPLOYMENT_STATUS_CODES),
+                    format_func=employment_status_label,
+                )
                 fb_confidence = st.slider(
                     t("radar_fb_confidence"), min_value=0, max_value=100, value=50,
                 ) / 100.0
@@ -366,7 +380,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     job_title=fb_job,
                     industry=fb_industry,
                     company=fb_company if fb_company else None,
-                    status=fb_status.lower(),
+                    status=fb_status,
                     confidence=fb_confidence,
                     transition_target=fb_target if fb_target != none_lbl else None,
                     email=email_val,
@@ -382,6 +396,6 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         with st.expander(t("radar_sources")):
             st.markdown(t("radar_sources_intro"))
             for j in all_jobs:
-                st.markdown(f"**{job_title(j)} ({j['industry']}):**")
+                st.markdown(f"**{job_title(j)} ({industry_label(j['industry'])}):**")
                 for s in j.get("sources", []):
                     st.markdown(f"- {s}")

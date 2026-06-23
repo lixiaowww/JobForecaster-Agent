@@ -1,7 +1,7 @@
-"""Hugging Face Spaces entrypoint.
+"""Hugging Face Spaces entrypoint (legacy).
 
-HF runs: streamlit run app.py
-This imports dashboard.py (all Streamlit widgets register at import time).
+HF Docker image runs `streamlit run dashboard.py` directly.
+This file remains for local `streamlit run app.py` compatibility.
 """
 from __future__ import annotations
 

@@ -8,11 +8,7 @@ from ui import i18n
 
 
 def test_translate_both_languages(monkeypatch):
-    monkeypatch.setattr(
-        i18n,
-        "lang",
-        lambda: "en",
-    )
+    monkeypatch.setattr(i18n, "lang", lambda: "en")
     assert i18n.t("tab_radar") == "Job Forecast Radar"
     assert i18n._translate("zh", "tab_radar") == "岗位预测雷达"
 
@@ -22,6 +18,18 @@ def test_job_fields_chinese():
     assert i18n._job_title_for("zh", job) == "工程师"
     assert i18n._job_description_for("zh", job) == "中文描述"
     assert i18n._job_title_for("en", job) == "Engineer"
+
+
+def test_industry_and_status_chinese():
+    assert i18n._translate("zh", "industry_finance") == "金融"
+    assert i18n._translate("zh", "emp_status_employed") == "在职"
+    assert i18n._translate("zh", "pred_labor") == "劳动力"
+    assert i18n._job_category_label_for("zh", "at_risk") == "高风险"
+
+
+def test_industry_label_english():
+    assert i18n._industry_label_for("en", "Tech") == "Tech"
+    assert i18n._industry_label_for("zh", "Tech") == "科技"
 
 
 def test_all_keys_have_both_languages():

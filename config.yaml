@@ -1,5 +1,5 @@
 # ---- core ----
-model: claude-sonnet-4-6          # claude-opus-4-8 for higher quality, claude-haiku-4-5 for cheap
+model: claude-sonnet-4-6          # used when ANTHROPIC_API_KEY set; Groq uses llama-3.3-70b-versatile
 database_path: data/forecaster.db # SQLite store (see schemas.py engine)
 mock_llm: false                   # true or run.py --mock for offline deterministic LLM
 interval_seconds: 86400           # loop cadence (24h). Or use cron, see README.

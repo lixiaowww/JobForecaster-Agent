@@ -49,6 +49,13 @@ def mock_mode_enabled() -> bool:
     return flag in ("1", "true", "yes", "on")
 
 
+def _resolve_groq_model(model: Optional[str]) -> str:
+    """Use config model only if it looks Groq-compatible; else default."""
+    if model and not model.startswith("claude-"):
+        return model
+    return _GROQ_DEFAULT_MODEL
+
+
 def call_llm(
     system: str,
     user: str,
@@ -66,7 +73,7 @@ def call_llm(
 
     if groq_key:
         return _call_groq(system, user, max_tokens=max_tokens,
-                          model=model or _GROQ_DEFAULT_MODEL, api_key=groq_key)
+                          model=_resolve_groq_model(model), api_key=groq_key)
     if anthropic_key:
         return _call_anthropic(system, user, max_tokens=max_tokens,
                                model=model or _ANTHROPIC_DEFAULT_MODEL)

@@ -478,12 +478,74 @@ _FACTOR_LABELS = {
 }
 
 _DIMENSION_NAMES = {
-    "complementarity": "Complementary Growth (互补协同型)",
-    "demand_expansion": "Demand Expansion (需求扩张型)",
-    "transition_friction": "High Transition Friction (转型摩擦型)",
-    "latent": "Latent (潜在型)",
-    "other": "Other (其它)"
+    "complementarity": "Complementary growth",
+    "demand_expansion": "Demand expansion",
+    "transition_friction": "High transition friction",
+    "latent": "Latent regime",
+    "other": "Other",
 }
+
+
+def _short_case_title(name: str) -> str:
+    """Trim year/period suffix for a compact chart label."""
+    for sep in (" 197", " 198", " 199", " 200", " 201", " 202", " 180", " 190"):
+        if sep in name:
+            return name.split(sep)[0].strip()
+    return name.strip()
+
+
+def _outcome_phrase(mean_mult: float) -> str:
+    if mean_mult >= 1.25:
+        return f"{mean_mult:.1f}x job growth"
+    if mean_mult >= 0.95:
+        return f"{mean_mult:.1f}x mixed outcome"
+    return f"{mean_mult:.1f}x displacement"
+
+
+def _trait_phrases(var_means: dict[str, float]) -> list[str]:
+    traits: list[str] = []
+    aug = float(var_means.get("augmentation_ratio", 0.5))
+    if aug >= 0.55:
+        traits.append("complementary tools")
+    elif aug <= 0.3:
+        traits.append("heavy substitution")
+    skill = float(var_means.get("skill_distance", 0.5))
+    if skill >= 0.6:
+        traits.append("steep retraining")
+    elif skill <= 0.35:
+        traits.append("easy reskilling")
+    de = float(var_means.get("demand_elasticity", 0.5))
+    if de >= 0.75:
+        traits.append("elastic demand")
+    diff = float(var_means.get("diffusion_years", 15))
+    if diff >= 25:
+        traits.append("slow diffusion")
+    elif diff <= 12:
+        traits.append("fast diffusion")
+    if float(var_means.get("absorbing_sector", 0)) >= 0.5:
+        traits.append("Baumol absorption")
+    return traits[:2]
+
+
+def _name_cluster(
+    members: list[TransitionCase],
+    var_means: dict[str, float],
+    mean_mult: float,
+    mean_lag: float,
+) -> str:
+    """Distinct English label anchored on the medoid historical case."""
+    anchor = min(
+        members,
+        key=lambda m: sum(
+            (float(getattr(m, v)) - float(var_means.get(v, 0))) ** 2
+            for v in VARIABLE_NAMES
+        ),
+    )
+    title = _short_case_title(anchor.name)
+    traits = _trait_phrases(var_means)
+    trait_part = f" · {traits[0]}" if traits else ""
+    return f"{title} · {_outcome_phrase(mean_mult)}{trait_part} · {mean_lag:.0f}yr lag"
+
 
 def _name_factor(loadings: list[tuple[str, float]]) -> str:
     scores: dict[str, float] = {}
@@ -647,6 +709,7 @@ def build_prior(
 
     # 4. cluster profiles
     profiles = []
+    used_names: dict[str, int] = {}
     for lbl in sorted(set(labels)):
         members = [c for c, l in zip(cases, labels) if l == lbl]
         var_means = {}
@@ -655,11 +718,16 @@ def build_prior(
                 sum(getattr(m, vname) for m in members) / len(members), 3)
         mean_mult = sum(m.net_job_multiplier for m in members) / len(members)
         mean_lag  = sum(m.lag_years for m in members) / len(members)
+        base_name = _name_cluster(members, var_means, mean_mult, mean_lag)
+        if base_name in used_names:
+            used_names[base_name] += 1
+            display_name = f"{base_name} (variant {used_names[base_name]})"
+        else:
+            used_names[base_name] = 1
+            display_name = base_name
         profiles.append(ClusterProfile(
             label=int(lbl), size=len(members),
-            name=_name_factor(
-                sorted([(v, var_means[v]) for v in VARIABLE_NAMES],
-                       key=lambda t: -abs(t[1]))),
+            name=display_name,
             centroid_variables=var_means,
             mean_multiplier=round(mean_mult, 3),
             mean_lag_years=round(mean_lag, 1),

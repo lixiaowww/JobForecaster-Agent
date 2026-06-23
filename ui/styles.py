@@ -1,10 +1,8 @@
 """Dashboard CSS (dark glassmorphism)."""
 CUSTOM_CSS = """<style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
-    
-    /* Main body background and font */
+    /* Main body background and font (system stack — no external font CDN for HF iframe CSP) */
     html, body, [data-testid="stAppViewContainer"], [data-testid="stSidebar"] {
-        font-family: 'Outfit', sans-serif;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
         background-color: #0d1117;
         color: #f0f6fc !important;
     }

@@ -1,7 +1,7 @@
 # CI / GitHub Actions — zero-cost daily publish (see docs/DEPLOY.md)
 # Do not use require_review: false in local config.yaml for production trust.
 
-model: llama-3.3-70b-versatile   # Groq; ignored when --mock
+model: llama-3.3-70b-versatile   # Groq when GROQ_API_KEY set; else --mock
 mock_llm: false
 database_path: data/forecaster.db
 max_signals: 30

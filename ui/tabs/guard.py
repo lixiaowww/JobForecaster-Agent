@@ -57,7 +57,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
 
     col_gauge, col_info = st.columns([2, 3])
     with col_gauge:
-        st.plotly_chart(fig_gauge, use_container_width=True)
+        st.plotly_chart(fig_gauge, width="stretch")
 
     with col_info:
         st.subheader(t("guard_actions"))

@@ -9,7 +9,7 @@ import streamlit as st
 from services.dashboard_data import get_predictions, get_scoreboard_data
 import market
 from schemas import Status
-from ui.i18n import filter_all_label, t
+from ui.i18n import filter_all_label, prediction_category_label, t
 
 
 def render(scenario_input: dict, prior, job_radar_cfg: dict):
@@ -84,7 +84,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             height=450,
             margin=dict(l=40, r=40, t=60, b=40),
         )
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     else:
         st.info(t("acc_no_cal"))
 
@@ -94,7 +94,11 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
     all_label = filter_all_label()
     if preds:
         cat_options = [all_label] + sorted(list(set(p.category for p in preds)))
-        selected_cat = st.selectbox(t("acc_filter_cat"), cat_options)
+        selected_cat = st.selectbox(
+            t("acc_filter_cat"),
+            cat_options,
+            format_func=lambda c: all_label if c == all_label else prediction_category_label(c),
+        )
 
         filtered_preds = preds
         if selected_cat != all_label:
@@ -117,14 +121,14 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             st.markdown(f"### {t('acc_active', n=len(open_preds))}")
             if open_preds:
                 active_df = pd.DataFrame([{
-                    "ID": p.fingerprint(),
-                    "Statement": p.statement,
-                    "Category": p.category,
-                    "Confidence": f"{p.confidence*100:.0f}%",
-                    "Horizon": p.horizon,
-                    "Resolution": p.resolution_date.strftime("%Y-%m-%d"),
+                    t("col_id"): p.fingerprint(),
+                    t("col_statement"): p.statement,
+                    t("col_category"): prediction_category_label(p.category),
+                    t("col_confidence"): f"{p.confidence*100:.0f}%",
+                    t("col_horizon"): p.horizon,
+                    t("col_resolution"): p.resolution_date.strftime("%Y-%m-%d"),
                 } for p in open_preds])
-                st.dataframe(active_df, use_container_width=True, hide_index=True)
+                st.dataframe(active_df, width="stretch", hide_index=True)
             else:
                 st.write(t("acc_no_active"))
 
@@ -132,14 +136,14 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             st.markdown(f"### {t('acc_resolved_list', n=len(resolved_preds))}")
             if resolved_preds:
                 resolved_df = pd.DataFrame([{
-                    "ID": p.fingerprint(),
-                    "Statement": p.statement,
-                    "Outcome": "TRUE" if p.outcome else "FALSE",
-                    "Confidence": f"{p.confidence*100:.0f}%",
-                    "Brier": f"{p.brier:.4f}" if p.brier is not None else "",
-                    "Rationale": p.judged_rationale,
+                    t("col_id"): p.fingerprint(),
+                    t("col_statement"): p.statement,
+                    t("col_outcome"): t("outcome_true") if p.outcome else t("outcome_false"),
+                    t("col_confidence"): f"{p.confidence*100:.0f}%",
+                    t("col_brier"): f"{p.brier:.4f}" if p.brier is not None else "",
+                    t("col_rationale"): p.judged_rationale,
                 } for p in resolved_preds])
-                st.dataframe(resolved_df, use_container_width=True, hide_index=True)
+                st.dataframe(resolved_df, width="stretch", hide_index=True)
             else:
                 st.write(t("acc_no_resolved"))
     else:
@@ -203,7 +207,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 if lb:
                     lb_df = pd.DataFrame(lb)
                     lb_df.columns = ["Rank", "Contributor", "Points"]
-                    st.dataframe(lb_df, use_container_width=True, hide_index=True)
+                    st.dataframe(lb_df, width="stretch", hide_index=True)
                 else:
                     st.info(t("acc_lb_empty"))
         else:

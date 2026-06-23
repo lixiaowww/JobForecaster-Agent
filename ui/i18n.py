@@ -367,6 +367,52 @@ Compare your AI scenario with **15+ historical tech transitions**.
         "en": "Occupation profiles reference authoritative labour-market research.",
         "zh": "岗位画像引用权威劳动力市场研究来源。",
     },
+
+    # ── industries ────────────────────────────────────────────────────────────
+    "industry_agriculture": {"en": "Agriculture", "zh": "农业"},
+    "industry_construction": {"en": "Construction", "zh": "建筑业"},
+    "industry_education": {"en": "Education", "zh": "教育"},
+    "industry_finance": {"en": "Finance", "zh": "金融"},
+    "industry_government": {"en": "Government", "zh": "政府/公共部门"},
+    "industry_healthcare": {"en": "Healthcare", "zh": "医疗健康"},
+    "industry_hospitality": {"en": "Hospitality", "zh": "酒店餐饮/旅游"},
+    "industry_legal": {"en": "Legal", "zh": "法律"},
+    "industry_logistics": {"en": "Logistics", "zh": "物流"},
+    "industry_manufacturing": {"en": "Manufacturing", "zh": "制造业"},
+    "industry_media": {"en": "Media", "zh": "媒体"},
+    "industry_retail": {"en": "Retail", "zh": "零售"},
+    "industry_tech": {"en": "Tech", "zh": "科技"},
+
+    # ── employment status ─────────────────────────────────────────────────────
+    "emp_status_employed": {"en": "Employed", "zh": "在职"},
+    "emp_status_unemployed": {"en": "Unemployed", "zh": "失业"},
+    "emp_status_transitioning": {"en": "Transitioning", "zh": "转型中"},
+
+    # ── job role categories (KB) ──────────────────────────────────────────────
+    "cat_at_risk": {"en": "At risk", "zh": "高风险"},
+    "cat_emerging": {"en": "Emerging", "zh": "新兴"},
+    "cat_transforming": {"en": "Transforming", "zh": "转型中"},
+
+    # ── prediction categories (registry) ────────────────────────────────────
+    "pred_labor": {"en": "Labor", "zh": "劳动力"},
+    "pred_compute": {"en": "Compute", "zh": "算力"},
+    "pred_macro": {"en": "Macro", "zh": "宏观经济"},
+    "pred_capital": {"en": "Capital", "zh": "资本"},
+    "pred_policy": {"en": "Policy", "zh": "政策"},
+    "pred_general": {"en": "General", "zh": "综合"},
+
+    # ── accuracy table columns ────────────────────────────────────────────────
+    "col_id": {"en": "ID", "zh": "ID"},
+    "col_statement": {"en": "Statement", "zh": "预测陈述"},
+    "col_category": {"en": "Category", "zh": "类别"},
+    "col_confidence": {"en": "Confidence", "zh": "置信度"},
+    "col_horizon": {"en": "Horizon", "zh": "时间窗口"},
+    "col_resolution": {"en": "Resolution date", "zh": "解析日期"},
+    "col_outcome": {"en": "Outcome", "zh": "结果"},
+    "col_brier": {"en": "Brier", "zh": "Brier"},
+    "col_rationale": {"en": "Rationale", "zh": "判定理由"},
+    "outcome_true": {"en": "TRUE", "zh": "成立"},
+    "outcome_false": {"en": "FALSE", "zh": "不成立"},
 }
 
 _VARIABLES = (
@@ -378,6 +424,16 @@ _VARIABLES = (
     "absorbing_sector",
     "productivity_capture",
     "task_frontier_open",
+)
+
+INDUSTRY_CODES: tuple[str, ...] = (
+    "Agriculture", "Construction", "Education", "Finance", "Government",
+    "Healthcare", "Hospitality", "Legal", "Logistics", "Manufacturing",
+    "Media", "Retail", "Tech",
+)
+
+EMPLOYMENT_STATUS_CODES: tuple[str, ...] = (
+    "employed", "unemployed", "transitioning",
 )
 
 
@@ -451,3 +507,39 @@ def _job_description_for(code: str, job: dict) -> str:
 
 def filter_all_label() -> str:
     return t("filter_all")
+
+
+def industry_label(name: str) -> str:
+    return _industry_label_for(lang(), name)
+
+
+def employment_status_label(code: str) -> str:
+    key = f"emp_status_{code.lower()}"
+    if key in _STRINGS:
+        return _translate(lang(), key)
+    return code
+
+
+def job_category_label(category: str) -> str:
+    return _job_category_label_for(lang(), category)
+
+
+def _industry_label_for(code: str, name: str) -> str:
+    key = f"industry_{name.lower()}"
+    if key in _STRINGS:
+        return _translate(code, key)
+    return name
+
+
+def _job_category_label_for(code: str, category: str) -> str:
+    key = f"cat_{category}"
+    if key in _STRINGS:
+        return _translate(code, key)
+    return category.replace("_", " ").title()
+
+
+def prediction_category_label(category: str) -> str:
+    key = f"pred_{category}"
+    if key in _STRINGS:
+        return _translate(lang(), key)
+    return category.replace("_", " ").title()

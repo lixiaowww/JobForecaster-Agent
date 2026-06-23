@@ -3,7 +3,12 @@ headless = true
 # HF Spaces embeds the app in an iframe on *.hf.space — cookies/XSRF break without these.
 enableCORS = false
 enableXsrfProtection = false
+enableWebsocketCompression = false
+fileWatcherType = "none"
 baseUrlPath = ""
+
+[client]
+showErrorDetails = true
 
 [browser]
 gatherUsageStats = false

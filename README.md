@@ -178,8 +178,14 @@ See **[docs/HUGGINGFACE.md](docs/HUGGINGFACE.md)** — add `HF_TOKEN` (Hugging F
 
 ## Configuration (`config.yaml`)
 
+LLM routing is automatic in `forecast.call_llm()`:
+
+1. **`GROQ_API_KEY` set** → Groq (`llama-3.3-70b-versatile`), free tier recommended  
+2. **`ANTHROPIC_API_KEY` set** → uses `model` below (Claude)  
+3. **Neither** → error (or `mock_llm` / `--mock` for offline)
+
 ```yaml
-model: claude-sonnet-4-6
+model: claude-sonnet-4-6   # Anthropic only; Groq ignores claude-* ids
 database_path: data/forecaster.db
 interval_seconds: 86400     # 24h; or use cron (more robust)
 max_signals: 40
@@ -190,6 +196,8 @@ evolution:
 
 require_review: true         # KEEP THIS TRUE until your scoreboard earns trust
 ```
+
+**Where to set `GROQ_API_KEY`:** GitHub repo → **Settings → Secrets** (daily Pages workflow); Hugging Face Space → **Settings → Repository secrets** (Radar LLM expansion). The `model` field in this file does not enable Groq — the env var does.
 
 ---
 

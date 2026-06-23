@@ -215,6 +215,16 @@ def test_prior_builds_and_serialises():
           f"prompt={len(prompt)} chars")
 
 
+def test_cluster_names_are_distinct_and_english():
+    prior = _build(n_boot=10)
+    names = [c.name for c in prior.clusters]
+    assert len(names) == len(set(names)), f"duplicate cluster names: {names}"
+    for name in names:
+        assert "·" in name, f"expected structured label, got {name!r}"
+        assert not any("\u4e00" <= ch <= "\u9fff" for ch in name), name
+    print(f"ok  cluster names distinct: {names}")
+
+
 def test_ood_warning_in_prompt_when_ood():
     """If the current scenario is OOD, the prompt context must say so explicitly."""
     prior = _build(n_boot=10)

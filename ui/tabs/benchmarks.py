@@ -12,19 +12,25 @@ import plotly.graph_objects as go
 from ui.i18n import t
 
 
-def render(scenario_input: dict, prior, job_radar_cfg: dict):
-    st.subheader(t("bench_title"))
-    st.markdown(t("bench_intro"))
-
-    # Live GMM/PCA computation
+@st.cache_resource(show_spinner=False)
+def _benchmark_models():
+    """Historical case PCA + GMM (independent of user scenario)."""
     cases = ev.CASE_LIBRARY
     reducer = ev.PCAReducer(n_components=3)
     clusterer = ev.BayesianGMMClusterer(max_components=5)
-
     X = ev._normalise_diffusion(cases)
     reducer.fit(X)
     Z = reducer.transform(X)
     labels = clusterer.fit(Z).predict(Z)
+    return Z, labels, reducer
+
+
+def render(scenario_input: dict, prior, job_radar_cfg: dict):
+    st.subheader(t("bench_title"))
+    st.markdown(t("bench_intro"))
+
+    cases = ev.CASE_LIBRARY
+    Z, labels, reducer = _benchmark_models()
 
     cluster_names = {c.label: c.name for c in prior.clusters}
 
@@ -134,7 +140,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 margin=dict(l=0, r=0, t=0, b=0),
                 legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01)
             )
-            st.plotly_chart(fig_3d, use_container_width=True)
+            st.plotly_chart(fig_3d, width="stretch")
             
         else:
             fig_2d = px.scatter(
@@ -176,7 +182,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 font=dict(color='#c9d1d9'),
                 height=500
             )
-            st.plotly_chart(fig_2d, use_container_width=True)
+            st.plotly_chart(fig_2d, width="stretch")
 
     with col_meta:
         st.markdown(f"### {t('bench_regimes')}")
@@ -190,7 +196,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 "Job Multiplier": f"{c.mean_multiplier:.2f}x",
                 "Adjustment Lag": f"{c.mean_lag_years:.1f} yr"
             })
-        st.dataframe(pd.DataFrame(profile_data), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(profile_data), width="stretch", hide_index=True)
         
         st.markdown(t("bench_regimes_tip"))
 
@@ -215,5 +221,5 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
     with st.expander(t("bench_library")):
         st.dataframe(
             df_cases[["Name", "Cluster Name", "Period", "Technology", "Displaced Occupation", "Net Job Multiplier", "Lag Years", "Notes", "Sources"]],
-            use_container_width=True, hide_index=True
+            width="stretch", hide_index=True
         )

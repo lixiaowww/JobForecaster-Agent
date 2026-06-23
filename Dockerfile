@@ -11,6 +11,7 @@ WORKDIR /home/user/app
 
 ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 ENV PYTHONUNBUFFERED=1
+ENV EVOLUTION_N_BOOTSTRAP=15
 ENV PATH="/home/user/.local/bin:${PATH}"
 
 COPY --chown=user:user requirements.txt requirements-dashboard.txt ./
@@ -22,4 +23,4 @@ EXPOSE 8501
 
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 
-ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true", "--server.enableCORS=false", "--server.enableXsrfProtection=false"]
+ENTRYPOINT ["streamlit", "run", "dashboard.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.headless=true", "--server.enableCORS=false", "--server.enableXsrfProtection=false", "--server.fileWatcherType=none"]
