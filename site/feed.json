@@ -1,0 +1,26 @@
+[
+  {
+    "date": "2026-06-23",
+    "predictions": [
+      {
+        "id": "fe93050e46a8434f",
+        "statement": "Mock harness: aggregate US hyperscaler AI capex exceeds $350B in the next measured fiscal year",
+        "category": "capital",
+        "horizon": "2027-H1",
+        "resolution_criteria": "Sum of disclosed capex in 10-K filings (mock/offline).",
+        "created_at": "2026-06-23T18:26:47.670457",
+        "outcome": null,
+        "resolved_at": null,
+        "confidence": 0.55,
+        "rationale": "Because this is offline mock mode therefore the claim is deterministic; however it mirrors capital-expenditure forecasting structure for harness tests.",
+        "resolution_date": "2026-12-20",
+        "sources": [
+          "https://example.com/mock-harness"
+        ],
+        "status": "open",
+        "judged_rationale": "",
+        "brier": null
+      }
+    ]
+  }
+]

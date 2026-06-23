@@ -1,0 +1,93 @@
+# ---- core ----
+model: claude-sonnet-4-6          # claude-opus-4-8 for higher quality, claude-haiku-4-5 for cheap
+database_path: data/forecaster.db # SQLite store (see schemas.py engine)
+mock_llm: false                   # true or run.py --mock for offline deterministic LLM
+interval_seconds: 86400           # loop cadence (24h). Or use cron, see README.
+max_signals: 40
+max_predictions: 6
+
+# ---- evolution prior (fed into every forecast cycle) ----
+evolution:
+  n_bootstrap: 50                  # GMM bootstrap iterations; lower in tests
+  # scenario:                      # optional override of evolution.CURRENT_AI_SCENARIO
+  #   augmentation_ratio: 0.60
+  #   demand_elasticity: 0.65
+  #   oring_leverage: 0.75
+  #   skill_distance: 0.55
+  #   diffusion_years: 7.0
+  #   absorbing_sector: 0.80
+  #   productivity_capture: 0.45
+  #   task_frontier_open: 0.70
+
+# ---- safety ----
+# require_review: true means nothing is auto-published. Predictions land in ./pending
+# and a human runs `python run.py approve`. Flip to false ONLY when you trust the loop.
+require_review: true
+
+# ---- publishing backends (enable what you need) ----
+publish:
+  file:
+    enabled: true
+    out_dir: site                 # static site: host on GitHub Pages / Netlify / S3
+  webhook:
+    url: ""                       # Slack/Discord/generic incoming webhook URL
+  git:
+    repo_dir: ""                  # path to a git repo to commit+push (e.g. a Pages repo)
+    branch: main
+
+# ---- job radar ----
+job_radar:
+  alpha: 0.6           # structural match weight
+  beta: 0.4            # semantic similarity weight
+  impact_threshold: 0.15
+  kb_path: "data/jobs_kb.json"
+
+# ---- job market calibration (BLS to KB displacement risk overlay) ----
+job_market:
+  enabled: true
+  sources:
+    bls:
+      enabled: true
+      start_year: "2022"
+      end_year: "2024"
+      cache_path: data/bls_cache.json
+      seed_path: data/bls_market_seed.json
+  calibration:
+    trend_threshold: 0.02
+    high_risk_cutoff: 0.6
+    low_risk_cutoff: 0.4
+    max_delta: 0.10
+    blend_weight: 0.3
+    writeback_mode: overlay
+    kb_path: data/jobs_kb.json
+    overlay_path: data/kb_calibration.json
+    overlay_seed_path: data/kb_calibration_seed.json
+    log_path: data/kb_calibration_log.jsonl
+
+# ---- crowd gate (Phase 2 — contributor API + loop integration) ----
+crowd:
+  enabled: true
+  offline_judge: true        # true = HeuristicSoundnessJudge (HR-1 offline tests)
+  tau_soundness: 0.55
+  tau_novelty: 0.35
+  k: 3
+  trace_path: data/crowd_traces.jsonl
+
+# ---- REST API (Phase 3b — read-only) ----
+api:
+  host: 127.0.0.1
+  port: 8765
+  rate_limit_per_minute: 60
+  # api_key: set FORECASTER_API_KEY in env (do not commit)
+  cors_origins:
+    - "http://localhost:8501"
+    - "http://127.0.0.1:8501"
+
+# ---- chat bots (Phase 2b — crowd contributions) ----
+bots:
+  telegram:
+    enabled: false
+    token_env: TELEGRAM_BOT_TOKEN
+  discord:
+    enabled: false
+    token_env: DISCORD_BOT_TOKEN

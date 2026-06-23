@@ -1,0 +1,73 @@
+name: Daily forecast and GitHub Pages
+
+# Zero-cost public demo: run one cycle, publish site/, deploy to Pages.
+# Secrets (optional): GROQ_API_KEY — without it, uses --mock (deterministic stub).
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # 06:00 UTC daily
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: daily-pages
+  cancel-in-progress: false
+
+jobs:
+  forecast-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore SQLite registry
+        uses: actions/cache@v4
+        with:
+          path: data/forecaster.db
+          key: forecaster-db-v1
+          restore-keys: |
+            forecaster-db-
+
+      - name: Ensure data directory
+        run: mkdir -p data site
+
+      - name: Run forecasting cycle
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          FORECASTER_CONFIG: config.ci.yaml
+        run: |
+          if [ -n "$GROQ_API_KEY" ]; then
+            echo "Using Groq (free tier secret)"
+            python run.py once --config config.ci.yaml
+          else
+            echo "No GROQ_API_KEY — using mock LLM stub"
+            python run.py once --config config.ci.yaml --mock
+          fi
+
+      - name: Verify static site output
+        run: |
+          test -f site/index.html
+          echo "site/index.html ready ($(wc -c < site/index.html) bytes)"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

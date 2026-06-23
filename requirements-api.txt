@@ -1,0 +1,3 @@
+# REST API server (Phase 3b). Optional — shares handlers with MCP.
+fastapi>=0.115
+uvicorn[standard]>=0.32

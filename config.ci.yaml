@@ -1,0 +1,21 @@
+# CI / GitHub Actions — zero-cost daily publish (see docs/DEPLOY.md)
+# Do not use require_review: false in local config.yaml for production trust.
+
+model: llama-3.3-70b-versatile   # Groq; ignored when --mock
+mock_llm: false
+database_path: data/forecaster.db
+max_signals: 30
+max_predictions: 4
+require_review: false
+
+evolution:
+  n_bootstrap: 10
+
+publish:
+  file:
+    enabled: true
+    out_dir: site
+  webhook:
+    url: ""
+  git:
+    repo_dir: ""

@@ -1,0 +1,2 @@
+# MCP read-only server (Phase 3). Optional — core loop does not require this.
+mcp>=1.27,<2

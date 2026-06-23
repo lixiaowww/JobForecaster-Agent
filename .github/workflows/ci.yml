@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "dev"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test:
+    name: Offline test suite (no API key required)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dashboard.txt
+          pip install -r requirements-mcp.txt
+          pip install -r requirements-api.txt
+
+      - name: Run offline harness
+        run: python -m pytest tests/ -v
+        # No API key needed — all tests use deterministic stubs

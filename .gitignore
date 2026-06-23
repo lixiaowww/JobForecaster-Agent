@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+venv/
+.venv/
+
+# Secrets & local env
+.env
+.env.*
+!.env.example
+
+# Runtime / generated (CI rebuilds these)
+data/forecaster.db
+data/bls_cache.json
+data/kb_calibration.json
+data/kb_calibration_log.jsonl
+data/crowd_traces.jsonl
+data/_bls_fetch_tmp.json
+pending/
+
+# Accidental / cache artifacts
+=0.9
+nodeids
+CACHEDIR.TAG
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

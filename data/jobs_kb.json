@@ -1,0 +1,4097 @@
+[
+  {
+    "id": "fin_credit_analyst",
+    "title": "Credit Analyst",
+    "title_zh": "信用分析师",
+    "industry": "Finance",
+    "category": "at_risk",
+    "description": "Reviews financial records to evaluate credit risk for businesses or individuals. Highly routine analytical tasks are increasingly handled by automated scoring systems.",
+    "description_zh": "评估个人或企业信用风险，审核财务记录。由于信用评估分析任务高度程序化，正逐渐被自动评分系统和决策模型取代。",
+    "sensitivity": {
+      "augmentation_ratio": -0.8,
+      "demand_elasticity": 0.2,
+      "oring_leverage": -0.4,
+      "skill_distance": -0.5,
+      "diffusion_years": 0.6,
+      "absorbing_sector": -0.2,
+      "productivity_capture": -0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": -0.06,
+    "displacement_risk": 0.85,
+    "required_skills": [
+      "Financial Statement Analysis",
+      "Credit Risk Modeling",
+      "Spreadsheet Management",
+      "Ratio Analysis"
+    ],
+    "skill_vector": [
+      0.2,
+      0.3,
+      0.2,
+      0.4,
+      0.5,
+      0.1,
+      0.3,
+      0.2
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS Occupational Outlook Handbook: Financial Analysts",
+      "O*NET 13-2041.00 - Credit Analysts",
+      "OECD: Automation Risk in Financial Services"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 5,
+        "salary_delta": 0.09
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 7,
+        "salary_delta": 0.11
+      },
+      {
+        "target_id": "log_customs_broker",
+        "skill_bridge": "Develop proficiency in HTS Tariff Classification, Import/Export Regulations to transition into the Customs Broker role.",
+        "retrain_months": 8,
+        "salary_delta": 0.12
+      }
+    ]
+  },
+  {
+    "id": "fin_wealth_manager",
+    "title": "Wealth Manager",
+    "title_zh": "财富管理顾问",
+    "industry": "Finance",
+    "category": "transforming",
+    "description": "Advises clients on investments, tax planning, and asset allocation. Requires high human empathy and relationship building, augmented by AI portfolio optimization.",
+    "description_zh": "为客户提供投资、税务规划和资产配置建议。需要极高的人际共情和信任建立，同时使用AI进行组合优化。",
+    "sensitivity": {
+      "augmentation_ratio": 0.6,
+      "demand_elasticity": 0.5,
+      "oring_leverage": 0.4,
+      "skill_distance": 0.3,
+      "diffusion_years": -0.2,
+      "absorbing_sector": 0.5,
+      "productivity_capture": 0.6,
+      "task_frontier_open": 0.4
+    },
+    "base_demand_trend": 0.04,
+    "displacement_risk": 0.25,
+    "required_skills": [
+      "Client Relationship Management",
+      "Asset Allocation",
+      "Estate Planning",
+      "AI Portfolio Tools"
+    ],
+    "skill_vector": [
+      0.7,
+      0.6,
+      0.6,
+      0.5,
+      0.4,
+      0.7,
+      0.5,
+      0.5
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Personal Financial Advisors",
+      "O*NET 13-2052.00 - Personal Financial Advisors",
+      "World Economic Forum: Future of Jobs Report"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "mfg_maintenance_tech",
+        "skill_bridge": "Develop proficiency in IoT Sensor Diagnostics, Mechanical Troubleshooting to transition into the Predictive Maintenance Technician role.",
+        "retrain_months": 4,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "hc_general_practitioner",
+        "skill_bridge": "Develop proficiency in Patient Communication, Differential Diagnosis to transition into the General Practitioner MD role.",
+        "retrain_months": 4,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "hc_care_coordinator",
+        "skill_bridge": "Develop proficiency in Patient Relation Management, Telehealth Platform Operations to transition into the AI Healthcare Care Coordinator role.",
+        "retrain_months": 4,
+        "salary_delta": 0.18
+      }
+    ]
+  },
+  {
+    "id": "fin_risk_manager",
+    "title": "Risk Management Specialist",
+    "title_zh": "风险管理专家",
+    "industry": "Finance",
+    "category": "transforming",
+    "description": "Identifies and analyzes operational, financial, or reputational risks. Role evolves from manual spreadsheet audit to designing and auditing complex risk simulation systems.",
+    "description_zh": "识别并分析运营、财务或声誉风险。工作重点正从传统报表审计，转向设计和审计复杂的风险模拟与机器学习预测系统。",
+    "sensitivity": {
+      "augmentation_ratio": 0.5,
+      "demand_elasticity": 0.4,
+      "oring_leverage": 0.7,
+      "skill_distance": 0.4,
+      "diffusion_years": -0.1,
+      "absorbing_sector": 0.3,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.6
+    },
+    "base_demand_trend": 0.05,
+    "displacement_risk": 0.2,
+    "required_skills": [
+      "Quantitative Risk Modeling",
+      "Scenario Stress Testing",
+      "Regulatory Compliance",
+      "Data Interpretation"
+    ],
+    "skill_vector": [
+      0.6,
+      0.5,
+      0.8,
+      0.6,
+      0.3,
+      0.5,
+      0.6,
+      0.7
+    ],
+    "emergence_year": null,
+    "sources": [
+      "O*NET 13-2051.00 - Financial Analysts",
+      "GARP (Global Association of Risk Professionals) Survey",
+      "OECD Skills Outlook 2023"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "legal_compliance_officer",
+        "skill_bridge": "Develop proficiency in Regulatory Mapping, Compliance Software Auditing to transition into the Corporate Compliance Officer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "legal_corporate_counsel",
+        "skill_bridge": "Develop proficiency in High-Stakes Negotiation, Corporate Strategy Planning to transition into the Corporate General Counsel role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "log_sustainability_planner",
+        "skill_bridge": "Develop proficiency in Carbon Emissions Auditing, Multi-Modal Freight Coordination to transition into the Green Logistics Planner role.",
+        "retrain_months": 3,
+        "salary_delta": 0.17
+      }
+    ]
+  },
+  {
+    "id": "fin_algo_trader",
+    "title": "Algorithmic AI Trading Specialist",
+    "title_zh": "算法交易专家",
+    "industry": "Finance",
+    "category": "emerging",
+    "description": "Designs, implements, and monitors AI-driven algorithmic trading systems. Focuses on reinforcing learning models for real-time market data adaptation.",
+    "description_zh": "设计、实现和监控基于AI的算法交易系统。专注于用于实时市场数据自适应的强化学习模型调优与流数据处理。",
+    "sensitivity": {
+      "augmentation_ratio": 0.8,
+      "demand_elasticity": 0.8,
+      "oring_leverage": 0.8,
+      "skill_distance": 0.8,
+      "diffusion_years": -0.4,
+      "absorbing_sector": 0.2,
+      "productivity_capture": 0.8,
+      "task_frontier_open": 0.9
+    },
+    "base_demand_trend": 0.15,
+    "displacement_risk": 0.05,
+    "required_skills": [
+      "Quantitative Finance",
+      "Reinforcement Learning",
+      "High-Frequency Data Pipelines",
+      "Risk Controls"
+    ],
+    "skill_vector": [
+      0.9,
+      0.9,
+      0.8,
+      0.9,
+      0.2,
+      0.3,
+      0.8,
+      0.9
+    ],
+    "emergence_year": 2024,
+    "sources": [
+      "CFA Institute: AI in Investment Management",
+      "O*NET 11-3031.01 - Treasurers and Controllers",
+      "MIT Technology Review: AI Wall Street"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "tech_agent_fleet_mgr",
+        "skill_bridge": "Develop proficiency in Agent Swarm Orchestration, Telemetry Logging to transition into the AI Agent Fleet Manager role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "tech_ai_infra_eng",
+        "skill_bridge": "Develop proficiency in Kubernetes (K8s) Orchestration, GPU Clustering (NCCL) to transition into the AI Infrastructure Architect role.",
+        "retrain_months": 4,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_digital_twin_eng",
+        "skill_bridge": "Develop proficiency in 3D CAD Modeling, IoT Telemetry Streams Integration to transition into the Digital Twin Architect role.",
+        "retrain_months": 4,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "fin_ai_compliance",
+    "title": "AI Financial Compliance Auditor",
+    "title_zh": "金融AI合规审计师",
+    "industry": "Finance",
+    "category": "emerging",
+    "description": "Audits autonomous financial advice and algorithmic decision systems for regulatory alignment, bias detection, and ethical transparency.",
+    "description_zh": "审计自主理财顾问和算法决策系统，确保符合监管规定，检测并消除算法偏见，确保技术透明度与伦理安全。",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.9,
+      "skill_distance": 0.7,
+      "diffusion_years": -0.3,
+      "absorbing_sector": 0.6,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.8
+    },
+    "base_demand_trend": 0.18,
+    "displacement_risk": 0.08,
+    "required_skills": [
+      "Model Explainability (XAI)",
+      "Financial Regulation",
+      "Algorithmic Audit",
+      "Risk Governance"
+    ],
+    "skill_vector": [
+      0.5,
+      0.7,
+      0.9,
+      0.8,
+      0.3,
+      0.6,
+      0.5,
+      0.8
+    ],
+    "emergence_year": 2025,
+    "sources": [
+      "EU AI Act: High-Risk Financial Systems Guidelines",
+      "SEC Algorithmic Trading Rules",
+      "Financial Stability Board (FSB): Artificial Intelligence in Finance"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "hc_care_coordinator",
+        "skill_bridge": "Develop proficiency in Patient Relation Management, Telehealth Platform Operations to transition into the AI Healthcare Care Coordinator role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "legal_compliance_officer",
+        "skill_bridge": "Develop proficiency in Regulatory Mapping, Compliance Software Auditing to transition into the Corporate Compliance Officer role.",
+        "retrain_months": 4,
+        "salary_delta": -0.05
+      },
+      {
+        "target_id": "log_sustainability_planner",
+        "skill_bridge": "Develop proficiency in Carbon Emissions Auditing, Multi-Modal Freight Coordination to transition into the Green Logistics Planner role.",
+        "retrain_months": 4,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "fin_underwriter",
+    "title": "Insurance Underwriter",
+    "title_zh": "保险核保员",
+    "industry": "Finance",
+    "category": "at_risk",
+    "description": "Analyzes insurance applications to determine risk and premium. Standard risk tables and consumer datasets are increasingly auto-processed by predictive analytics engines.",
+    "description_zh": "分析保险申请，确定风险等级和保费。标准风险表和消费者数据库现已能够被预测分析引擎全自动处理。",
+    "sensitivity": {
+      "augmentation_ratio": -0.9,
+      "demand_elasticity": 0.1,
+      "oring_leverage": -0.5,
+      "skill_distance": -0.6,
+      "diffusion_years": 0.7,
+      "absorbing_sector": -0.3,
+      "productivity_capture": -0.4,
+      "task_frontier_open": 0.0
+    },
+    "base_demand_trend": -0.08,
+    "displacement_risk": 0.9,
+    "required_skills": [
+      "Risk Evaluation",
+      "Actuarial Software",
+      "Policy Interpretation",
+      "Data Validation"
+    ],
+    "skill_vector": [
+      0.1,
+      0.2,
+      0.2,
+      0.3,
+      0.6,
+      0.1,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Insurance Underwriters",
+      "O*NET 13-2053.00 - Insurance Underwriters",
+      "Frey & Osborne: The Future of Employment (Risk = 99%)"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 6,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 9,
+        "salary_delta": 0.12
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 9,
+        "salary_delta": 0.12
+      }
+    ]
+  },
+  {
+    "id": "tech_software_eng",
+    "title": "Software Engineer",
+    "title_zh": "软件工程师",
+    "industry": "Tech",
+    "category": "transforming",
+    "description": "Creates, tests, and maintains software applications. Transitioning from manual coding to leveraging AI agents for code generation, focusing on architecture and security.",
+    "description_zh": "开发、测试和维护软件应用。正从手动编写代码过渡到利用AI智能体辅助代码生成，重点转向系统架构、集成与安全管控。",
+    "sensitivity": {
+      "augmentation_ratio": 0.8,
+      "demand_elasticity": 0.9,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.5,
+      "diffusion_years": -0.5,
+      "absorbing_sector": 0.3,
+      "productivity_capture": 0.7,
+      "task_frontier_open": 0.8
+    },
+    "base_demand_trend": 0.08,
+    "displacement_risk": 0.2,
+    "required_skills": [
+      "System Architecture",
+      "AI Code Generation Integration",
+      "Secure Coding",
+      "API Design"
+    ],
+    "skill_vector": [
+      0.8,
+      0.9,
+      0.6,
+      0.6,
+      0.2,
+      0.4,
+      0.7,
+      0.8
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Software Developers",
+      "O*NET 15-1252.00 - Software Developers",
+      "GitHub: Octoverse Developer Survey on Copilot Adoption"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "mfg_roboticist",
+        "skill_bridge": "Develop proficiency in Robot Operating System (ROS), Cobot Teach Pendant Programming to transition into the Collaborative Robot (Cobot) Integrator role.",
+        "retrain_months": 4,
+        "salary_delta": 0.18
+      },
+      {
+        "target_id": "edu_ai_learning_guide",
+        "skill_bridge": "Develop proficiency in Instructional System Design (ISD), Adaptive Learning Algorithms to transition into the AI Learning Experience Designer role.",
+        "retrain_months": 4,
+        "salary_delta": 0.18
+      },
+      {
+        "target_id": "tech_prompt_eng",
+        "skill_bridge": "Develop proficiency in Prompt Design Patterns, Vector Database Operations to transition into the Prompt Engineer & LLM Specialist role.",
+        "retrain_months": 5,
+        "salary_delta": 0.19
+      }
+    ]
+  },
+  {
+    "id": "tech_prompt_eng",
+    "title": "Prompt Engineer & LLM Specialist",
+    "title_zh": "提示词工程师",
+    "industry": "Tech",
+    "category": "emerging",
+    "description": "Designs and refines LLM inputs to elicit desired behaviors, embedding knowledge templates and building robust context-retrieval hooks.",
+    "description_zh": "设计并精炼大语言模型输入以引导期望的输出行为，构建知识模板并整合鲁棒的上下文检索机制。",
+    "sensitivity": {
+      "augmentation_ratio": 0.7,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.5,
+      "skill_distance": 0.8,
+      "diffusion_years": -0.6,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.6,
+      "task_frontier_open": 0.9
+    },
+    "base_demand_trend": 0.25,
+    "displacement_risk": 0.12,
+    "required_skills": [
+      "Prompt Design Patterns",
+      "Vector Database Operations",
+      "RAG Pipeline Configuration",
+      "LLM Parameters Tuning"
+    ],
+    "skill_vector": [
+      0.8,
+      0.8,
+      0.5,
+      0.9,
+      0.1,
+      0.5,
+      0.6,
+      0.9
+    ],
+    "emergence_year": 2023,
+    "sources": [
+      "World Economic Forum: Emergence of AI Prompting Roles",
+      "O*NET 15-1299.00 - Computer Occupations, All Other",
+      "McKinsey: The economic potential of generative AI"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "mfg_digital_twin_eng",
+        "skill_bridge": "Develop proficiency in 3D CAD Modeling, IoT Telemetry Streams Integration to transition into the Digital Twin Architect role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "edu_ai_learning_guide",
+        "skill_bridge": "Develop proficiency in Instructional System Design (ISD), Adaptive Learning Algorithms to transition into the AI Learning Experience Designer role.",
+        "retrain_months": 4,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "tech_agent_fleet_mgr",
+        "skill_bridge": "Develop proficiency in Agent Swarm Orchestration, Telemetry Logging to transition into the AI Agent Fleet Manager role.",
+        "retrain_months": 4,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "tech_qa_tester",
+    "title": "QA Manual Tester",
+    "title_zh": "软件手动测试员",
+    "industry": "Tech",
+    "category": "at_risk",
+    "description": "Manually tests software UI and functionality to identify bugs. Most execution flows and regression runs are now generated and executed automatically by agents.",
+    "description_zh": "手动测试软件用户界面和功能以发现故障。大多数回归测试和执行流程现在可通过AI智能体自动生成并运行。",
+    "sensitivity": {
+      "augmentation_ratio": -0.85,
+      "demand_elasticity": 0.1,
+      "oring_leverage": -0.3,
+      "skill_distance": -0.4,
+      "diffusion_years": 0.5,
+      "absorbing_sector": -0.4,
+      "productivity_capture": -0.2,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": -0.12,
+    "displacement_risk": 0.88,
+    "required_skills": [
+      "Manual Test Script Execution",
+      "Bug Reporting",
+      "Basic UI Testing",
+      "Regression Checks"
+    ],
+    "skill_vector": [
+      0.1,
+      0.2,
+      0.3,
+      0.3,
+      0.5,
+      0.1,
+      0.3,
+      0.2
+    ],
+    "emergence_year": null,
+    "sources": [
+      "O*NET 15-1253.00 - Software Quality Assurance Analysts and Testers",
+      "Sogeti State of AI in Quality Engineering",
+      "Gartner Magic Quadrant for Software Test Automation"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 6,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 7,
+        "salary_delta": 0.11
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 8,
+        "salary_delta": 0.12
+      }
+    ]
+  },
+  {
+    "id": "tech_ai_infra_eng",
+    "title": "AI Infrastructure Architect",
+    "title_zh": "AI基础设施架构师",
+    "industry": "Tech",
+    "category": "emerging",
+    "description": "Designs and manages cluster configurations, high-throughput network topologies, and distributed GPU pools necessary to train and serve deep learning models.",
+    "description_zh": "设计并管理运行深度学习模型训练和推理集群所需的软硬件配置、高吞吐网络拓扑及分布式GPU算力池。",
+    "sensitivity": {
+      "augmentation_ratio": 0.6,
+      "demand_elasticity": 0.8,
+      "oring_leverage": 0.85,
+      "skill_distance": 0.75,
+      "diffusion_years": -0.4,
+      "absorbing_sector": 0.2,
+      "productivity_capture": 0.7,
+      "task_frontier_open": 0.85
+    },
+    "base_demand_trend": 0.22,
+    "displacement_risk": 0.04,
+    "required_skills": [
+      "Kubernetes (K8s) Orchestration",
+      "GPU Clustering (NCCL)",
+      "InfiniBand Networks",
+      "Distributed Storage Systems"
+    ],
+    "skill_vector": [
+      0.7,
+      0.8,
+      0.9,
+      0.8,
+      0.2,
+      0.3,
+      0.7,
+      0.8
+    ],
+    "emergence_year": 2023,
+    "sources": [
+      "IEEE: Cloud and Infrastructure Engineering trends",
+      "O*NET 15-1241.00 - Computer Network Architects",
+      "NVIDIA: Demand for Cluster Operations Engineers"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "hc_surgical_roboticist",
+        "skill_bridge": "Develop proficiency in Surgical Robot Systems (da Vinci), Biomedical Instrumentation Calibrations to transition into the Robotic Surgery Assistant Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "log_autonomous_fleet_mgr",
+        "skill_bridge": "Develop proficiency in Drone Mission Control Software, LiDAR Diagnostics to transition into the Autonomous Fleet Coordinator role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_roboticist",
+        "skill_bridge": "Develop proficiency in Robot Operating System (ROS), Cobot Teach Pendant Programming to transition into the Collaborative Robot (Cobot) Integrator role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "tech_data_annotator",
+    "title": "Data Labeler & Annotator",
+    "title_zh": "数据标注员",
+    "industry": "Tech",
+    "category": "at_risk",
+    "description": "Categorizes, labels, and annotates text, images, and video to feed training datasets. Semi-supervised learning and synthetic data loops have marginalized manual annotating roles.",
+    "description_zh": "对文本、图像和视频进行分类和标注以供模型训练。自监督学习、合成数据生成和自动化模型评估使传统手动标注岗位大幅减少。",
+    "sensitivity": {
+      "augmentation_ratio": -0.95,
+      "demand_elasticity": 0.0,
+      "oring_leverage": -0.6,
+      "skill_distance": -0.8,
+      "diffusion_years": 0.4,
+      "absorbing_sector": -0.5,
+      "productivity_capture": -0.6,
+      "task_frontier_open": 0.0
+    },
+    "base_demand_trend": -0.2,
+    "displacement_risk": 0.96,
+    "required_skills": [
+      "Bounding Box Tagging",
+      "Data Classification",
+      "Text Categorization",
+      "Data Review Guidelines"
+    ],
+    "skill_vector": [
+      0.0,
+      0.1,
+      0.1,
+      0.2,
+      0.4,
+      0.1,
+      0.1,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "MIT Technology Review: The decline of human labeling",
+      "Stanford AI Index Report 2024",
+      "O*NET 15-1299.00 - Computer Occupations, All Other"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 7,
+        "salary_delta": 0.11
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 10,
+        "salary_delta": 0.14
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 11,
+        "salary_delta": 0.14
+      }
+    ]
+  },
+  {
+    "id": "tech_agent_fleet_mgr",
+    "title": "AI Agent Fleet Manager",
+    "title_zh": "AI智能体集群管理员",
+    "industry": "Tech",
+    "category": "emerging",
+    "description": "Orchestrates and monitors fleets of autonomous AI agents. Diagnoses performance drift, resolves workflow edge cases, and handles system deadlocks.",
+    "description_zh": "统筹、监控和管理自主AI智能体集群的工作流。负责诊断运行偏差、处理业务边缘场景以及解决系统死锁等疑难问题。",
+    "sensitivity": {
+      "task_frontier_open": 0.9,
+      "oring_leverage": 0.8,
+      "augmentation_ratio": 0.7,
+      "demand_elasticity": 0.7,
+      "skill_distance": 0.8,
+      "diffusion_years": -0.3,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.6
+    },
+    "base_demand_trend": 0.28,
+    "displacement_risk": 0.03,
+    "required_skills": [
+      "Agent Swarm Orchestration",
+      "Telemetry Logging",
+      "Process Exception Handling",
+      "State Management Tools"
+    ],
+    "skill_vector": [
+      0.8,
+      0.8,
+      0.8,
+      0.9,
+      0.2,
+      0.5,
+      0.7,
+      0.9
+    ],
+    "emergence_year": 2025,
+    "sources": [
+      "Harness Future Job Spec H-102",
+      "Gartner: Predicts Agentic Workflows",
+      "OpenAI: Developer Ecosystem Speculation"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "legal_ai_forensics",
+        "skill_bridge": "Develop proficiency in Copyright Law & Fair Use, Model Provenance Tracking to transition into the AI Legal Forensics Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "log_autonomous_fleet_mgr",
+        "skill_bridge": "Develop proficiency in Drone Mission Control Software, LiDAR Diagnostics to transition into the Autonomous Fleet Coordinator role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_digital_twin_eng",
+        "skill_bridge": "Develop proficiency in 3D CAD Modeling, IoT Telemetry Streams Integration to transition into the Digital Twin Architect role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "mfg_assembly_worker",
+    "title": "Assembly Line Operator",
+    "title_zh": "装配线工人",
+    "industry": "Manufacturing",
+    "category": "at_risk",
+    "description": "Performs repetitive assembly tasks on factory floors. Advances in computer-vision-guided robotic arms have automated high-accuracy physical processes.",
+    "description_zh": "在工厂车间执行重复性的装配任务。高精度协作机器人与计算机视觉定位技术的突破，正在淘汰标准化手动物理装配岗位。",
+    "sensitivity": {
+      "augmentation_ratio": -0.85,
+      "demand_elasticity": 0.2,
+      "oring_leverage": -0.4,
+      "skill_distance": -0.7,
+      "diffusion_years": 0.8,
+      "absorbing_sector": -0.3,
+      "productivity_capture": -0.2,
+      "task_frontier_open": 0.0
+    },
+    "base_demand_trend": -0.07,
+    "displacement_risk": 0.89,
+    "required_skills": [
+      "Manual Component Installation",
+      "Quality Checks",
+      "Standard Tool Operations",
+      "Safety Protocol Compliance"
+    ],
+    "skill_vector": [
+      0.1,
+      0.3,
+      0.3,
+      0.2,
+      0.6,
+      0.2,
+      0.3,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Assemblers and Fabricators",
+      "O*NET 51-2099.00 - Assemblers and Fabricators",
+      "International Federation of Robotics (IFR) Report"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 4,
+        "salary_delta": 0.09
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 7,
+        "salary_delta": 0.11
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 8,
+        "salary_delta": 0.12
+      }
+    ]
+  },
+  {
+    "id": "mfg_quality_inspector",
+    "title": "Quality Control Inspector",
+    "title_zh": "工业质检员",
+    "industry": "Manufacturing",
+    "category": "transforming",
+    "description": "Inspects manufactured components for defects. Transitioning from visual human check to managing automated computer vision cameras and classification models.",
+    "description_zh": "检验制造部件是否存在缺陷。岗位重点正从人工肉眼排查，转向管理、微调自动视觉相机和分类深度学习模型。",
+    "sensitivity": {
+      "augmentation_ratio": 0.5,
+      "demand_elasticity": 0.3,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.2,
+      "absorbing_sector": 0.2,
+      "productivity_capture": 0.4,
+      "task_frontier_open": 0.3
+    },
+    "base_demand_trend": -0.02,
+    "displacement_risk": 0.45,
+    "required_skills": [
+      "Defect Taxonomy",
+      "Computer Vision Inspection Systems",
+      "Measurement Instruments",
+      "SPC Software"
+    ],
+    "skill_vector": [
+      0.4,
+      0.4,
+      0.6,
+      0.5,
+      0.4,
+      0.3,
+      0.4,
+      0.4
+    ],
+    "emergence_year": null,
+    "sources": [
+      "O*NET 51-9061.00 - Inspectors, Testers, Sorters, Samplers, and Weighers",
+      "McKinsey: Smart Quality in Industry 4.0",
+      "ISO 9001 Quality Management Standards"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "edu_tutor",
+        "skill_bridge": "Develop proficiency in Differentiated Instruction, Student Motivation Techniques to transition into the Private Academic Tutor role.",
+        "retrain_months": 4,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "edu_corporate_trainer",
+        "skill_bridge": "Develop proficiency in Workshop Facilitation, VR Simulation Management to transition into the Corporate Trainer role.",
+        "retrain_months": 4,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "log_supply_chain_analyst",
+        "skill_bridge": "Develop proficiency in Demand Forecasting Models, Logistics Bottleneck Diagnostics to transition into the Supply Chain Analyst role.",
+        "retrain_months": 4,
+        "salary_delta": 0.0
+      }
+    ]
+  },
+  {
+    "id": "mfg_roboticist",
+    "title": "Collaborative Robot (Cobot) Integrator",
+    "title_zh": "协作机器人集成专家",
+    "industry": "Manufacturing",
+    "category": "emerging",
+    "description": "Integrates and programs collaborative robots on production lines, teaching trajectories, configuring vision systems, and managing physical safety barriers.",
+    "description_zh": "在生产线上部署和配置协作机器人（Cobot），负责示教机械臂运动轨迹、配置工业相机视觉引导系统并确保人机共存的安全边界。",
+    "sensitivity": {
+      "augmentation_ratio": 0.7,
+      "demand_elasticity": 0.8,
+      "oring_leverage": 0.8,
+      "skill_distance": 0.7,
+      "diffusion_years": -0.3,
+      "absorbing_sector": 0.3,
+      "productivity_capture": 0.7,
+      "task_frontier_open": 0.75
+    },
+    "base_demand_trend": 0.16,
+    "displacement_risk": 0.06,
+    "required_skills": [
+      "Robot Operating System (ROS)",
+      "Cobot Teach Pendant Programming",
+      "Industrial Safety PLC",
+      "Sensor Integration"
+    ],
+    "skill_vector": [
+      0.7,
+      0.8,
+      0.8,
+      0.8,
+      0.3,
+      0.4,
+      0.7,
+      0.7
+    ],
+    "emergence_year": 2024,
+    "sources": [
+      "Robotics Business Review: The demand for robot technicians",
+      "O*NET 17-2199.08 - Robotics Engineers",
+      "IFR Global Industrial Robots Database"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "log_autonomous_fleet_mgr",
+        "skill_bridge": "Develop proficiency in Drone Mission Control Software, LiDAR Diagnostics to transition into the Autonomous Fleet Coordinator role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "tech_ai_infra_eng",
+        "skill_bridge": "Develop proficiency in Kubernetes (K8s) Orchestration, GPU Clustering (NCCL) to transition into the AI Infrastructure Architect role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "hc_surgical_roboticist",
+        "skill_bridge": "Develop proficiency in Surgical Robot Systems (da Vinci), Biomedical Instrumentation Calibrations to transition into the Robotic Surgery Assistant Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "mfg_maintenance_tech",
+    "title": "Predictive Maintenance Technician",
+    "title_zh": "预测性维护技术员",
+    "industry": "Manufacturing",
+    "category": "transforming",
+    "description": "Services factory machinery. Evolving from scheduled breakdown fixes to monitoring IoT vibration, acoustic, and thermal sensors analyzed by AI prediction dashboards.",
+    "description_zh": "维护工厂机械设备。正从定期或故障后抢修，转变为监控由AI算法分析的IoT振动、声学和红外温度传感器仪表盘，实施针对性预防维护。",
+    "sensitivity": {
+      "augmentation_ratio": 0.6,
+      "demand_elasticity": 0.4,
+      "oring_leverage": 0.75,
+      "skill_distance": 0.5,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.5
+    },
+    "base_demand_trend": 0.06,
+    "displacement_risk": 0.18,
+    "required_skills": [
+      "IoT Sensor Diagnostics",
+      "Mechanical Troubleshooting",
+      "Vibration Analysis",
+      "AI Predictive Dashboard Navigation"
+    ],
+    "skill_vector": [
+      0.6,
+      0.5,
+      0.7,
+      0.6,
+      0.3,
+      0.5,
+      0.6,
+      0.5
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Industrial Machinery Mechanics",
+      "O*NET 49-9041.00 - Industrial Machinery Mechanics",
+      "PwC: Predictive Maintenance in Manufacturing Survey"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "log_supply_chain_analyst",
+        "skill_bridge": "Develop proficiency in Demand Forecasting Models, Logistics Bottleneck Diagnostics to transition into the Supply Chain Analyst role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "edu_corporate_trainer",
+        "skill_bridge": "Develop proficiency in Workshop Facilitation, VR Simulation Management to transition into the Corporate Trainer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "fin_risk_manager",
+        "skill_bridge": "Develop proficiency in Quantitative Risk Modeling, Scenario Stress Testing to transition into the Risk Management Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ]
+  },
+  {
+    "id": "mfg_digital_twin_eng",
+    "title": "Digital Twin Architect",
+    "title_zh": "数字孪生架构师",
+    "industry": "Manufacturing",
+    "category": "emerging",
+    "description": "Constructs real-time 3D simulation mirrors of physical factory floors and supply chains to optimize assembly flows and test layout changes virtually before deploy.",
+    "description_zh": "构建物理工厂和供应链的实时3D仿真数字孪生体，用于在实体部署前虚拟模拟和优化装配工序、测试布局改动。",
+    "sensitivity": {
+      "augmentation_ratio": 0.7,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.7,
+      "skill_distance": 0.8,
+      "diffusion_years": -0.4,
+      "absorbing_sector": 0.3,
+      "productivity_capture": 0.6,
+      "task_frontier_open": 0.8
+    },
+    "base_demand_trend": 0.18,
+    "displacement_risk": 0.05,
+    "required_skills": [
+      "3D CAD Modeling",
+      "IoT Telemetry Streams Integration",
+      "Unity/Unreal Engine for Industry",
+      "Physics Simulation Tools"
+    ],
+    "skill_vector": [
+      0.8,
+      0.7,
+      0.7,
+      0.9,
+      0.2,
+      0.4,
+      0.6,
+      0.8
+    ],
+    "emergence_year": 2025,
+    "sources": [
+      "Gartner: Emerging Technologies Hype Cycle for Digital Twins",
+      "O*NET 17-2061.00 - Computer Hardware Engineers",
+      "Siemens: Digital Enterprise Whitepaper"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "edu_ai_learning_guide",
+        "skill_bridge": "Develop proficiency in Instructional System Design (ISD), Adaptive Learning Algorithms to transition into the AI Learning Experience Designer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "tech_agent_fleet_mgr",
+        "skill_bridge": "Develop proficiency in Agent Swarm Orchestration, Telemetry Logging to transition into the AI Agent Fleet Manager role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_roboticist",
+        "skill_bridge": "Develop proficiency in Robot Operating System (ROS), Cobot Teach Pendant Programming to transition into the Collaborative Robot (Cobot) Integrator role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "mfg_machinist",
+    "title": "CNC Machinist",
+    "title_zh": "数控机床操作工",
+    "industry": "Manufacturing",
+    "category": "at_risk",
+    "description": "Sets up and operates computer numerical control (CNC) machines to cut and shape metal. CAD-to-CAM translation pipelines are increasingly fully automated by neural geometry compilers.",
+    "description_zh": "安装和操作数控机床（CNC）以切割金属。随着神经几何编译器的成熟，从CAD图纸到CAM加工代码的生成流程正逐渐被完全自动替代。",
+    "sensitivity": {
+      "augmentation_ratio": -0.75,
+      "demand_elasticity": 0.2,
+      "oring_leverage": -0.3,
+      "skill_distance": -0.5,
+      "diffusion_years": 0.6,
+      "absorbing_sector": -0.2,
+      "productivity_capture": -0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": -0.05,
+    "displacement_risk": 0.76,
+    "required_skills": [
+      "CNC Setup",
+      "G-Code Inspection",
+      "Precision Measurement",
+      "Metalworking Principles"
+    ],
+    "skill_vector": [
+      0.2,
+      0.3,
+      0.3,
+      0.4,
+      0.5,
+      0.2,
+      0.3,
+      0.2
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Machinists and Tool and Die Makers",
+      "O*NET 51-4041.00 - Machinists",
+      "SME (Society of Manufacturing Engineers): CNC Automation Impact"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 5,
+        "salary_delta": 0.09
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 6,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 7,
+        "salary_delta": 0.11
+      }
+    ]
+  },
+  {
+    "id": "hc_radiologist",
+    "title": "Radiologist Assistant / MD",
+    "title_zh": "放射科医生/助理",
+    "industry": "Healthcare",
+    "category": "transforming",
+    "description": "Examines medical images (X-rays, MRIs, CT scans) to diagnose diseases. Generative vision AI provides draft reports and locates lesions, with doctors acting as final verification.",
+    "description_zh": "检查医学影像（X光、核磁共振、CT）以诊断疾病。生成式视觉AI能够自动标注病变并起草诊断报告，医生专注于终审确认与复杂多科室联合诊断。",
+    "sensitivity": {
+      "augmentation_ratio": 0.65,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.9,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.2,
+      "absorbing_sector": 0.3,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.7
+    },
+    "base_demand_trend": 0.05,
+    "displacement_risk": 0.15,
+    "required_skills": [
+      "Image Pattern Detection",
+      "Clinical Diagnosis",
+      "AI Report Auditing",
+      "Patient Interdisciplinary Consultation"
+    ],
+    "skill_vector": [
+      0.6,
+      0.7,
+      0.9,
+      0.5,
+      0.3,
+      0.4,
+      0.5,
+      0.7
+    ],
+    "emergence_year": null,
+    "sources": [
+      "American College of Radiology (ACR) AI Survey",
+      "O*NET 29-1067.00 - Radiologists",
+      "Lancet Digital Health: AI vs Radiologist Accuracy studies"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "hc_general_practitioner",
+        "skill_bridge": "Develop proficiency in Patient Communication, Differential Diagnosis to transition into the General Practitioner MD role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "fin_risk_manager",
+        "skill_bridge": "Develop proficiency in Quantitative Risk Modeling, Scenario Stress Testing to transition into the Risk Management Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "legal_corporate_counsel",
+        "skill_bridge": "Develop proficiency in High-Stakes Negotiation, Corporate Strategy Planning to transition into the Corporate General Counsel role.",
+        "retrain_months": 4,
+        "salary_delta": 0.0
+      }
+    ]
+  },
+  {
+    "id": "hc_care_coordinator",
+    "title": "AI Healthcare Care Coordinator",
+    "title_zh": "医疗健康AI协调员",
+    "industry": "Healthcare",
+    "category": "emerging",
+    "description": "Combines remote patient monitoring data, AI symptom assessment logs, and doctor calendars to optimize chronic care pathways and follow-ups.",
+    "description_zh": "整合远程患者监测数据、AI症状初筛日志和医生排班表，设计并优化慢性病管理途径和术后随访流程。",
+    "sensitivity": {
+      "augmentation_ratio": 0.5,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.7,
+      "skill_distance": 0.6,
+      "diffusion_years": -0.2,
+      "absorbing_sector": 0.6,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.7
+    },
+    "base_demand_trend": 0.12,
+    "displacement_risk": 0.08,
+    "required_skills": [
+      "Patient Relation Management",
+      "Telehealth Platform Operations",
+      "Clinical Data Triage",
+      "Care Pathway Mapping"
+    ],
+    "skill_vector": [
+      0.6,
+      0.6,
+      0.7,
+      0.7,
+      0.3,
+      0.6,
+      0.5,
+      0.7
+    ],
+    "emergence_year": 2025,
+    "sources": [
+      "NHS: Digital Transformation and Nurse Coordinator Roles",
+      "O*NET 29-1141.00 - Registered Nurses",
+      "World Health Organization: Global Strategy on Digital Health"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "log_sustainability_planner",
+        "skill_bridge": "Develop proficiency in Carbon Emissions Auditing, Multi-Modal Freight Coordination to transition into the Green Logistics Planner role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "legal_compliance_officer",
+        "skill_bridge": "Develop proficiency in Regulatory Mapping, Compliance Software Auditing to transition into the Corporate Compliance Officer role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      },
+      {
+        "target_id": "fin_risk_manager",
+        "skill_bridge": "Develop proficiency in Quantitative Risk Modeling, Scenario Stress Testing to transition into the Risk Management Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      }
+    ]
+  },
+  {
+    "id": "hc_medical_transcriptionist",
+    "title": "Medical Transcriptionist",
+    "title_zh": "医疗速录员",
+    "industry": "Healthcare",
+    "category": "at_risk",
+    "description": "Converts voice recordings of doctors into written reports. Natural language processing and whisper-like speech-to-text models have rendered manual transcribing obsolete.",
+    "description_zh": "将医生的口头录音转换为书面病历。大语言模型和高精度实时语音转文字接口的普及，使手动速录病历的岗位彻底消失。",
+    "sensitivity": {
+      "augmentation_ratio": -0.98,
+      "demand_elasticity": 0.0,
+      "oring_leverage": -0.5,
+      "skill_distance": -0.7,
+      "diffusion_years": 0.3,
+      "absorbing_sector": -0.5,
+      "productivity_capture": -0.6,
+      "task_frontier_open": 0.0
+    },
+    "base_demand_trend": -0.25,
+    "displacement_risk": 0.99,
+    "required_skills": [
+      "Medical Terminology",
+      "Keyboarding Speed",
+      "Audio Playback Software",
+      "Formatting Guidelines"
+    ],
+    "skill_vector": [
+      0.0,
+      0.1,
+      0.2,
+      0.2,
+      0.3,
+      0.1,
+      0.1,
+      0.0
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Medical Transcriptionists",
+      "O*NET 31-9094.00 - Medical Transcriptionists",
+      "Frey & Osborne: Future of Employment (Risk = 99%)"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 7,
+        "salary_delta": 0.11
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 10,
+        "salary_delta": 0.13
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 11,
+        "salary_delta": 0.14
+      }
+    ]
+  },
+  {
+    "id": "hc_surgical_roboticist",
+    "title": "Robotic Surgery Assistant Specialist",
+    "title_zh": "机器人手术辅助专家",
+    "industry": "Healthcare",
+    "category": "emerging",
+    "description": "Prepares, calibrates, and assists in controlling robotic-guided surgery consoles, maintaining optical sensors and managing real-time system diagnostics.",
+    "description_zh": "准备、标定并协助主刀医生控制机器人引导的手术控制台，负责维护光学跟踪传感器并处理手术过程中的系统实时报错。",
+    "sensitivity": {
+      "augmentation_ratio": 0.6,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.95,
+      "skill_distance": 0.8,
+      "diffusion_years": -0.1,
+      "absorbing_sector": 0.3,
+      "productivity_capture": 0.7,
+      "task_frontier_open": 0.8
+    },
+    "base_demand_trend": 0.14,
+    "displacement_risk": 0.05,
+    "required_skills": [
+      "Surgical Robot Systems (da Vinci)",
+      "Biomedical Instrumentation Calibrations",
+      "Sterilization Procedures",
+      "Real-Time Telemetry Audits"
+    ],
+    "skill_vector": [
+      0.7,
+      0.7,
+      0.9,
+      0.8,
+      0.3,
+      0.3,
+      0.7,
+      0.8
+    ],
+    "emergence_year": 2024,
+    "sources": [
+      "Intuitive Surgical annual technology report",
+      "O*NET 29-2055.00 - Surgical Technologists",
+      "Journal of Robotic Surgery training reviews"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "tech_ai_infra_eng",
+        "skill_bridge": "Develop proficiency in Kubernetes (K8s) Orchestration, GPU Clustering (NCCL) to transition into the AI Infrastructure Architect role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_roboticist",
+        "skill_bridge": "Develop proficiency in Robot Operating System (ROS), Cobot Teach Pendant Programming to transition into the Collaborative Robot (Cobot) Integrator role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "log_autonomous_fleet_mgr",
+        "skill_bridge": "Develop proficiency in Drone Mission Control Software, LiDAR Diagnostics to transition into the Autonomous Fleet Coordinator role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "hc_clinical_coder",
+    "title": "Clinical Medical Coder",
+    "title_zh": "临床病历编码员",
+    "industry": "Healthcare",
+    "category": "at_risk",
+    "description": "Translates diagnoses and treatment notes into ICD codes for billing. LLMs fine-tuned on medical text can parse reports and output correct codes automatically.",
+    "description_zh": "将诊断和治疗报告翻译为标准ICD疾病分类代码以供报销。基于医学文本微调的大语言模型已能够直接解析病历并自动输出编码。",
+    "sensitivity": {
+      "augmentation_ratio": -0.9,
+      "demand_elasticity": 0.1,
+      "oring_leverage": -0.4,
+      "skill_distance": -0.5,
+      "diffusion_years": 0.5,
+      "absorbing_sector": -0.3,
+      "productivity_capture": -0.4,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": -0.1,
+    "displacement_risk": 0.88,
+    "required_skills": [
+      "ICD-10/ICD-11 Classification",
+      "Medical Billing Rules",
+      "Record Extraction",
+      "Compliance Checking"
+    ],
+    "skill_vector": [
+      0.1,
+      0.2,
+      0.2,
+      0.3,
+      0.4,
+      0.1,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "O*NET 29-2072.00 - Medical Records and Health Information Technicians",
+      "AHIMA (American Health Information Management Association) survey on coding automation"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 5,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 8,
+        "salary_delta": 0.12
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 9,
+        "salary_delta": 0.12
+      }
+    ]
+  },
+  {
+    "id": "hc_general_practitioner",
+    "title": "General Practitioner MD",
+    "title_zh": "全科医生",
+    "industry": "Healthcare",
+    "category": "transforming",
+    "description": "Diagnoses and treats acute and chronic illnesses. Role shifts from basic diagnosis search to using AI tools for clinical decisions, focusing on patient comfort and lifestyle advice.",
+    "description_zh": "诊断和治疗各类急慢性疾病。工作重心正从传统的“查阅资料比对症状”，转向利用AI决策支持工具，把精力集中在医患沟通、复杂共病诊断和生活方式干预上。",
+    "sensitivity": {
+      "augmentation_ratio": 0.5,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.85,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.5,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.6
+    },
+    "base_demand_trend": 0.03,
+    "displacement_risk": 0.1,
+    "required_skills": [
+      "Patient Communication",
+      "Differential Diagnosis",
+      "AI Clinical Decision Support Tools",
+      "Holistic Treatment Planning"
+    ],
+    "skill_vector": [
+      0.6,
+      0.6,
+      0.8,
+      0.5,
+      0.3,
+      0.5,
+      0.5,
+      0.6
+    ],
+    "emergence_year": null,
+    "sources": [
+      "AMA (American Medical Association) Policy on Clinical Decision Support AI",
+      "O*NET 29-1215.00 - Family Medicine Physicians",
+      "New England Journal of Medicine: AI in Primary Care"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "fin_risk_manager",
+        "skill_bridge": "Develop proficiency in Quantitative Risk Modeling, Scenario Stress Testing to transition into the Risk Management Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "hc_radiologist",
+        "skill_bridge": "Develop proficiency in Image Pattern Detection, Clinical Diagnosis to transition into the Radiologist Assistant / MD role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "log_supply_chain_analyst",
+        "skill_bridge": "Develop proficiency in Demand Forecasting Models, Logistics Bottleneck Diagnostics to transition into the Supply Chain Analyst role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ]
+  },
+  {
+    "id": "edu_tutor",
+    "title": "Private Academic Tutor",
+    "title_zh": "学科辅导教师",
+    "industry": "Education",
+    "category": "transforming",
+    "description": "Supports students outside standard hours. Transitioning from lecturing material to tutoring study habits, managing customized learning chatbots, and solving advanced queries.",
+    "description_zh": "在课外为学生提供学科辅导。工作内容正在从“单向传授知识”，转变为指导学习习惯、配置和监管个性化AI伴学智能体，以及解答极少数高难度探究性问题。",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.5,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.5,
+      "productivity_capture": 0.4,
+      "task_frontier_open": 0.5
+    },
+    "base_demand_trend": 0.02,
+    "displacement_risk": 0.3,
+    "required_skills": [
+      "Differentiated Instruction",
+      "Student Motivation Techniques",
+      "AI Tutor Prompt Tuning",
+      "Performance Tracking"
+    ],
+    "skill_vector": [
+      0.5,
+      0.5,
+      0.5,
+      0.4,
+      0.3,
+      0.5,
+      0.4,
+      0.5
+    ],
+    "emergence_year": null,
+    "sources": [
+      "O*NET 25-3031.00 - Self-Enrichment Teachers",
+      "EdTech Hub Research on Personalised Learning",
+      "Gates Foundation Report on Generative AI in Classrooms"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "edu_corporate_trainer",
+        "skill_bridge": "Develop proficiency in Workshop Facilitation, VR Simulation Management to transition into the Corporate Trainer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "agr_agronomist",
+        "skill_bridge": "Develop proficiency in Soil Chemistry, Fertiliser Planning to transition into the Agronomist & Soil Scientist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 4,
+        "salary_delta": 0.0
+      }
+    ]
+  },
+  {
+    "id": "edu_curriculum_designer",
+    "title": "Curriculum Developer",
+    "title_zh": "课程设计师",
+    "industry": "Education",
+    "category": "transforming",
+    "description": "Designs textbooks, tests, and study plans. Employs generative AI to draft modular exercises, interactive virtual worlds, and personalized case studies.",
+    "description_zh": "设计教科书、测验卷和教学计划。现在的课程开发人员大量利用生成式AI快速起草模块化习题、虚拟互动情景以及个性化案例研究，并将重点放在教学法审定上。",
+    "sensitivity": {
+      "augmentation_ratio": 0.6,
+      "demand_elasticity": 0.5,
+      "oring_leverage": 0.5,
+      "skill_distance": 0.5,
+      "diffusion_years": 0.0,
+      "absorbing_sector": 0.3,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.7
+    },
+    "base_demand_trend": 0.04,
+    "displacement_risk": 0.22,
+    "required_skills": [
+      "Pedagogy Design",
+      "Generative Curriculum Prompts",
+      "Modular Assessment Creation",
+      "Bilingual Content Adaption"
+    ],
+    "skill_vector": [
+      0.6,
+      0.6,
+      0.5,
+      0.6,
+      0.3,
+      0.4,
+      0.5,
+      0.7
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Instructional Coordinators",
+      "O*NET 25-9031.00 - Instructional Coordinators",
+      "OECD Future of Education and Skills 2030"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "edu_corporate_trainer",
+        "skill_bridge": "Develop proficiency in Workshop Facilitation, VR Simulation Management to transition into the Corporate Trainer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "log_supply_chain_analyst",
+        "skill_bridge": "Develop proficiency in Demand Forecasting Models, Logistics Bottleneck Diagnostics to transition into the Supply Chain Analyst role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "log_sustainability_planner",
+        "skill_bridge": "Develop proficiency in Carbon Emissions Auditing, Multi-Modal Freight Coordination to transition into the Green Logistics Planner role.",
+        "retrain_months": 3,
+        "salary_delta": 0.18
+      }
+    ]
+  },
+  {
+    "id": "edu_grading_assistant",
+    "title": "Grading Assistant",
+    "title_zh": "助教改卷员",
+    "industry": "Education",
+    "category": "at_risk",
+    "description": "Grades assignments, essays, and tests against rubrics. Neural text classifiers and LLM graders perform automated essay scoring with high consistency.",
+    "description_zh": "根据评分细则批改作业、作文和试卷。现在的神经网络分类器和大语言模型批改系统能够快速对大量开放式文章进行评分，且结果一致性强，导致此类重复性助教岗位急剧萎缩。",
+    "sensitivity": {
+      "augmentation_ratio": -0.9,
+      "demand_elasticity": 0.1,
+      "oring_leverage": -0.3,
+      "skill_distance": -0.5,
+      "diffusion_years": 0.4,
+      "absorbing_sector": -0.4,
+      "productivity_capture": -0.3,
+      "task_frontier_open": 0.0
+    },
+    "base_demand_trend": -0.15,
+    "displacement_risk": 0.92,
+    "required_skills": [
+      "Rubric Application",
+      "Feedback Entry",
+      "Score Verification",
+      "Spreadsheet Logging"
+    ],
+    "skill_vector": [
+      0.1,
+      0.2,
+      0.3,
+      0.3,
+      0.4,
+      0.1,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "Stanford AI Index: Automated Grading Milestones",
+      "O*NET 25-9041.00 - Teacher Assistants",
+      "Frey & Osborne: Teacher Assistants Automation Risk"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 6,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 8,
+        "salary_delta": 0.12
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 8,
+        "salary_delta": 0.12
+      }
+    ]
+  },
+  {
+    "id": "edu_ai_learning_guide",
+    "title": "AI Learning Experience Designer",
+    "title_zh": "AI学习体验设计师",
+    "industry": "Education",
+    "category": "emerging",
+    "description": "Designs and optimizes personalized learning trajectories, tuning algorithmic tutor weights and customizing interactive voice agents for neurodiverse students.",
+    "description_zh": "设计并调优个性化AI学习路径，负责调整自适应教学算法权重、定制符合不同神经发育类型（如ADHD/自闭症）学生的互动式语音教学对话机器人。",
+    "sensitivity": {
+      "augmentation_ratio": 0.6,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.7,
+      "skill_distance": 0.8,
+      "diffusion_years": -0.2,
+      "absorbing_sector": 0.5,
+      "productivity_capture": 0.6,
+      "task_frontier_open": 0.85
+    },
+    "base_demand_trend": 0.15,
+    "displacement_risk": 0.06,
+    "required_skills": [
+      "Instructional System Design (ISD)",
+      "Adaptive Learning Algorithms",
+      "Voice Interface Design (VUI)",
+      "Cognitive Science Principles"
+    ],
+    "skill_vector": [
+      0.7,
+      0.7,
+      0.7,
+      0.8,
+      0.2,
+      0.5,
+      0.6,
+      0.8
+    ],
+    "emergence_year": 2024,
+    "sources": [
+      "EdTech Consortium on AI-driven Instruction",
+      "O*NET 25-9031.00 - Instructional Coordinators",
+      "UNESCO: Guidance for Generative AI in Education and Research"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "mfg_digital_twin_eng",
+        "skill_bridge": "Develop proficiency in 3D CAD Modeling, IoT Telemetry Streams Integration to transition into the Digital Twin Architect role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "log_sustainability_planner",
+        "skill_bridge": "Develop proficiency in Carbon Emissions Auditing, Multi-Modal Freight Coordination to transition into the Green Logistics Planner role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "tech_agent_fleet_mgr",
+        "skill_bridge": "Develop proficiency in Agent Swarm Orchestration, Telemetry Logging to transition into the AI Agent Fleet Manager role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "edu_corporate_trainer",
+    "title": "Corporate Trainer",
+    "title_zh": "企业培训师",
+    "industry": "Education",
+    "category": "transforming",
+    "description": "Delivers upskilling workshops to corporate staff. Transitioning to running immersive VR simulation debriefings and building localized knowledge RAG bots for company training datasets.",
+    "description_zh": "为企业员工提供技能提升研讨会。工作方式正转变为运行沉浸式VR模拟场景的分析总结会，并为公司私有培训数据库构建和调优本地化知识RAG问答机器人。",
+    "sensitivity": {
+      "augmentation_ratio": 0.5,
+      "demand_elasticity": 0.5,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.6
+    },
+    "base_demand_trend": 0.03,
+    "displacement_risk": 0.24,
+    "required_skills": [
+      "Workshop Facilitation",
+      "VR Simulation Management",
+      "Skill Gap Diagnostics",
+      "Training Database Integration"
+    ],
+    "skill_vector": [
+      0.6,
+      0.5,
+      0.6,
+      0.5,
+      0.3,
+      0.4,
+      0.5,
+      0.6
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Training and Development Specialists",
+      "O*NET 13-1151.00 - Training and Development Specialists",
+      "Association for Talent Development (ATD) State of the Industry Report"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "log_supply_chain_analyst",
+        "skill_bridge": "Develop proficiency in Demand Forecasting Models, Logistics Bottleneck Diagnostics to transition into the Supply Chain Analyst role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "edu_curriculum_designer",
+        "skill_bridge": "Develop proficiency in Pedagogy Design, Generative Curriculum Prompts to transition into the Curriculum Developer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "mfg_maintenance_tech",
+        "skill_bridge": "Develop proficiency in IoT Sensor Diagnostics, Mechanical Troubleshooting to transition into the Predictive Maintenance Technician role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ]
+  },
+  {
+    "id": "legal_paralegal",
+    "title": "Paralegal",
+    "title_zh": "律师助理",
+    "industry": "Legal",
+    "category": "at_risk",
+    "description": "Conducts legal research, drafts boilerplate pleadings, and reviews discovery files. Semantic vector search and LLM summary pipelines have automated these paralegal tasks.",
+    "description_zh": "进行法学研究、起草常规诉状以及核查大量证据披露文件。随着法律语义向量检索和长文本LLM摘要系统的应用，绝大多数基础助理工作均被全自动处理。",
+    "sensitivity": {
+      "augmentation_ratio": -0.8,
+      "demand_elasticity": 0.3,
+      "oring_leverage": -0.4,
+      "skill_distance": -0.4,
+      "diffusion_years": 0.5,
+      "absorbing_sector": -0.2,
+      "productivity_capture": -0.3,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": -0.05,
+    "displacement_risk": 0.78,
+    "required_skills": [
+      "Case Law Research",
+      "Legal Document Preparation",
+      "Bates Stamping & Archiving",
+      "Document Discovery Search"
+    ],
+    "skill_vector": [
+      0.2,
+      0.3,
+      0.3,
+      0.4,
+      0.5,
+      0.2,
+      0.3,
+      0.2
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Paralegals and Legal Assistants",
+      "O*NET 23-2011.00 - Paralegals and Legal Assistants",
+      "Goldman Sachs Economics Research: The Potential Impact of AI on Economic Growth (Legal sector risk = 44%)"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 5,
+        "salary_delta": 0.09
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 6,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 7,
+        "salary_delta": 0.11
+      }
+    ]
+  },
+  {
+    "id": "legal_compliance_officer",
+    "title": "Corporate Compliance Officer",
+    "title_zh": "企业合规官",
+    "industry": "Legal",
+    "category": "transforming",
+    "description": "Monitors business operations for regulatory alignment. Evolving to configure real-time transaction monitoring compliance software and auditing algorithmic transparency.",
+    "description_zh": "监控企业运营以确保符合法律监管。工作重点正过渡到配置和微调实时交易监测合规引擎，以及审计企业在大数据/AI决策中的算法透明度。",
+    "sensitivity": {
+      "augmentation_ratio": 0.5,
+      "demand_elasticity": 0.4,
+      "oring_leverage": 0.8,
+      "skill_distance": 0.6,
+      "diffusion_years": -0.1,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.7
+    },
+    "base_demand_trend": 0.05,
+    "displacement_risk": 0.16,
+    "required_skills": [
+      "Regulatory Mapping",
+      "Compliance Software Auditing",
+      "Risk Identification",
+      "Corporate Governance Protocols"
+    ],
+    "skill_vector": [
+      0.6,
+      0.5,
+      0.8,
+      0.7,
+      0.3,
+      0.5,
+      0.6,
+      0.7
+    ],
+    "emergence_year": null,
+    "sources": [
+      "O*NET 13-1041.01 - Compliance Officers",
+      "Thomson Reuters: Cost of Compliance Report",
+      "Harvard Business Review: AI and the Compliance Function"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "fin_risk_manager",
+        "skill_bridge": "Develop proficiency in Quantitative Risk Modeling, Scenario Stress Testing to transition into the Risk Management Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "log_sustainability_planner",
+        "skill_bridge": "Develop proficiency in Carbon Emissions Auditing, Multi-Modal Freight Coordination to transition into the Green Logistics Planner role.",
+        "retrain_months": 3,
+        "salary_delta": 0.16
+      },
+      {
+        "target_id": "hc_care_coordinator",
+        "skill_bridge": "Develop proficiency in Patient Relation Management, Telehealth Platform Operations to transition into the AI Healthcare Care Coordinator role.",
+        "retrain_months": 3,
+        "salary_delta": 0.17
+      }
+    ]
+  },
+  {
+    "id": "legal_contracts_analyst",
+    "title": "Contract Review Analyst",
+    "title_zh": "合同审查专员",
+    "industry": "Legal",
+    "category": "at_risk",
+    "description": "Reviews legal contracts for missing clauses or liability risks. Automated contract analysis software parses agreements in seconds, flagging deviations automatically.",
+    "description_zh": "核对法律合同是否存在条款缺失或潜在法律责任风险。智能合同审核软件能在数秒内解析数百页协议，自动高亮并修改与标准范本不符的条款偏差。",
+    "sensitivity": {
+      "augmentation_ratio": -0.85,
+      "demand_elasticity": 0.2,
+      "oring_leverage": -0.5,
+      "skill_distance": -0.5,
+      "diffusion_years": 0.6,
+      "absorbing_sector": -0.3,
+      "productivity_capture": -0.4,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": -0.08,
+    "displacement_risk": 0.84,
+    "required_skills": [
+      "Contract Clause Verification",
+      "Liability Scanning",
+      "Drafting Boilerplate Agreements",
+      "Agreement Cross-Referencing"
+    ],
+    "skill_vector": [
+      0.1,
+      0.3,
+      0.2,
+      0.4,
+      0.5,
+      0.1,
+      0.2,
+      0.2
+    ],
+    "emergence_year": null,
+    "sources": [
+      "O*NET 23-2099.00 - Legal Support Workers, All Other",
+      "Legaltech News: The Rise of AI-Powered Contract Review",
+      "Frey & Osborne: Risk = 89%"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 5,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 8,
+        "salary_delta": 0.11
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 8,
+        "salary_delta": 0.12
+      }
+    ]
+  },
+  {
+    "id": "legal_ai_forensics",
+    "title": "AI Legal Forensics Specialist",
+    "title_zh": "AI法律取证与数据合规专家",
+    "industry": "Legal",
+    "category": "emerging",
+    "description": "Audits large training datasets for copyright infringement, traces algorithm lineages in IP lawsuits, and provides expert testimony on AI generation forensics.",
+    "description_zh": "审计大模型训练数据是否存在侵权、追踪知识产权诉讼中的算法演化谱系，并为AI生成内容的数字取证提供法庭专家证言。",
+    "sensitivity": {
+      "augmentation_ratio": 0.6,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.85,
+      "skill_distance": 0.85,
+      "diffusion_years": -0.3,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.7,
+      "task_frontier_open": 0.9
+    },
+    "base_demand_trend": 0.2,
+    "displacement_risk": 0.05,
+    "required_skills": [
+      "Copyright Law & Fair Use",
+      "Model Provenance Tracking",
+      "Metadata Forensics",
+      "Expert Witness Testimony"
+    ],
+    "skill_vector": [
+      0.7,
+      0.7,
+      0.9,
+      0.9,
+      0.2,
+      0.5,
+      0.7,
+      0.9
+    ],
+    "emergence_year": 2024,
+    "sources": [
+      "WIPO: Artificial Intelligence and Intellectual Property policy",
+      "O*NET 23-1011.00 - Lawyers",
+      "Stanford Cyber Law Center reports"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "log_autonomous_fleet_mgr",
+        "skill_bridge": "Develop proficiency in Drone Mission Control Software, LiDAR Diagnostics to transition into the Autonomous Fleet Coordinator role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "tech_agent_fleet_mgr",
+        "skill_bridge": "Develop proficiency in Agent Swarm Orchestration, Telemetry Logging to transition into the AI Agent Fleet Manager role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "hc_surgical_roboticist",
+        "skill_bridge": "Develop proficiency in Surgical Robot Systems (da Vinci), Biomedical Instrumentation Calibrations to transition into the Robotic Surgery Assistant Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "legal_corporate_counsel",
+    "title": "Corporate General Counsel",
+    "title_zh": "企业总法律顾问",
+    "industry": "Legal",
+    "category": "transforming",
+    "description": "Advises board of directors on strategic legal issues. Leverages AI for speedy research and drafting, while focusing on high-stakes negotiation and complex governance.",
+    "description_zh": "为董事会提供战略层面的法律咨询。利用AI进行超快速的事实查阅和底稿起草，主攻需要高度外交手腕的跨国谈判、危机管理与复杂的公司治理决策。",
+    "sensitivity": {
+      "augmentation_ratio": 0.5,
+      "demand_elasticity": 0.4,
+      "oring_leverage": 0.9,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.5,
+      "productivity_capture": 0.6,
+      "task_frontier_open": 0.7
+    },
+    "base_demand_trend": 0.04,
+    "displacement_risk": 0.08,
+    "required_skills": [
+      "High-Stakes Negotiation",
+      "Corporate Strategy Planning",
+      "Crisis Legal Management",
+      "AI Legal Tool Orchestration"
+    ],
+    "skill_vector": [
+      0.6,
+      0.5,
+      0.9,
+      0.5,
+      0.3,
+      0.6,
+      0.6,
+      0.7
+    ],
+    "emergence_year": null,
+    "sources": [
+      "Association of Corporate Counsel (ACC) annual benchmark study",
+      "O*NET 23-1011.00 - Lawyers",
+      "Georgetown Law Center: Report on the State of the Legal Market"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "fin_risk_manager",
+        "skill_bridge": "Develop proficiency in Quantitative Risk Modeling, Scenario Stress Testing to transition into the Risk Management Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "hc_general_practitioner",
+        "skill_bridge": "Develop proficiency in Patient Communication, Differential Diagnosis to transition into the General Practitioner MD role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "legal_compliance_officer",
+        "skill_bridge": "Develop proficiency in Regulatory Mapping, Compliance Software Auditing to transition into the Corporate Compliance Officer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ]
+  },
+  {
+    "id": "log_warehouse_picker",
+    "title": "Warehouse Order Picker",
+    "title_zh": "仓库拣货员",
+    "industry": "Logistics",
+    "category": "at_risk",
+    "description": "Picks products from warehouse shelves to fulfill orders. Replaced by Autonomous Mobile Robots (AMRs) and automated bin-picking arms in micro-fulfillment centers.",
+    "description_zh": "从仓库货架上拣选商品以履行订单。正大范围被自动导引叉车（AGV）、自主移动机器人（AMR）以及微型配货中心中的机械臂取代。",
+    "sensitivity": {
+      "augmentation_ratio": -0.9,
+      "demand_elasticity": 0.2,
+      "oring_leverage": -0.5,
+      "skill_distance": -0.8,
+      "diffusion_years": 0.8,
+      "absorbing_sector": -0.4,
+      "productivity_capture": -0.3,
+      "task_frontier_open": 0.0
+    },
+    "base_demand_trend": -0.1,
+    "displacement_risk": 0.92,
+    "required_skills": [
+      "Barcode Scanning",
+      "Physical Dexterity",
+      "Order Manifest Auditing",
+      "Safety Rules"
+    ],
+    "skill_vector": [
+      0.0,
+      0.2,
+      0.2,
+      0.1,
+      0.6,
+      0.1,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Hand Packers and Packagers",
+      "O*NET 53-7064.00 - Packers and Packagers, Hand",
+      "DHL Logistics Trend Radar: Robotics and Automation"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 6,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 10,
+        "salary_delta": 0.13
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 10,
+        "salary_delta": 0.14
+      }
+    ]
+  },
+  {
+    "id": "log_dispatcher",
+    "title": "Logistics Dispatcher",
+    "title_zh": "运输调度员",
+    "industry": "Logistics",
+    "category": "at_risk",
+    "description": "Schedules and dispatches trucks and shipments. Real-time fleet management software utilizes dynamic linear programming to auto-route and allocate orders.",
+    "description_zh": "编排货运车队和货运单。智能车队管理系统可基于实时路况、天气和订单量进行多变量线性规划，实现全自动的路径寻优与派单，取代人工调度员。",
+    "sensitivity": {
+      "augmentation_ratio": -0.75,
+      "demand_elasticity": 0.3,
+      "oring_leverage": -0.4,
+      "skill_distance": -0.5,
+      "diffusion_years": 0.6,
+      "absorbing_sector": -0.2,
+      "productivity_capture": -0.3,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": -0.04,
+    "displacement_risk": 0.74,
+    "required_skills": [
+      "Truck Dispatching Software",
+      "Route Monitoring",
+      "Customer Support Communications",
+      "Cargo Compliance Tracking"
+    ],
+    "skill_vector": [
+      0.2,
+      0.3,
+      0.3,
+      0.4,
+      0.5,
+      0.2,
+      0.3,
+      0.3
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Dispatchers",
+      "O*NET 43-5032.00 - Dispatchers, Except Police, Fire, and Ambulance",
+      "Frey & Osborne: Risk = 87%"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 5,
+        "salary_delta": 0.09
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 5,
+        "salary_delta": 0.09
+      },
+      {
+        "target_id": "log_customs_broker",
+        "skill_bridge": "Develop proficiency in HTS Tariff Classification, Import/Export Regulations to transition into the Customs Broker role.",
+        "retrain_months": 7,
+        "salary_delta": 0.11
+      }
+    ]
+  },
+  {
+    "id": "log_supply_chain_analyst",
+    "title": "Supply Chain Analyst",
+    "title_zh": "供应链分析师",
+    "industry": "Logistics",
+    "category": "transforming",
+    "description": "Analyzes supply chain flows to find inefficiencies. Transitioning from batch spreadsheets to configuring AI demand forecasting pipelines and global disruption simulator agents.",
+    "description_zh": "分析物流及供应链流程以发掘低效环节。工作方式正从定期处理静态电子表格，升级为维护和监控AI智能体运行的实时需求预测与全球地缘/港口断链模拟器。",
+    "sensitivity": {
+      "augmentation_ratio": 0.5,
+      "demand_elasticity": 0.4,
+      "oring_leverage": 0.7,
+      "skill_distance": 0.5,
+      "diffusion_years": 0.0,
+      "absorbing_sector": 0.3,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.6
+    },
+    "base_demand_trend": 0.05,
+    "displacement_risk": 0.22,
+    "required_skills": [
+      "Demand Forecasting Models",
+      "Logistics Bottleneck Diagnostics",
+      "SQL/Data Extraction",
+      "Dynamic Safety Stock Modeling"
+    ],
+    "skill_vector": [
+      0.6,
+      0.5,
+      0.7,
+      0.6,
+      0.3,
+      0.4,
+      0.5,
+      0.6
+    ],
+    "emergence_year": null,
+    "sources": [
+      "O*NET 13-1081.02 - Logistics Analysts",
+      "CSCMP (Council of Supply Chain Management Professionals) Annual Survey",
+      "Gartner Supply Chain Top 25"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "edu_corporate_trainer",
+        "skill_bridge": "Develop proficiency in Workshop Facilitation, VR Simulation Management to transition into the Corporate Trainer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "mfg_maintenance_tech",
+        "skill_bridge": "Develop proficiency in IoT Sensor Diagnostics, Mechanical Troubleshooting to transition into the Predictive Maintenance Technician role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "fin_risk_manager",
+        "skill_bridge": "Develop proficiency in Quantitative Risk Modeling, Scenario Stress Testing to transition into the Risk Management Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ]
+  },
+  {
+    "id": "log_autonomous_fleet_mgr",
+    "title": "Autonomous Fleet Coordinator",
+    "title_zh": "无人车与送货无人机群调度专家",
+    "industry": "Logistics",
+    "category": "emerging",
+    "description": "Coordinates and monitors fleets of driverless delivery trucks, delivery rovers, and distribution drones, monitoring battery status and resolving navigation failures.",
+    "description_zh": "统筹并监控自动驾驶重卡、末端配送小车及配送无人机集群。负责在线监控电量、处理路网阻断或临时空域封锁等导致的配送导航中断。",
+    "sensitivity": {
+      "augmentation_ratio": 0.6,
+      "demand_elasticity": 0.8,
+      "oring_leverage": 0.9,
+      "skill_distance": 0.7,
+      "diffusion_years": -0.3,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.7,
+      "task_frontier_open": 0.8
+    },
+    "base_demand_trend": 0.16,
+    "displacement_risk": 0.04,
+    "required_skills": [
+      "Drone Mission Control Software",
+      "LiDAR Diagnostics",
+      "Aviation/Roadway Regulations",
+      "Fail-Safe Protocol Initiation"
+    ],
+    "skill_vector": [
+      0.7,
+      0.8,
+      0.9,
+      0.8,
+      0.2,
+      0.5,
+      0.7,
+      0.8
+    ],
+    "emergence_year": 2025,
+    "sources": [
+      "FAA Drone operator requirements and autonomous drone policies",
+      "O*NET 53-2012.00 - Commercial Pilots (Drone variants)",
+      "McKinsey: The future of last-mile delivery"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "legal_ai_forensics",
+        "skill_bridge": "Develop proficiency in Copyright Law & Fair Use, Model Provenance Tracking to transition into the AI Legal Forensics Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "tech_ai_infra_eng",
+        "skill_bridge": "Develop proficiency in Kubernetes (K8s) Orchestration, GPU Clustering (NCCL) to transition into the AI Infrastructure Architect role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "tech_agent_fleet_mgr",
+        "skill_bridge": "Develop proficiency in Agent Swarm Orchestration, Telemetry Logging to transition into the AI Agent Fleet Manager role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "log_last_mile_delivery",
+    "title": "Last-Mile Delivery Driver",
+    "title_zh": "快递配送员",
+    "industry": "Logistics",
+    "category": "at_risk",
+    "description": "Transports packages from local depots to residential doorsteps. Driverless vans and autonomous rolling sidewalk pods are displacing high-volume courier jobs.",
+    "description_zh": "将快递包裹从本地网点运送到居民住宅门前。无人配送货车和人行道滚动配送机器人的成熟部署，使高通量传统人工配送岗位逐步收缩。",
+    "sensitivity": {
+      "augmentation_ratio": -0.7,
+      "demand_elasticity": 0.3,
+      "oring_leverage": -0.3,
+      "skill_distance": -0.8,
+      "diffusion_years": 0.7,
+      "absorbing_sector": -0.2,
+      "productivity_capture": -0.2,
+      "task_frontier_open": 0.0
+    },
+    "base_demand_trend": -0.03,
+    "displacement_risk": 0.7,
+    "required_skills": [
+      "Vehicle Operation",
+      "Cargo Safe Stowage",
+      "Route Navigation App Usage",
+      "Customer Receipt Verification"
+    ],
+    "skill_vector": [
+      0.1,
+      0.4,
+      0.3,
+      0.1,
+      0.6,
+      0.2,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Light Truck or Delivery Services Drivers",
+      "O*NET 53-3033.00 - Light Truck Drivers",
+      "FedEx/Amazon Robotics implementation reports"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 4,
+        "salary_delta": 0.09
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 7,
+        "salary_delta": 0.11
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 9,
+        "salary_delta": 0.12
+      }
+    ]
+  },
+  {
+    "id": "log_sustainability_planner",
+    "title": "Green Logistics Planner",
+    "title_zh": "绿色物流规划师",
+    "industry": "Logistics",
+    "category": "emerging",
+    "description": "Utilizes AI route optimizers to design net-zero delivery networks, auditing carbon footprints and coordinating multi-modal electric fleets.",
+    "description_zh": "利用AI多目标路径优化引擎设计零碳配送网络，评估各运输航线的碳足迹，并调度多式联运纯电或氢能运力车队。",
+    "sensitivity": {
+      "augmentation_ratio": 0.5,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.7,
+      "skill_distance": 0.7,
+      "diffusion_years": -0.2,
+      "absorbing_sector": 0.5,
+      "productivity_capture": 0.6,
+      "task_frontier_open": 0.75
+    },
+    "base_demand_trend": 0.11,
+    "displacement_risk": 0.07,
+    "required_skills": [
+      "Carbon Emissions Auditing",
+      "Multi-Modal Freight Coordination",
+      "Multi-Objective AI Route Planning",
+      "Sustainability Standards (GHG Protocol)"
+    ],
+    "skill_vector": [
+      0.6,
+      0.6,
+      0.7,
+      0.7,
+      0.3,
+      0.5,
+      0.6,
+      0.7
+    ],
+    "emergence_year": 2026,
+    "sources": [
+      "Smart Freight Centre guidelines",
+      "O*NET 13-1081.00 - Logisticians",
+      "OECD Guidelines for Green Transportation"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "hc_care_coordinator",
+        "skill_bridge": "Develop proficiency in Patient Relation Management, Telehealth Platform Operations to transition into the AI Healthcare Care Coordinator role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "legal_compliance_officer",
+        "skill_bridge": "Develop proficiency in Regulatory Mapping, Compliance Software Auditing to transition into the Corporate Compliance Officer role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      },
+      {
+        "target_id": "fin_risk_manager",
+        "skill_bridge": "Develop proficiency in Quantitative Risk Modeling, Scenario Stress Testing to transition into the Risk Management Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      }
+    ]
+  },
+  {
+    "id": "ret_store_manager",
+    "title": "Retail Store Manager",
+    "title_zh": "零售门店店长",
+    "industry": "Retail",
+    "category": "transforming",
+    "description": "Oversees daily store operations, staff scheduling, inventory, and customer experience. Faces structural pressure from e-commerce traffic shifts and omnichannel expectations but retains strong local community relationship value.",
+    "description_zh": "负责门店日常运营、员工排班、库存管理和顾客体验。受电商流量分流影响较大，但本地社区关系价值持续维持刚性需求。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.4,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.6,
+      "productivity_capture": 0.4,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": -0.01,
+    "displacement_risk": 0.28,
+    "required_skills": [
+      "Team Leadership",
+      "Inventory Management",
+      "Customer Conflict Resolution",
+      "P&L Responsibility"
+    ],
+    "skill_vector": [
+      0.3,
+      0.7,
+      0.4,
+      0.4,
+      0.3,
+      0.6,
+      0.4,
+      0.3
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_agronomist",
+        "skill_bridge": "Develop proficiency in Soil Chemistry, Fertiliser Planning to transition into the Agronomist & Soil Scientist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "con_site_foreman",
+        "skill_bridge": "Develop proficiency in Trade Sequencing, OSHA Safety Compliance to transition into the Construction Site Foreman role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "ret_buyer_merchandiser",
+        "skill_bridge": "Develop proficiency in Trend Forecasting, Vendor Negotiation to transition into the Retail Buyer & Merchandiser role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: First-Line Supervisors of Retail Sales Workers",
+      "O*NET 41-1011.00",
+      "NRF: Future of Retail Workforce 2024"
+    ]
+  },
+  {
+    "id": "ret_buyer_merchandiser",
+    "title": "Retail Buyer & Merchandiser",
+    "title_zh": "采购买手与陈列商品规划师",
+    "industry": "Retail",
+    "category": "transforming",
+    "description": "Selects product ranges and negotiates vendor contracts based on trend forecasting and margin targets. Human taste and brand intuition remain central to decisions that algorithms cannot fully replicate.",
+    "description_zh": "根据趋势预测和利润目标选择商品品类、与供应商谈判合同。人类品味判断和品牌直觉是算法目前无法完全复制的核心竞争力。",
+    "sensitivity": {
+      "augmentation_ratio": 0.3,
+      "demand_elasticity": 0.8,
+      "oring_leverage": 0.5,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.5,
+      "productivity_capture": 0.4,
+      "task_frontier_open": 0.3
+    },
+    "base_demand_trend": 0.01,
+    "displacement_risk": 0.35,
+    "required_skills": [
+      "Trend Forecasting",
+      "Vendor Negotiation",
+      "Category Management",
+      "Visual Merchandising"
+    ],
+    "skill_vector": [
+      0.4,
+      0.8,
+      0.5,
+      0.5,
+      0.2,
+      0.5,
+      0.4,
+      0.3
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_agronomist",
+        "skill_bridge": "Develop proficiency in Soil Chemistry, Fertiliser Planning to transition into the Agronomist & Soil Scientist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "ret_store_manager",
+        "skill_bridge": "Develop proficiency in Team Leadership, Inventory Management to transition into the Retail Store Manager role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "con_green_building_certifier",
+        "skill_bridge": "Develop proficiency in LEED / BREEAM Standards, Energy Modelling (EnergyPlus) to transition into the Green Building Certifier (LEED/BREEAM) role.",
+        "retrain_months": 3,
+        "salary_delta": 0.18
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Buyers and Purchasing Agents",
+      "O*NET 13-1022.00 - Wholesale and Retail Buyers",
+      "Deloitte: Retail Futures Workforce"
+    ]
+  },
+  {
+    "id": "ret_cashier",
+    "title": "Cashier",
+    "title_zh": "收银员",
+    "industry": "Retail",
+    "category": "at_risk",
+    "description": "Processes customer transactions at point of sale. Self-checkout kiosks and frictionless store formats (e.g. Amazon Go-style) have mechanised the vast majority of repetitive payment handling tasks.",
+    "description_zh": "在销售终端处理顾客付款交易。自助结账设备和无感知结账门店（如Amazon Go模式）已将绝大多数重复性收款操作机械化。",
+    "sensitivity": {
+      "augmentation_ratio": -0.9,
+      "demand_elasticity": 0.2,
+      "oring_leverage": -0.3,
+      "skill_distance": -0.7,
+      "diffusion_years": 0.6,
+      "absorbing_sector": -0.3,
+      "productivity_capture": -0.3,
+      "task_frontier_open": 0.0
+    },
+    "base_demand_trend": -0.1,
+    "displacement_risk": 0.91,
+    "required_skills": [
+      "POS System Operation",
+      "Cash Handling",
+      "Customer Greeting",
+      "Transaction Balancing"
+    ],
+    "skill_vector": [
+      0.1,
+      0.2,
+      0.2,
+      0.1,
+      0.5,
+      0.1,
+      0.2,
+      0.1
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 6,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 9,
+        "salary_delta": 0.13
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 10,
+        "salary_delta": 0.13
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Cashiers",
+      "O*NET 41-2011.00 - Cashiers",
+      "Frey & Osborne: Cashier Automation Risk = 97%"
+    ]
+  },
+  {
+    "id": "ret_personal_stylist",
+    "title": "Personal Shopper & Stylist",
+    "title_zh": "私人购物顾问与形象造型师",
+    "industry": "Retail",
+    "category": "emerging",
+    "description": "Provides curated, high-touch wardrobe consulting for premium customers. As mass market retail commoditises, demand for bespoke human styling, trust, and aesthetic judgement in the luxury segment grows.",
+    "description_zh": "为高端顾客提供精致、个性化的衣橱管理咨询服务。随着大众零售商品化，奢侈品和个性化细分市场对真人造型师的信赖感和审美判断力的需求上升。",
+    "sensitivity": {
+      "augmentation_ratio": 0.1,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.3,
+      "diffusion_years": -0.1,
+      "absorbing_sector": 0.8,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": 0.06,
+    "displacement_risk": 0.09,
+    "required_skills": [
+      "Fashion Trend Knowledge",
+      "Client Psychology",
+      "Brand Portfolio Expertise",
+      "Colour & Body-Type Analysis"
+    ],
+    "skill_vector": [
+      0.2,
+      0.7,
+      0.6,
+      0.4,
+      0.2,
+      0.8,
+      0.5,
+      0.2
+    ],
+    "transition_targets": [
+      {
+        "target_id": "hos_travel_experience_designer",
+        "skill_bridge": "Develop proficiency in Destination Knowledge Networks, High-Net-Worth Client Management to transition into the Experiential Travel Designer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "hos_hotel_manager",
+        "skill_bridge": "Develop proficiency in P&L Management, Guest Relations to transition into the Hotel General Manager role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      },
+      {
+        "target_id": "hos_chef",
+        "skill_bridge": "Develop proficiency in Menu Engineering, Kitchen Team Leadership to transition into the Executive Chef role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      }
+    ],
+    "emergence_year": 2022,
+    "sources": [
+      "BLS: Fashion Designers and Personal Stylists",
+      "O*NET 39-5012.00 - Hairdressers, Hairstylists, and Cosmetologists",
+      "McKinsey: State of Fashion 2024 Report"
+    ]
+  },
+  {
+    "id": "agr_farmer",
+    "title": "Mixed Arable Farmer",
+    "title_zh": "综合农耕农场主",
+    "industry": "Agriculture",
+    "category": "transforming",
+    "description": "Manages crop cultivation cycles, soil health, irrigation, pest control, and harvest logistics across mixed arable land. Climate variability and input cost volatility are the primary pressures, not automation.",
+    "description_zh": "管理混合耕作农场的农作物种植周期、土壤健康、灌溉、病虫害防治和收割物流。主要压力来自气候波动和农资成本变化，而非自动化。",
+    "sensitivity": {
+      "augmentation_ratio": 0.1,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.2,
+      "skill_distance": 0.1,
+      "diffusion_years": 0.3,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": 0.02,
+    "displacement_risk": 0.22,
+    "required_skills": [
+      "Soil Science",
+      "Crop Rotation Planning",
+      "Irrigation Management",
+      "Equipment Maintenance"
+    ],
+    "skill_vector": [
+      0.2,
+      0.5,
+      0.2,
+      0.2,
+      0.4,
+      0.4,
+      0.3,
+      0.1
+    ],
+    "transition_targets": [
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 5,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "ret_store_manager",
+        "skill_bridge": "Develop proficiency in Team Leadership, Inventory Management to transition into the Retail Store Manager role.",
+        "retrain_months": 6,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "log_customs_broker",
+        "skill_bridge": "Develop proficiency in HTS Tariff Classification, Import/Export Regulations to transition into the Customs Broker role.",
+        "retrain_months": 7,
+        "salary_delta": 0.0
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "FAO: Future of Food and Agriculture",
+      "O*NET 45-2093.00 - Farmworkers",
+      "USDA Economic Research Service: Farm Sector Labor"
+    ]
+  },
+  {
+    "id": "agr_agronomist",
+    "title": "Agronomist & Soil Scientist",
+    "title_zh": "农艺师与土壤科学家",
+    "industry": "Agriculture",
+    "category": "transforming",
+    "description": "Advises farms on optimal crop varieties, nutrient management, and soil health diagnostics. Growing role in sustainable agriculture certification and regenerative farming transitions.",
+    "description_zh": "为农场提供最优农作物品种、养分管理和土壤健康诊断建议。在可持续农业认证和再生农业转型方面发挥越来越重要的作用。",
+    "sensitivity": {
+      "augmentation_ratio": 0.3,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.5,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.5,
+      "productivity_capture": 0.4,
+      "task_frontier_open": 0.3
+    },
+    "base_demand_trend": 0.05,
+    "displacement_risk": 0.12,
+    "required_skills": [
+      "Soil Chemistry",
+      "Fertiliser Planning",
+      "Crop Disease Diagnosis",
+      "Sustainable Certification Standards"
+    ],
+    "skill_vector": [
+      0.4,
+      0.6,
+      0.5,
+      0.5,
+      0.2,
+      0.5,
+      0.4,
+      0.3
+    ],
+    "transition_targets": [
+      {
+        "target_id": "ret_buyer_merchandiser",
+        "skill_bridge": "Develop proficiency in Trend Forecasting, Vendor Negotiation to transition into the Retail Buyer & Merchandiser role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "log_customs_broker",
+        "skill_bridge": "Develop proficiency in HTS Tariff Classification, Import/Export Regulations to transition into the Customs Broker role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "ret_store_manager",
+        "skill_bridge": "Develop proficiency in Team Leadership, Inventory Management to transition into the Retail Store Manager role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "O*NET 19-1011.00 - Animal Scientists & Agronomists",
+      "BLS: Agricultural and Food Scientists",
+      "OECD: Sustainable Agriculture and Food Systems"
+    ]
+  },
+  {
+    "id": "agr_regenerative_specialist",
+    "title": "Regenerative Agriculture Specialist",
+    "title_zh": "再生农业专家",
+    "industry": "Agriculture",
+    "category": "emerging",
+    "description": "Designs and implements carbon-sequestering, biodiversity-positive farming systems — cover cropping, no-till, agroforestry — to meet corporate net-zero supply chain commitments. Demand driven by ESG pressure, not AI.",
+    "description_zh": "设计并推行固碳、生物多样性正向的农业系统（如覆盖作物、免耕和农林复合系统），以满足企业净零供应链承诺。需求主要由ESG压力驱动，而非人工智能技术。",
+    "sensitivity": {
+      "augmentation_ratio": 0.1,
+      "demand_elasticity": 0.8,
+      "oring_leverage": 0.5,
+      "skill_distance": 0.5,
+      "diffusion_years": -0.1,
+      "absorbing_sector": 0.7,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": 0.14,
+    "displacement_risk": 0.04,
+    "required_skills": [
+      "Carbon Sequestration Methods",
+      "Biodiversity Assessment",
+      "Agroforestry Design",
+      "ESG Reporting Standards"
+    ],
+    "skill_vector": [
+      0.2,
+      0.8,
+      0.5,
+      0.6,
+      0.2,
+      0.7,
+      0.5,
+      0.2
+    ],
+    "transition_targets": [
+      {
+        "target_id": "con_green_building_certifier",
+        "skill_bridge": "Develop proficiency in LEED / BREEAM Standards, Energy Modelling (EnergyPlus) to transition into the Green Building Certifier (LEED/BREEAM) role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "hos_travel_experience_designer",
+        "skill_bridge": "Develop proficiency in Destination Knowledge Networks, High-Net-Worth Client Management to transition into the Experiential Travel Designer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "gov_climate_policy_officer",
+        "skill_bridge": "Develop proficiency in Carbon Market Regulation (ETS), Climate Economics to transition into the Climate Policy & Carbon Markets Officer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ],
+    "emergence_year": 2023,
+    "sources": [
+      "Rodale Institute: Regenerative Organic Agriculture report",
+      "O*NET 19-1011.00 - Agricultural Scientists",
+      "World Resources Institute: Creating a Sustainable Food Future"
+    ]
+  },
+  {
+    "id": "con_site_foreman",
+    "title": "Construction Site Foreman",
+    "title_zh": "建筑工地工长",
+    "industry": "Construction",
+    "category": "transforming",
+    "description": "Coordinates daily on-site labour, enforces safety standards, and manages sub-contractor sequencing. Physical complexity and coordination of multi-trade teams make full automation extremely difficult.",
+    "description_zh": "协调工地日常劳动力、执行安全标准并管理分包商工序。现场物理复杂性以及多专业团队协同的高度不确定性，使全面自动化极为困难。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.2,
+      "absorbing_sector": 0.6,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": 0.03,
+    "displacement_risk": 0.2,
+    "required_skills": [
+      "Trade Sequencing",
+      "OSHA Safety Compliance",
+      "Blueprint Reading",
+      "Multi-subcontractor Coordination"
+    ],
+    "skill_vector": [
+      0.3,
+      0.7,
+      0.6,
+      0.4,
+      0.3,
+      0.6,
+      0.3,
+      0.2
+    ],
+    "transition_targets": [
+      {
+        "target_id": "log_customs_broker",
+        "skill_bridge": "Develop proficiency in HTS Tariff Classification, Import/Export Regulations to transition into the Customs Broker role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "hos_hotel_manager",
+        "skill_bridge": "Develop proficiency in P&L Management, Guest Relations to transition into the Hotel General Manager role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "ret_store_manager",
+        "skill_bridge": "Develop proficiency in Team Leadership, Inventory Management to transition into the Retail Store Manager role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Construction Managers",
+      "O*NET 47-1011.00 - First-Line Supervisors of Construction Trades",
+      "McKinsey Global Institute: Reinventing Construction"
+    ]
+  },
+  {
+    "id": "con_electrician",
+    "title": "Licensed Electrician",
+    "title_zh": "持证电工",
+    "industry": "Construction",
+    "category": "transforming",
+    "description": "Installs, maintains, and repairs electrical wiring systems in residential and commercial buildings. Strong licensing barriers and physical task complexity provide robust protection against routine displacement.",
+    "description_zh": "在住宅和商业建筑中安装、维护和修理电气线路系统。严格的执照要求与高度复杂的物理操作任务，为从业者提供了有力的替代壁垒。",
+    "sensitivity": {
+      "augmentation_ratio": 0.1,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.7,
+      "skill_distance": 0.2,
+      "diffusion_years": 0.3,
+      "absorbing_sector": 0.7,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": 0.06,
+    "displacement_risk": 0.11,
+    "required_skills": [
+      "NEC Code Compliance",
+      "Panel Installation",
+      "Conduit Bending",
+      "Fault Diagnosis"
+    ],
+    "skill_vector": [
+      0.2,
+      0.6,
+      0.7,
+      0.3,
+      0.3,
+      0.7,
+      0.3,
+      0.1
+    ],
+    "transition_targets": [
+      {
+        "target_id": "hos_chef",
+        "skill_bridge": "Develop proficiency in Menu Engineering, Kitchen Team Leadership to transition into the Executive Chef role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "con_site_foreman",
+        "skill_bridge": "Develop proficiency in Trade Sequencing, OSHA Safety Compliance to transition into the Construction Site Foreman role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Electricians",
+      "O*NET 47-2111.00 - Electricians",
+      "IBEW Workforce Data Outlook"
+    ]
+  },
+  {
+    "id": "con_green_building_certifier",
+    "title": "Green Building Certifier (LEED/BREEAM)",
+    "title_zh": "绿色建筑认证评审师（LEED/BREEAM）",
+    "industry": "Construction",
+    "category": "emerging",
+    "description": "Audits commercial and residential construction projects for energy efficiency, water use, material sustainability, and indoor air quality to issue green building certifications (LEED, BREEAM, WELL). Driven by building decarbonisation regulation, not AI.",
+    "description_zh": "对商业和住宅建设项目的能源效率、用水、材料可持续性和室内空气质量进行审计，以颁发绿色建筑认证（LEED、BREEAM、WELL）。需求由建筑脱碳法规驱动，而非人工智能。",
+    "sensitivity": {
+      "augmentation_ratio": 0.1,
+      "demand_elasticity": 0.8,
+      "oring_leverage": 0.5,
+      "skill_distance": 0.5,
+      "diffusion_years": 0.0,
+      "absorbing_sector": 0.6,
+      "productivity_capture": 0.4,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": 0.12,
+    "displacement_risk": 0.05,
+    "required_skills": [
+      "LEED / BREEAM Standards",
+      "Energy Modelling (EnergyPlus)",
+      "Site Inspection Protocols",
+      "Sustainability Reporting"
+    ],
+    "skill_vector": [
+      0.2,
+      0.8,
+      0.5,
+      0.6,
+      0.2,
+      0.6,
+      0.4,
+      0.2
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_regenerative_specialist",
+        "skill_bridge": "Develop proficiency in Carbon Sequestration Methods, Biodiversity Assessment to transition into the Regenerative Agriculture Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "ret_buyer_merchandiser",
+        "skill_bridge": "Develop proficiency in Trend Forecasting, Vendor Negotiation to transition into the Retail Buyer & Merchandiser role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      },
+      {
+        "target_id": "hos_hotel_manager",
+        "skill_bridge": "Develop proficiency in P&L Management, Guest Relations to transition into the Hotel General Manager role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      }
+    ],
+    "emergence_year": 2021,
+    "sources": [
+      "USGBC: Green Building Market Report",
+      "O*NET 17-2051.00 - Civil Engineers",
+      "IEA: Energy Efficiency in Buildings Tracker"
+    ]
+  },
+  {
+    "id": "hos_chef",
+    "title": "Executive Chef",
+    "title_zh": "行政总厨",
+    "industry": "Hospitality",
+    "category": "transforming",
+    "description": "Designs menus, manages kitchen teams, controls food costs, and ensures consistent dish quality across service volumes. Creativity, sensory judgement, and cultural culinary knowledge are irreplaceable human attributes.",
+    "description_zh": "设计菜单、管理厨房团队、控制食材成本并在高出餐量下确保出品质量一致。创造力、感官判断力和文化烹饪知识是无法被替代的人类特质。",
+    "sensitivity": {
+      "augmentation_ratio": 0.1,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.7,
+      "skill_distance": 0.2,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.8,
+      "productivity_capture": 0.4,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": 0.04,
+    "displacement_risk": 0.08,
+    "required_skills": [
+      "Menu Engineering",
+      "Kitchen Team Leadership",
+      "Food Cost Control",
+      "Culinary Technique Mastery"
+    ],
+    "skill_vector": [
+      0.2,
+      0.6,
+      0.7,
+      0.3,
+      0.2,
+      0.8,
+      0.4,
+      0.1
+    ],
+    "transition_targets": [
+      {
+        "target_id": "con_electrician",
+        "skill_bridge": "Develop proficiency in NEC Code Compliance, Panel Installation to transition into the Licensed Electrician role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "gov_social_worker",
+        "skill_bridge": "Develop proficiency in Crisis Intervention, Case Management to transition into the Social Worker role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "ret_personal_stylist",
+        "skill_bridge": "Develop proficiency in Fashion Trend Knowledge, Client Psychology to transition into the Personal Shopper & Stylist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.17
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Chefs and Head Cooks",
+      "O*NET 35-1011.00 - Chefs and Head Cooks",
+      "NRA: Restaurant Industry 2024 Outlook"
+    ]
+  },
+  {
+    "id": "hos_hotel_manager",
+    "title": "Hotel General Manager",
+    "title_zh": "酒店总经理",
+    "industry": "Hospitality",
+    "category": "transforming",
+    "description": "Directs all hotel operations — rooms, F&B, events, housekeeping — to maximise guest satisfaction and profitability. Stakeholder management, crisis response, and guest relationship building are core human-dependent functions.",
+    "description_zh": "统筹酒店全部运营（客房、餐饮、活动、客房服务）以最大化宾客满意度和盈利能力。利益相关者管理、危机应对和宾客关系维护是核心人类依赖型职能。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.0,
+      "absorbing_sector": 0.7,
+      "productivity_capture": 0.4,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": 0.03,
+    "displacement_risk": 0.12,
+    "required_skills": [
+      "P&L Management",
+      "Guest Relations",
+      "Rooms Division Optimisation",
+      "F&B Operations"
+    ],
+    "skill_vector": [
+      0.3,
+      0.7,
+      0.6,
+      0.4,
+      0.2,
+      0.7,
+      0.4,
+      0.2
+    ],
+    "transition_targets": [
+      {
+        "target_id": "con_site_foreman",
+        "skill_bridge": "Develop proficiency in Trade Sequencing, OSHA Safety Compliance to transition into the Construction Site Foreman role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "ret_personal_stylist",
+        "skill_bridge": "Develop proficiency in Fashion Trend Knowledge, Client Psychology to transition into the Personal Shopper & Stylist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.17
+      },
+      {
+        "target_id": "hos_travel_experience_designer",
+        "skill_bridge": "Develop proficiency in Destination Knowledge Networks, High-Net-Worth Client Management to transition into the Experiential Travel Designer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.17
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Lodging Managers",
+      "O*NET 11-9081.00 - Lodging Managers",
+      "STR / CoStar: Global Hotel Workforce Outlook"
+    ]
+  },
+  {
+    "id": "hos_travel_experience_designer",
+    "title": "Experiential Travel Designer",
+    "title_zh": "深度体验旅行顾问",
+    "industry": "Hospitality",
+    "category": "emerging",
+    "description": "Crafts bespoke, immersive travel itineraries — cultural immersion, adventure experiences, wellness retreats — for premium travellers seeking differentiation beyond packaged tours. Demand driven by post-pandemic 'experience economy', not AI.",
+    "description_zh": "为追求差异化的高端旅行者设计定制化、沉浸式旅程（文化浸入、探险体验、疗愈静修），满足后疫情时代\"体验经济\"的需求，而非人工智能驱动。",
+    "sensitivity": {
+      "augmentation_ratio": 0.1,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.4,
+      "diffusion_years": -0.1,
+      "absorbing_sector": 0.8,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": 0.1,
+    "displacement_risk": 0.06,
+    "required_skills": [
+      "Destination Knowledge Networks",
+      "High-Net-Worth Client Management",
+      "Itinerary Logistics",
+      "Cultural Liaison Skills"
+    ],
+    "skill_vector": [
+      0.2,
+      0.7,
+      0.6,
+      0.5,
+      0.2,
+      0.8,
+      0.5,
+      0.2
+    ],
+    "transition_targets": [
+      {
+        "target_id": "ret_personal_stylist",
+        "skill_bridge": "Develop proficiency in Fashion Trend Knowledge, Client Psychology to transition into the Personal Shopper & Stylist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "hos_hotel_manager",
+        "skill_bridge": "Develop proficiency in P&L Management, Guest Relations to transition into the Hotel General Manager role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      },
+      {
+        "target_id": "agr_regenerative_specialist",
+        "skill_bridge": "Develop proficiency in Carbon Sequestration Methods, Biodiversity Assessment to transition into the Regenerative Agriculture Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ],
+    "emergence_year": 2023,
+    "sources": [
+      "UNWTO: Global Tourism Outlook",
+      "O*NET 41-3041.00 - Travel Agents",
+      "Skift Research: Future of Luxury Travel"
+    ]
+  },
+  {
+    "id": "gov_social_worker",
+    "title": "Social Worker",
+    "title_zh": "社会工作者",
+    "industry": "Government",
+    "category": "transforming",
+    "description": "Assesses individual and family welfare needs, coordinates support services, and advocates for vulnerable populations. Human empathy, cultural sensitivity, and ethical judgement are irreplaceable — societal demand is rising as inequality grows.",
+    "description_zh": "评估个人和家庭福利需求，协调支持服务并为弱势群体倡权。人类共情、文化敏感性和伦理判断力不可替代，随着不平等加剧，社会需求持续上升。",
+    "sensitivity": {
+      "augmentation_ratio": 0.1,
+      "demand_elasticity": 0.5,
+      "oring_leverage": 0.8,
+      "skill_distance": 0.2,
+      "diffusion_years": 0.0,
+      "absorbing_sector": 0.9,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": 0.07,
+    "displacement_risk": 0.05,
+    "required_skills": [
+      "Crisis Intervention",
+      "Case Management",
+      "Welfare System Navigation",
+      "Trauma-Informed Practice"
+    ],
+    "skill_vector": [
+      0.2,
+      0.5,
+      0.8,
+      0.3,
+      0.2,
+      0.9,
+      0.3,
+      0.1
+    ],
+    "transition_targets": [
+      {
+        "target_id": "edu_special_needs_teacher",
+        "skill_bridge": "Develop proficiency in IEP Development, Adaptive Teaching Strategies to transition into the Special Educational Needs Teacher (SEND) role.",
+        "retrain_months": 3,
+        "salary_delta": 0.16
+      },
+      {
+        "target_id": "hc_mental_health_counsellor",
+        "skill_bridge": "Develop proficiency in CBT & DBT Therapy, Crisis Assessment to transition into the Mental Health Counsellor role.",
+        "retrain_months": 3,
+        "salary_delta": 0.17
+      },
+      {
+        "target_id": "hos_chef",
+        "skill_bridge": "Develop proficiency in Menu Engineering, Kitchen Team Leadership to transition into the Executive Chef role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Social Workers",
+      "O*NET 21-1021.00 - Child, Family, and School Social Workers",
+      "NASW: Social Work Workforce Report"
+    ]
+  },
+  {
+    "id": "gov_policy_analyst",
+    "title": "Public Policy Analyst",
+    "title_zh": "公共政策分析师",
+    "industry": "Government",
+    "category": "transforming",
+    "description": "Researches, drafts, and evaluates government policies across health, housing, tax, and labour domains. Stakeholder negotiation, political context, and normative trade-off judgement remain deeply human.",
+    "description_zh": "研究、起草和评估健康、住房、税收和劳工等领域的政府政策。利益相关者谈判、政治背景判断和规范性权衡取舍，仍属于高度人类依赖型职能。",
+    "sensitivity": {
+      "augmentation_ratio": 0.3,
+      "demand_elasticity": 0.5,
+      "oring_leverage": 0.7,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.7,
+      "productivity_capture": 0.4,
+      "task_frontier_open": 0.4
+    },
+    "base_demand_trend": 0.04,
+    "displacement_risk": 0.12,
+    "required_skills": [
+      "Quantitative Policy Evaluation",
+      "Stakeholder Consultation",
+      "Regulatory Impact Assessment",
+      "Government Budget Modelling"
+    ],
+    "skill_vector": [
+      0.4,
+      0.5,
+      0.7,
+      0.5,
+      0.2,
+      0.7,
+      0.4,
+      0.4
+    ],
+    "transition_targets": [
+      {
+        "target_id": "med_journalist",
+        "skill_bridge": "Develop proficiency in Source Cultivation, FOIA Requests to transition into the Investigative Journalist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "med_film_director",
+        "skill_bridge": "Develop proficiency in Screenplay Analysis, Actor Direction to transition into the Film & TV Director role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "agr_agronomist",
+        "skill_bridge": "Develop proficiency in Soil Chemistry, Fertiliser Planning to transition into the Agronomist & Soil Scientist role.",
+        "retrain_months": 4,
+        "salary_delta": 0.0
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Political Scientists and Policy Analysts",
+      "O*NET 19-3094.00 - Political Scientists",
+      "OECD: Government at a Glance"
+    ]
+  },
+  {
+    "id": "gov_tax_inspector",
+    "title": "Tax Inspector",
+    "title_zh": "税务稽查员",
+    "industry": "Government",
+    "category": "at_risk",
+    "description": "Audits tax returns and investigates compliance failures. Routine discrepancy detection and standard audit workflows are increasingly automated by rules-engine and ML anomaly detection systems.",
+    "description_zh": "审核纳税申报表并调查合规问题。常规差异检测和标准审计工作流程已逐渐被规则引擎和机器学习异常检测系统自动化处理。",
+    "sensitivity": {
+      "augmentation_ratio": -0.7,
+      "demand_elasticity": 0.2,
+      "oring_leverage": -0.3,
+      "skill_distance": -0.4,
+      "diffusion_years": 0.5,
+      "absorbing_sector": -0.2,
+      "productivity_capture": -0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": -0.04,
+    "displacement_risk": 0.66,
+    "required_skills": [
+      "Tax Code Interpretation",
+      "Financial Record Examination",
+      "Interview Technique",
+      "Penalty Calculation"
+    ],
+    "skill_vector": [
+      0.2,
+      0.3,
+      0.4,
+      0.4,
+      0.4,
+      0.3,
+      0.3,
+      0.2
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_farmer",
+        "skill_bridge": "Develop proficiency in Soil Science, Crop Rotation Planning to transition into the Mixed Arable Farmer role.",
+        "retrain_months": 4,
+        "salary_delta": 0.09
+      },
+      {
+        "target_id": "mfg_quality_inspector",
+        "skill_bridge": "Develop proficiency in Defect Taxonomy, Computer Vision Inspection Systems to transition into the Quality Control Inspector role.",
+        "retrain_months": 5,
+        "salary_delta": 0.09
+      },
+      {
+        "target_id": "mfg_industrial_welder",
+        "skill_bridge": "Develop proficiency in MIG/TIG/Stick Welding, Blueprint Interpretation to transition into the Certified Industrial Welder role.",
+        "retrain_months": 5,
+        "salary_delta": 0.09
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Tax Examiners and Collectors",
+      "O*NET 13-2081.00 - Tax Examiners and Collectors",
+      "IRS: Future of Compliance Technology"
+    ]
+  },
+  {
+    "id": "gov_climate_policy_officer",
+    "title": "Climate Policy & Carbon Markets Officer",
+    "title_zh": "气候政策与碳市场官员",
+    "industry": "Government",
+    "category": "emerging",
+    "description": "Develops, regulates, and enforces climate legislation, carbon pricing mechanisms (ETS, carbon taxes), and net-zero transition plans. Fastest-growing government role globally — demand driven entirely by climate emergency response.",
+    "description_zh": "制定、监管并执行气候立法、碳定价机制（碳交易体系、碳税）和净零转型规划。全球增速最快的政府岗位之一，需求完全由气候紧急应对措施驱动。",
+    "sensitivity": {
+      "augmentation_ratio": 0.1,
+      "demand_elasticity": 0.9,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.6,
+      "diffusion_years": -0.2,
+      "absorbing_sector": 0.8,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.3
+    },
+    "base_demand_trend": 0.18,
+    "displacement_risk": 0.04,
+    "required_skills": [
+      "Carbon Market Regulation (ETS)",
+      "Climate Economics",
+      "International Negotiation (UNFCCC)",
+      "Environmental Law"
+    ],
+    "skill_vector": [
+      0.2,
+      0.9,
+      0.6,
+      0.7,
+      0.2,
+      0.8,
+      0.5,
+      0.3
+    ],
+    "transition_targets": [
+      {
+        "target_id": "agr_regenerative_specialist",
+        "skill_bridge": "Develop proficiency in Carbon Sequestration Methods, Biodiversity Assessment to transition into the Regenerative Agriculture Specialist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "med_creator_economy_manager",
+        "skill_bridge": "Develop proficiency in Brand Partnership Negotiation, Multi-platform Monetisation to transition into the Creator Economy Manager role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "con_green_building_certifier",
+        "skill_bridge": "Develop proficiency in LEED / BREEAM Standards, Energy Modelling (EnergyPlus) to transition into the Green Building Certifier (LEED/BREEAM) role.",
+        "retrain_months": 4,
+        "salary_delta": 0.1
+      }
+    ],
+    "emergence_year": 2022,
+    "sources": [
+      "IPCC: Policy Brief on Carbon Markets",
+      "O*NET 19-2041.00 - Environmental Scientists",
+      "World Bank: State and Trends of Carbon Pricing 2024"
+    ]
+  },
+  {
+    "id": "med_journalist",
+    "title": "Investigative Journalist",
+    "title_zh": "调查记者",
+    "industry": "Media",
+    "category": "transforming",
+    "description": "Investigates and reports on matters of public interest through source cultivation, document analysis, and field reporting. Structural decline in advertising revenue is the primary threat, not AI — deep investigation requires human source trust networks.",
+    "description_zh": "通过发展信源、分析文件和实地采访，对公众利益相关事务进行调查和报道。主要威胁是广告收入的结构性下滑，而非AI——深度调查需要人际信任网络。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": 0.5,
+      "oring_leverage": 0.7,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.6,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.3
+    },
+    "base_demand_trend": -0.03,
+    "displacement_risk": 0.22,
+    "required_skills": [
+      "Source Cultivation",
+      "FOIA Requests",
+      "Legal Risk Assessment",
+      "Long-form Narrative Writing"
+    ],
+    "skill_vector": [
+      0.3,
+      0.5,
+      0.7,
+      0.4,
+      0.2,
+      0.6,
+      0.3,
+      0.3
+    ],
+    "transition_targets": [
+      {
+        "target_id": "gov_policy_analyst",
+        "skill_bridge": "Develop proficiency in Quantitative Policy Evaluation, Stakeholder Consultation to transition into the Public Policy Analyst role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "log_customs_broker",
+        "skill_bridge": "Develop proficiency in HTS Tariff Classification, Import/Export Regulations to transition into the Customs Broker role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "con_site_foreman",
+        "skill_bridge": "Develop proficiency in Trade Sequencing, OSHA Safety Compliance to transition into the Construction Site Foreman role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "Reuters Institute: Digital News Report",
+      "O*NET 27-3023.00 - News Analysts, Reporters, and Journalists",
+      "Columbia Journalism Review: State of the News Industry"
+    ]
+  },
+  {
+    "id": "med_film_director",
+    "title": "Film & TV Director",
+    "title_zh": "电影与电视导演",
+    "industry": "Media",
+    "category": "transforming",
+    "description": "Translates written screenplays into visual storytelling through creative direction of performance, cinematography, and editing. Human vision, cultural context, and collaborative leadership define this role; AI assists but does not direct.",
+    "description_zh": "通过对表演、摄影和剪辑的创意指导，将剧本转化为视觉叙事。人类愿景、文化背景和协作领导力定义了这个角色；AI可辅助但无法主导创作。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.8,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.1,
+      "absorbing_sector": 0.8,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.3
+    },
+    "base_demand_trend": 0.03,
+    "displacement_risk": 0.07,
+    "required_skills": [
+      "Screenplay Analysis",
+      "Actor Direction",
+      "Visual Composition",
+      "Production Budget Management"
+    ],
+    "skill_vector": [
+      0.3,
+      0.6,
+      0.8,
+      0.4,
+      0.2,
+      0.8,
+      0.5,
+      0.3
+    ],
+    "transition_targets": [
+      {
+        "target_id": "ret_personal_stylist",
+        "skill_bridge": "Develop proficiency in Fashion Trend Knowledge, Client Psychology to transition into the Personal Shopper & Stylist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.18
+      },
+      {
+        "target_id": "gov_policy_analyst",
+        "skill_bridge": "Develop proficiency in Quantitative Policy Evaluation, Stakeholder Consultation to transition into the Public Policy Analyst role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "hos_chef",
+        "skill_bridge": "Develop proficiency in Menu Engineering, Kitchen Team Leadership to transition into the Executive Chef role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Film and Video Editors and Camera Operators",
+      "O*NET 27-2012.02 - Directors, Stage, Motion Pictures, TV, and Radio",
+      "DGA: Director Workforce Survey"
+    ]
+  },
+  {
+    "id": "med_creator_economy_manager",
+    "title": "Creator Economy Manager",
+    "title_zh": "内容创作者经济管理人",
+    "industry": "Media",
+    "category": "emerging",
+    "description": "Manages the business operations, brand partnerships, and revenue diversification of independent content creators and influencers — a new professional layer between talent and platforms entirely absent before 2015.",
+    "description_zh": "管理独立内容创作者和网红的业务运营、品牌合作及收入多元化，是2015年之前完全不存在的、平台与内容创作者之间的新型专业层。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": 0.8,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.5,
+      "diffusion_years": -0.3,
+      "absorbing_sector": 0.7,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.5
+    },
+    "base_demand_trend": 0.2,
+    "displacement_risk": 0.06,
+    "required_skills": [
+      "Brand Partnership Negotiation",
+      "Multi-platform Monetisation",
+      "Talent Contract Law",
+      "Audience Analytics"
+    ],
+    "skill_vector": [
+      0.3,
+      0.8,
+      0.6,
+      0.6,
+      0.2,
+      0.7,
+      0.5,
+      0.5
+    ],
+    "transition_targets": [
+      {
+        "target_id": "gov_climate_policy_officer",
+        "skill_bridge": "Develop proficiency in Carbon Market Regulation (ETS), Climate Economics to transition into the Climate Policy & Carbon Markets Officer role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "agr_regenerative_specialist",
+        "skill_bridge": "Develop proficiency in Carbon Sequestration Methods, Biodiversity Assessment to transition into the Regenerative Agriculture Specialist role.",
+        "retrain_months": 4,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "ret_buyer_merchandiser",
+        "skill_bridge": "Develop proficiency in Trend Forecasting, Vendor Negotiation to transition into the Retail Buyer & Merchandiser role.",
+        "retrain_months": 4,
+        "salary_delta": -0.05
+      }
+    ],
+    "emergence_year": 2020,
+    "sources": [
+      "Influencer Marketing Hub: Creator Economy Report 2024",
+      "O*NET 11-2011.00 - Advertising and Promotions Managers",
+      "Goldman Sachs: The Creator Economy Report"
+    ]
+  },
+  {
+    "id": "hc_mental_health_counsellor",
+    "title": "Mental Health Counsellor",
+    "title_zh": "心理健康咨询师",
+    "industry": "Healthcare",
+    "category": "emerging",
+    "description": "Provides individual and group therapy for depression, anxiety, trauma, and addiction. Growing demand is driven by post-pandemic mental health crisis and workforce burnout — AI chatbots are a supplement, not a substitute.",
+    "description_zh": "为抑郁、焦虑、创伤和成瘾问题提供个体和团体心理治疗。需求增长源于后疫情心理健康危机和职场倦怠——AI聊天机器人是补充工具，而非替代品。",
+    "sensitivity": {
+      "augmentation_ratio": 0.1,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.9,
+      "skill_distance": 0.2,
+      "diffusion_years": 0.0,
+      "absorbing_sector": 0.95,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": 0.15,
+    "displacement_risk": 0.03,
+    "required_skills": [
+      "CBT & DBT Therapy",
+      "Crisis Assessment",
+      "Trauma-Informed Care",
+      "Group Facilitation"
+    ],
+    "skill_vector": [
+      0.2,
+      0.6,
+      0.9,
+      0.3,
+      0.1,
+      0.95,
+      0.3,
+      0.1
+    ],
+    "transition_targets": [
+      {
+        "target_id": "edu_special_needs_teacher",
+        "skill_bridge": "Develop proficiency in IEP Development, Adaptive Teaching Strategies to transition into the Special Educational Needs Teacher (SEND) role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "gov_social_worker",
+        "skill_bridge": "Develop proficiency in Crisis Intervention, Case Management to transition into the Social Worker role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      },
+      {
+        "target_id": "hc_palliative_care_nurse",
+        "skill_bridge": "Develop proficiency in Pain Management Protocols, Grief Counselling to transition into the Palliative & Hospice Care Nurse role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ],
+    "emergence_year": 2022,
+    "sources": [
+      "BLS: Substance Abuse, Behavioral Disorder, and Mental Health Counselors",
+      "O*NET 21-1014.00 - Mental Health Counselors",
+      "WHO: Mental Health Atlas 2023"
+    ]
+  },
+  {
+    "id": "hc_palliative_care_nurse",
+    "title": "Palliative & Hospice Care Nurse",
+    "title_zh": "安宁疗护护士",
+    "industry": "Healthcare",
+    "category": "emerging",
+    "description": "Provides compassionate end-of-life care, pain management, and emotional support to dying patients and their families. One of the most human-irreplaceable roles — demand grows with ageing demographics globally.",
+    "description_zh": "为临终患者及其家属提供富有同情心的临终关怀、疼痛管理和情感支持。是最难被取代的人类职业之一，需求随全球人口老龄化而持续增长。",
+    "sensitivity": {
+      "augmentation_ratio": 0.05,
+      "demand_elasticity": 0.5,
+      "oring_leverage": 0.95,
+      "skill_distance": 0.1,
+      "diffusion_years": 0.0,
+      "absorbing_sector": 0.98,
+      "productivity_capture": 0.2,
+      "task_frontier_open": 0.05
+    },
+    "base_demand_trend": 0.13,
+    "displacement_risk": 0.02,
+    "required_skills": [
+      "Pain Management Protocols",
+      "Grief Counselling",
+      "Family Communication",
+      "Symptom Control"
+    ],
+    "skill_vector": [
+      0.1,
+      0.5,
+      0.95,
+      0.2,
+      0.1,
+      0.98,
+      0.2,
+      0.05
+    ],
+    "transition_targets": [
+      {
+        "target_id": "edu_special_needs_teacher",
+        "skill_bridge": "Develop proficiency in IEP Development, Adaptive Teaching Strategies to transition into the Special Educational Needs Teacher (SEND) role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "hc_mental_health_counsellor",
+        "skill_bridge": "Develop proficiency in CBT & DBT Therapy, Crisis Assessment to transition into the Mental Health Counsellor role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "gov_social_worker",
+        "skill_bridge": "Develop proficiency in Crisis Intervention, Case Management to transition into the Social Worker role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      }
+    ],
+    "emergence_year": 2021,
+    "sources": [
+      "BLS: Registered Nurses",
+      "O*NET 29-1141.00 - Registered Nurses",
+      "WHO: Palliative Care Fact Sheet",
+      "NHPCO: Facts and Figures on Hospice Care"
+    ]
+  },
+  {
+    "id": "edu_special_needs_teacher",
+    "title": "Special Educational Needs Teacher (SEND)",
+    "title_zh": "特殊教育需求教师（SEND）",
+    "industry": "Education",
+    "category": "emerging",
+    "description": "Supports students with physical, cognitive, emotional, or developmental disabilities through adaptive teaching methods and individual education plans (IEPs). Chronic global shortage makes this one of the fastest-growing teaching roles.",
+    "description_zh": "通过适应性教学方法和个别教育计划（IEP），为有身体、认知、情感或发育障碍的学生提供支持。全球长期短缺使这成为增速最快的教学岗位之一。",
+    "sensitivity": {
+      "augmentation_ratio": 0.1,
+      "demand_elasticity": 0.5,
+      "oring_leverage": 0.9,
+      "skill_distance": 0.2,
+      "diffusion_years": 0.0,
+      "absorbing_sector": 0.95,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": 0.11,
+    "displacement_risk": 0.04,
+    "required_skills": [
+      "IEP Development",
+      "Adaptive Teaching Strategies",
+      "Autism Spectrum Support",
+      "Behavioural Intervention Plans"
+    ],
+    "skill_vector": [
+      0.2,
+      0.5,
+      0.9,
+      0.3,
+      0.1,
+      0.95,
+      0.3,
+      0.1
+    ],
+    "transition_targets": [
+      {
+        "target_id": "hc_mental_health_counsellor",
+        "skill_bridge": "Develop proficiency in CBT & DBT Therapy, Crisis Assessment to transition into the Mental Health Counsellor role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "gov_social_worker",
+        "skill_bridge": "Develop proficiency in Crisis Intervention, Case Management to transition into the Social Worker role.",
+        "retrain_months": 3,
+        "salary_delta": -0.05
+      },
+      {
+        "target_id": "hc_palliative_care_nurse",
+        "skill_bridge": "Develop proficiency in Pain Management Protocols, Grief Counselling to transition into the Palliative & Hospice Care Nurse role.",
+        "retrain_months": 3,
+        "salary_delta": 0.1
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Special Education Teachers",
+      "O*NET 25-2051.00 - Special Education Teachers",
+      "UNESCO: Inclusive Education Policy Guide"
+    ]
+  },
+  {
+    "id": "mfg_industrial_welder",
+    "title": "Certified Industrial Welder",
+    "title_zh": "工业认证焊工",
+    "industry": "Manufacturing",
+    "category": "transforming",
+    "description": "Performs structural and precision welding for heavy industry, shipbuilding, and infrastructure. While robotic welding handles repetitive flat joins, certified welders remain essential for complex geometries, repairs, and field work.",
+    "description_zh": "为重工业、造船和基础设施执行结构性和精密焊接。虽然机器人焊接可处理重复性直线焊缝，但认证焊工在复杂几何形状、维修和现场作业中仍不可或缺。",
+    "sensitivity": {
+      "augmentation_ratio": -0.3,
+      "demand_elasticity": 0.5,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.2,
+      "diffusion_years": 0.3,
+      "absorbing_sector": 0.6,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": 0.02,
+    "displacement_risk": 0.35,
+    "required_skills": [
+      "MIG/TIG/Stick Welding",
+      "Blueprint Interpretation",
+      "AWS Certification",
+      "Metallurgy Fundamentals"
+    ],
+    "skill_vector": [
+      0.2,
+      0.5,
+      0.6,
+      0.3,
+      0.4,
+      0.6,
+      0.3,
+      0.1
+    ],
+    "transition_targets": [
+      {
+        "target_id": "con_electrician",
+        "skill_bridge": "Develop proficiency in NEC Code Compliance, Panel Installation to transition into the Licensed Electrician role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "con_site_foreman",
+        "skill_bridge": "Develop proficiency in Trade Sequencing, OSHA Safety Compliance to transition into the Construction Site Foreman role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "log_customs_broker",
+        "skill_bridge": "Develop proficiency in HTS Tariff Classification, Import/Export Regulations to transition into the Customs Broker role.",
+        "retrain_months": 4,
+        "salary_delta": 0.0
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Welders, Cutters, Solderers, and Brazers",
+      "O*NET 51-4121.00 - Welders",
+      "American Welding Society: Welder Shortage Analysis"
+    ]
+  },
+  {
+    "id": "log_customs_broker",
+    "title": "Customs Broker",
+    "title_zh": "报关行从业人员",
+    "industry": "Logistics",
+    "category": "transforming",
+    "description": "Facilitates the import and export of goods by preparing and filing customs documentation, tariff classification, and duty calculation. Geopolitical trade policy volatility keeps specialist human knowledge in high demand despite document automation.",
+    "description_zh": "通过准备和提交报关文件、关税分类和关税计算，协助货物进出口清关。地缘政治贸易政策的频繁波动，使专业人员的知识在文件自动化背景下依然供不应求。",
+    "sensitivity": {
+      "augmentation_ratio": -0.3,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.3,
+      "absorbing_sector": 0.5,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": 0.03,
+    "displacement_risk": 0.4,
+    "required_skills": [
+      "HTS Tariff Classification",
+      "Import/Export Regulations",
+      "Customs Bond Management",
+      "Trade Compliance Audit"
+    ],
+    "skill_vector": [
+      0.3,
+      0.6,
+      0.6,
+      0.5,
+      0.3,
+      0.5,
+      0.3,
+      0.2
+    ],
+    "transition_targets": [
+      {
+        "target_id": "con_site_foreman",
+        "skill_bridge": "Develop proficiency in Trade Sequencing, OSHA Safety Compliance to transition into the Construction Site Foreman role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "agr_agronomist",
+        "skill_bridge": "Develop proficiency in Soil Chemistry, Fertiliser Planning to transition into the Agronomist & Soil Scientist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      },
+      {
+        "target_id": "med_journalist",
+        "skill_bridge": "Develop proficiency in Source Cultivation, FOIA Requests to transition into the Investigative Journalist role.",
+        "retrain_months": 3,
+        "salary_delta": 0.0
+      }
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Cargo and Freight Agents",
+      "O*NET 43-5011.00 - Cargo and Freight Agents",
+      "NCBFAA: Licensed Customs Broker Industry Outlook"
+    ]
+  }
+]

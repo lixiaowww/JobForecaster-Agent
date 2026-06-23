@@ -1,0 +1,26 @@
+# LLM backends (at least one API key required for live cycles)
+# Option A (FREE): set GROQ_API_KEY — https://console.groq.com
+groq>=0.9
+# Option B (paid): set ANTHROPIC_API_KEY — https://console.anthropic.com
+anthropic>=0.40
+
+# Data models & config
+pydantic>=2.6
+sqlmodel>=0.0.22
+PyYAML>=6.0
+python-dotenv>=1.0
+
+# Signal ingestion
+feedparser>=6.0
+requests>=2.31
+
+# Evolution agent (unsupervised layer)
+scikit-learn>=1.4
+scipy>=1.13
+numpy>=1.26
+
+# Publishing
+markdown>=3.5
+
+# Dashboard (optional: pip install -r requirements-dashboard.txt)
+# streamlit, plotly, pandas — see requirements-dashboard.txt

@@ -1,0 +1,2 @@
+# Optional chat bots for crowd contributions
+discord.py>=2.3
