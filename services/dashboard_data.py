@@ -5,7 +5,7 @@ from datetime import date
 from typing import Any
 
 import evolution as ev
-from crowd import HashingEmbedder
+import job_radar
 from registry import Registry
 from schemas import Prediction
 from services.config_loader import load_config
@@ -47,7 +47,7 @@ def hybrid_job_search(
         alpha=float(jr.get("alpha", 0.6)),
         beta=float(jr.get("beta", 0.4)),
         kb_path=kb_path,
-        embedder=HashingEmbedder(),
+        embedder=job_radar._default_embedder(),
     )
     jobs.sort(key=lambda j: j.get("hybrid_score", 0.0), reverse=True)
     return jobs[:limit]

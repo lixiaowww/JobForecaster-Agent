@@ -27,6 +27,14 @@ def test_get_transition_details_accepts_string_targets():
     assert details[0]["skill_bridge"] is None
 
 
+def test_finance_query_matches_finance_industry():
+    """Regression: 'finance' must not collide onto an unrelated job (issue: green building)."""
+    jobs = job_radar.load_knowledge_base("data/jobs_kb.json")
+    _, best = job_radar.find_best_match("finance", jobs)
+    assert best is not None
+    assert best["industry"] == "Finance"
+
+
 def test_normalize_transition_targets_skips_invalid_entries():
     out = job_radar._normalize_transition_targets([
         "fin_risk_manager",

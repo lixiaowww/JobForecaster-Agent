@@ -61,6 +61,34 @@ def filter_by_industry(jobs: list[dict], industry: str) -> list[dict]:
         return jobs
     return [j for j in jobs if j.get("industry") == industry]
 
+# Larger hashing dim than the crowd default (256) to avoid bucket collisions that
+# made unrelated jobs spuriously match short queries like "finance".
+_SEARCH_EMBED_DIM = 8192
+
+
+def _default_embedder():
+    return HashingEmbedder(dim=_SEARCH_EMBED_DIM)
+
+
+def _job_embed_text(job: dict) -> str:
+    """Build the lexical search document for a job.
+
+    Includes industry + category so queries like "finance" match Finance-industry
+    roles whose titles don't literally contain the word (e.g. "Credit Analyst").
+    """
+    skills_str = ", ".join(job.get("required_skills", []))
+    parts = [
+        job.get("title", ""),
+        job.get("title_zh", ""),
+        job.get("industry", ""),
+        job.get("category", ""),
+        job.get("description", ""),
+        job.get("description_zh", ""),
+        skills_str,
+    ]
+    return " ".join(p for p in parts if p)
+
+
 def get_hybrid_scores(jobs: list[dict], query: str, alpha: float, beta: float, embedder=None) -> list[dict]:
     """
     Calculates hybrid score: alpha * impact_score + beta * semantic_similarity.
@@ -73,18 +101,13 @@ def get_hybrid_scores(jobs: list[dict], query: str, alpha: float, beta: float, e
         return jobs
         
     if embedder is None:
-        embedder = HashingEmbedder()
-        
+        embedder = _default_embedder()
+
     # Embed the query
     q_emb = embedder.embed([query])[0]
     
     # Pre-embed jobs
-    texts = []
-    for j in jobs:
-        skills_str = ", ".join(j.get("required_skills", []))
-        text = f"{j.get('title', '')} {j.get('title_zh', '')} {j.get('description', '')} {j.get('description_zh', '')} {skills_str}"
-        texts.append(text)
-        
+    texts = [_job_embed_text(j) for j in jobs]
     j_embs = embedder.embed(texts)
     
     # Calculate cosine similarity
@@ -266,15 +289,10 @@ def find_best_match(query: str, jobs: list[dict], embedder=None) -> tuple[float,
         return 0.0, None
 
     if embedder is None:
-        embedder = HashingEmbedder()
+        embedder = _default_embedder()
 
     q_emb = embedder.embed([query])[0]
-    texts = []
-    for j in jobs:
-        skills_str = ", ".join(j.get("required_skills", []))
-        text = f"{j.get('title', '')} {j.get('description', '')} {skills_str}"
-        texts.append(text)
-
+    texts = [_job_embed_text(j) for j in jobs]
     j_embs = embedder.embed(texts)
     best_sim = 0.0
     best_job = None
