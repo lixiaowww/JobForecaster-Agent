@@ -25,8 +25,21 @@ def test_ci_config_mock_cycle_writes_site(tmp_path, monkeypatch):
 
     import loop as orchestrator
     import forecast as fc
+    import ingest as ing
     import yaml
-    from run import load_config
+    from schemas import Signal
+
+    # Keep the "offline" harness genuinely offline: replace the network signal
+    # sources (arXiv/RSS/Tavily/FRED) with deterministic canned signals.
+    canned = [
+        Signal(source="arxiv", title="AI agents automate analytical workflows",
+               summary="Study on LLM task automation across knowledge work.",
+               published="2026-06-22", kind="paper"),
+        Signal(source="FRED", title="Unemployment rate steady",
+               summary="latest 4.1 on 2026-06-01 (prev 4.1)",
+               published="2026-06-01", kind="indicator"),
+    ]
+    monkeypatch.setattr(ing, "gather_signals", lambda *a, **k: list(canned))
 
     fc.set_mock_mode(True)
     cfg_dict = yaml.safe_load(ci.read_text(encoding="utf-8"))
