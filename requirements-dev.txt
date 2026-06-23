@@ -1,0 +1,2 @@
+# Test / CI tooling (not needed at runtime)
+pytest>=7.4

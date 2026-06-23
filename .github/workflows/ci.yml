@@ -29,6 +29,7 @@ jobs:
           pip install -r requirements-dashboard.txt
           pip install -r requirements-mcp.txt
           pip install -r requirements-api.txt
+          pip install -r requirements-dev.txt
 
       - name: Run offline harness
         run: python -m pytest tests/ -v
