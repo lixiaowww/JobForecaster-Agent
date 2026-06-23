@@ -28,24 +28,48 @@
 
 ---
 
-## 第二步：连接 GitHub 仓库
+## 第二步：GitHub Actions 自动同步（推荐）
 
-### 方式 A：Space 设置里连 GitHub（推荐）
+每次 `git push origin main` 后，自动把代码同步到 HF Space。
 
-1. Space → **Settings** → **Repository**
-2. **Repository URL**：`https://github.com/lixiaowww/JobForecaster-Agent`
-3. **Branch**：`main`
-4. Save → 自动用仓库根目录的 **`Dockerfile`** 构建
+### 1. 在 Hugging Face 创建 Write Token
 
-### 方式 B：推送到 HF Git 仓库
+| 步骤 | 位置 |
+|------|------|
+| 平台 | **[huggingface.co](https://huggingface.co)**（不是 GitHub） |
+| 路径 | 头像 → **Settings** → **Access Tokens** → **Create new token** |
+| 权限 | **Write** |
+| 复制 | 生成后立刻保存（只显示一次） |
+
+### 2. 在 GitHub 添加 Secret
+
+| 步骤 | 位置 |
+|------|------|
+| 平台 | **[GitHub](https://github.com)** 仓库 `lixiaowww/JobForecaster-Agent` |
+| 路径 | **Settings** → **Secrets and variables** → **Actions** → **New repository secret** |
+| Name | `HF_TOKEN`（必须完全一致） |
+| Value | 粘贴上一步的 **Hugging Face Write token** |
+
+### 3. 触发同步
 
 ```bash
-# 在 HF Space 页面复制 git clone 地址后：
-git remote add hf https://huggingface.co/spaces/<你的用户名>/JobForecaster-Agent
-git push hf main
+git push origin main
 ```
 
-首次 push 若冲突，按 HF 提示 `git push --force`（仅首次）。
+或 GitHub → **Actions** → **Sync to Hugging Face Space** → **Run workflow**
+
+Workflow 文件：`.github/workflows/sync-hf-space.yml`  
+目标 Space：`https://huggingface.co/spaces/lixiaowww/JobForecaster-Agent`
+
+> GitHub 是代码唯一来源；同步会 `--force` 覆盖 HF 上的旧文件（含 Streamlit 演示模板）。
+
+### 方式 B：本地手动 push（备用）
+
+```bash
+huggingface-cli login   # 粘贴 Hugging Face Write token
+git remote add hf https://huggingface.co/spaces/lixiaowww/JobForecaster-Agent
+git push hf main --force
+```
 
 ---
 
@@ -63,15 +87,23 @@ git push hf main
 
 ---
 
-## 第三步：Secrets（可选）
+## 第三步：HF Space Secrets（可选，LLM 用）
 
-Space → **Settings** → **Repository secrets**
-
-| Name | 说明 |
-|------|------|
-| `GROQ_API_KEY` | [Groq 免费 key](https://console.groq.com)，用于 LLM 扩岗位 KB |
+| 平台 | 路径 | Name | 来源 |
+|------|------|------|------|
+| **Hugging Face** Space | Space → **Settings** → **Repository secrets** | `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) |
 
 无 key 时 Radar / BLS / 情景滑块仍可用。
+
+---
+
+## Token 对照表（别混）
+
+| Secret 名 | 在哪创建 | 填在哪 | 用途 |
+|-----------|----------|--------|------|
+| `HF_TOKEN` | **Hugging Face** Access Tokens | **GitHub** → Secrets → Actions | Actions 同步代码到 HF |
+| `GROQ_API_KEY` | **Groq** Console | **HF Space** Secrets（或 GitHub Secrets 给日更） | LLM |
+| GitHub PAT | **GitHub** | 本地 `git push origin` | 推 GitHub，与 HF 无关 |
 
 ---
 

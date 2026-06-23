@@ -1,0 +1,39 @@
+name: Sync to Hugging Face Space
+
+# Mirrors GitHub main → HF Space (Docker + Streamlit dashboard).
+#
+# Required GitHub Secret (Settings → Secrets and variables → Actions):
+#   HF_TOKEN — Hugging Face Write token (NOT GitHub token)
+#   Get it at: huggingface.co → avatar → Settings → Access Tokens → Write
+#
+# Target Space: https://huggingface.co/spaces/lixiaowww/JobForecaster-Agent
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: sync-hf-space
+  cancel-in-progress: false
+
+jobs:
+  sync-to-hf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Push to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          if [ -z "$HF_TOKEN" ]; then
+            echo "::error::HF_TOKEN secret is not set. See docs/HUGGINGFACE.md"
+            exit 1
+          fi
+          git remote remove hf 2>/dev/null || true
+          git remote add hf "https://lixiaowww:${HF_TOKEN}@huggingface.co/spaces/lixiaowww/JobForecaster-Agent"
+          git push hf HEAD:main --force

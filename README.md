@@ -160,7 +160,7 @@ streamlit run app.py          # local
 docker build -t jobforecaster . && docker run -p 8501:8501 jobforecaster  # optional
 ```
 
-See **[docs/HUGGINGFACE.md](docs/HUGGINGFACE.md)**.
+See **[docs/HUGGINGFACE.md](docs/HUGGINGFACE.md)** — add `HF_TOKEN` (Hugging Face Write) to **GitHub Secrets** for auto-sync.
 
 ---
 
