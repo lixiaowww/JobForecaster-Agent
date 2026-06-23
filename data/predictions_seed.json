@@ -93,5 +93,138 @@
     "resolution_date": "2026-03-31",
     "resolution_criteria": "Official Journal publication of binding employment-reporting requirements.",
     "status": "open"
+  },
+  {
+    "statement": "Combined 2024 capex of Microsoft, Alphabet, Amazon and Meta will exceed $200B, driven by AI infrastructure",
+    "rationale": "Frontier-model training and inference demand force a step-change in data-center buildout; all four guided sharply higher each quarter of 2024.",
+    "category": "capital",
+    "confidence": 0.74,
+    "horizon": "2024-FY",
+    "resolution_date": "2025-02-15",
+    "resolution_criteria": "Sum of company-reported full-year 2024 capex from 10-K / annual filings.",
+    "sources": [
+      "https://platformonomics.com/2025/02/follow-the-capex-cloud-table-stakes-2024-retrospective/",
+      "https://qz.com/big-tech-spend-ai-data-centers-google-meta-microsoft-1851730034"
+    ],
+    "created_at": "2024-05-01T12:00:00+00:00",
+    "status": "resolved_true",
+    "outcome": true,
+    "judged_rationale": "The four spent a combined ~$246-251B in 2024 (up 62% from 2023's ~$155B): Microsoft $75.6B, Amazon $83.9B, Google $52.5B, Meta $39.2B.",
+    "resolved_at": "2025-02-15T12:00:00+00:00"
+  },
+  {
+    "statement": "NVIDIA full-year (FY2025) Data Center revenue will exceed $90B",
+    "rationale": "GPU supply remains demand-constrained as hyperscalers and labs race to train larger models; Hopper/Blackwell ramp sustains record quarters.",
+    "category": "compute",
+    "confidence": 0.66,
+    "horizon": "FY2025",
+    "resolution_date": "2025-02-26",
+    "resolution_criteria": "NVIDIA fiscal-2025 annual results, Data Center segment revenue.",
+    "sources": [
+      "https://investor.nvidia.com/news/press-release-details/2025/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2025/"
+    ],
+    "created_at": "2024-06-01T12:00:00+00:00",
+    "status": "resolved_true",
+    "outcome": true,
+    "judged_rationale": "NVIDIA reported FY2025 Data Center revenue of $115.2B, up 142% YoY, well above the $90B threshold.",
+    "resolved_at": "2025-02-26T12:00:00+00:00"
+  },
+  {
+    "statement": "ChatGPT will surpass 600M weekly active users by the end of 2025",
+    "rationale": "Consumer plus enterprise/developer adoption compounds; the product crossed 300M WAU in Dec 2024 and was still accelerating.",
+    "category": "adoption",
+    "confidence": 0.60,
+    "horizon": "2025-Q4",
+    "resolution_date": "2025-12-31",
+    "resolution_criteria": "Public statement from OpenAI on weekly active users.",
+    "sources": [
+      "https://techcrunch.com/2025/10/06/sam-altman-says-chatgpt-has-hit-800m-weekly-active-users/"
+    ],
+    "created_at": "2024-12-15T12:00:00+00:00",
+    "status": "resolved_true",
+    "outcome": true,
+    "judged_rationale": "OpenAI reported 700M WAU by Sept 2025 and 800M by Oct 2025, exceeding the 600M threshold.",
+    "resolved_at": "2025-10-06T12:00:00+00:00"
+  },
+  {
+    "statement": "Frontier-class LLM API output price will fall at least 60% between Mar 2023 and Dec 2024",
+    "rationale": "Hardware efficiency, model distillation and competition collapse inference prices for comparable-quality models.",
+    "category": "compute",
+    "confidence": 0.71,
+    "horizon": "2024-Q4",
+    "resolution_date": "2024-12-31",
+    "resolution_criteria": "Published per-million-token output price for OpenAI's flagship model, Mar 2023 vs Dec 2024.",
+    "sources": [
+      "https://developers.openai.com/api/docs/pricing",
+      "https://tokenmix.ai/blog/ai-pricing-trends-history"
+    ],
+    "created_at": "2024-01-10T12:00:00+00:00",
+    "status": "resolved_true",
+    "outcome": true,
+    "judged_rationale": "GPT-4 launched at $60/M output tokens (Mar 2023); GPT-4o was $10/M by Oct 2024 - an ~83% reduction at higher quality.",
+    "resolved_at": "2025-01-05T12:00:00+00:00"
+  },
+  {
+    "statement": "US software developer employment will decline in 2024 as AI coding tools displace roles",
+    "rationale": "Code-generation assistants automate routine programming; firms cut engineering headcount as output-per-developer rises.",
+    "category": "labor",
+    "confidence": 0.58,
+    "horizon": "2024-FY",
+    "resolution_date": "2025-08-31",
+    "resolution_criteria": "BLS Occupational Outlook / OES employment level for software developers (SOC 15-1252), 2024 vs 2023.",
+    "sources": [
+      "https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm",
+      "https://www.understandingai.org/p/new-evidence-strongly-suggest-ai"
+    ],
+    "created_at": "2024-02-01T12:00:00+00:00",
+    "status": "resolved_false",
+    "outcome": false,
+    "judged_rationale": "MISS. BLS reported ~1.9M developers/QA/testers in 2024 with a 15% growth projection through 2034. The post-2022 hiring cooldown was driven by interest rates and over-hiring, not AI - software employment did not decline.",
+    "resolved_at": "2025-09-01T12:00:00+00:00"
+  },
+  {
+    "statement": "No major AI lab will publicly declare it has achieved human-level AGI by the end of 2025",
+    "rationale": "Despite rapid capability gains, no agreed AGI benchmark exists and labs avoid the claim; the bar remains far from routine economic generality.",
+    "category": "policy",
+    "confidence": 0.80,
+    "horizon": "2025-Q4",
+    "resolution_date": "2025-12-31",
+    "resolution_criteria": "Absence of an official AGI-achieved claim from OpenAI, Google DeepMind, Anthropic, Meta or xAI.",
+    "sources": [
+      "https://techcrunch.com/2025/10/06/sam-altman-says-chatgpt-has-hit-800m-weekly-active-users/"
+    ],
+    "created_at": "2024-03-01T12:00:00+00:00",
+    "status": "resolved_true",
+    "outcome": true,
+    "judged_rationale": "No major lab declared AGI by end-2025; frontier releases (GPT-5-class, Gemini, Claude) were framed as incremental capability gains, not AGI.",
+    "resolved_at": "2026-01-02T12:00:00+00:00"
+  },
+  {
+    "statement": "Combined hyperscaler AI capex (MSFT, Alphabet, Amazon, Meta) will exceed $350B in 2025",
+    "rationale": "2025 guidance from all four implies a further step-up: Microsoft ~$80B+ FY, Amazon/Alphabet/Meta each guiding sharply higher.",
+    "category": "capital",
+    "confidence": 0.69,
+    "horizon": "2025-FY",
+    "resolution_date": "2026-02-28",
+    "resolution_criteria": "Sum of company-reported full-year 2025 capex from annual filings.",
+    "sources": [
+      "https://platformonomics.com/2025/02/follow-the-capex-cloud-table-stakes-2024-retrospective/"
+    ],
+    "created_at": "2025-03-01T12:00:00+00:00",
+    "status": "open"
+  },
+  {
+    "statement": "ChatGPT will exceed 1B weekly active users by the end of 2026",
+    "rationale": "Growth trajectory (300M Dec-2024 to 900M Feb-2026) plus deeper OS/enterprise embedding points to continued compounding.",
+    "category": "adoption",
+    "confidence": 0.55,
+    "horizon": "2026-Q4",
+    "resolution_date": "2026-12-31",
+    "resolution_criteria": "Public OpenAI statement on weekly active users (distinct from monthly active users).",
+    "sources": [
+      "https://www.demandsage.com/chatgpt-statistics/"
+    ],
+    "created_at": "2026-03-01T12:00:00+00:00",
+    "status": "open"
   }
 ]
