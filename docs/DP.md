@@ -1,6 +1,6 @@
 # Design Proposal (DP) — forecaster-agent
 
-**Version:** 0.6 (Integrity & Learning Loop)  
+**Version:** 0.8 (Live Track Record Credibility)  
 **Last updated:** 2026-06-24
 
 Architectural design implementing [PRD.md](./PRD.md) under Harness Engineering standards.
@@ -224,7 +224,7 @@ CI: `.github/workflows/ci.yml` — Python 3.11 + 3.12 matrix.
 
 | Item | Priority | Status |
 |------|----------|--------|
-| `dashboard.py` monolith (~1150 LOC) | P1 | open |
+| `dashboard.py` monolith (~1150 LOC) | P1 | ✅ 104-LOC orchestrator + `ui/tabs/*` |
 | Discord/Telegram crowd bots | P2 | ✅ `bots/` |
 | No `MockLLMClient` for offline `run.py once` | P2 | open |
 | `src/` package layout + Poetry lock | P3 | open |
@@ -306,6 +306,56 @@ except Exception as exc:
 ```
 
 This closes the perception gap: users know their survey answers matter.
+
+---
+
+## 12. v0.8 Design additions (Live Track Record Credibility)
+
+### 12.1 Origin classification (HR-11)
+
+Location: `services/track_record.py`
+
+| Function | Purpose |
+|----------|---------|
+| `seed_prediction_ids(seed_path)` | Load fingerprint set from `predictions_seed.json` |
+| `prediction_origin(p, seed_ids)` | Returns `"seed"` if `p.id` ∈ seed_ids else `"live"` |
+| `partition_by_origin(preds, seed_ids)` | Split into `(seed_preds, live_preds)` |
+| `scoreboard_subset(preds)` | Same shape as `Registry.scoreboard()` for a filtered list |
+| `upcoming_resolutions(preds, *, limit=10)` | Open/due preds sorted by `resolution_date` asc |
+
+**Rule:** seed IDs are computed once per dashboard render from the committed seed file;
+live predictions are everything else in the registry (including cron-generated rows).
+
+### 12.2 Live-only export
+
+`run.py export` filters with `partition_by_origin` before writing JSONL.
+Seed data never enters `predictions_live.jsonl` — it remains in `predictions_seed.json`.
+
+### 12.3 Export verification (CI guard)
+
+`run.py verify-export`:
+
+1. Load live predictions from DB (`partition_by_origin`)
+2. Load `predictions_live.jsonl`
+3. For each live id, assert matching `status`, `outcome`, `brier` in JSONL
+4. Exit code 1 on any mismatch (prevents silent resolve/export regression)
+
+Called in `.github/workflows/daily-pages.yml` immediately after `export`.
+
+### 12.4 Track Record UI layout
+
+```
+┌─ Curated benchmark (seed) ─────────────────┐
+│  resolved N | mean Brier X | table         │
+└────────────────────────────────────────────┘
+┌─ Live LLM predictions ─────────────────────┐
+│  open N | resolved N | mean Brier Y        │
+│  ▶ Upcoming resolutions (live only)        │
+│  resolved table (live only)                │
+└────────────────────────────────────────────┘
+```
+
+CSV download includes `origin` column on every row.
 
 ---
 

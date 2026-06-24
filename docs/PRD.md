@@ -1,6 +1,6 @@
 # Product Requirement Document (PRD) — forecaster-agent
 
-**Version:** 0.6 (Integrity & Learning Loop)  
+**Version:** 0.8 (Live Track Record Credibility)  
 **Last updated:** 2026-06-24
 
 An autonomous AI × economy forecasting system that generates, calibrates, and publishes **falsifiable** predictions — with explicit limits on historical extrapolation.
@@ -122,6 +122,7 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 | **HR-8** | BUSL-1.1 license | Commercial SaaS/API requires separate license |
 | **HR-9** | Citation integrity | LLM-generated `sources` URLs pass schema check; arXiv IDs must not reference a future YYMM; `example.com` / placeholder domains rejected at parse time. Enforced in `forecast._sanitize_sources()`. |
 | **HR-10** | Resolved-state durability | `run.py export` serialises `status`, `outcome`, `brier`, `resolved_at`; `ensure_demo_registry` reloads them via `model_validate_json` preserving resolution. Track record must never regress to all-`open` after a cache eviction. |
+| **HR-11** | Origin transparency | Every prediction shown in the Track Record tab carries an explicit `origin` badge (`seed` = curated benchmark, `live` = daily LLM cron). `run.py export` writes **live-only** rows to `predictions_live.jsonl`; `run.py verify-export` fails CI if DB live state diverges from the committed file after a resolve. |
 
 ---
 
@@ -196,6 +197,22 @@ LLM accumulation run (12 predictions via Groq):
 - [x] **ROOT_CAUSE contrastive pairs** in `predictions_seed.json` + `track_record_summary` WRONG entries show 280-char rationale window
 - [x] **PR-aligned commit-back**: `predictions_live.jsonl` now correctly detects new/changed file via `git add` before `git diff --cached`
 
+### Phase 7 — Live Track Record Credibility (v0.8, 2026-06-24)
+
+Problem: seed demo data (12 resolved) and daily LLM predictions (12 open) were merged
+in the UI with no origin label — users could not tell curated benchmark from real agent
+performance.
+
+- [x] **HR-11 Origin split**: Track Record tab shows separate panels for *Curated benchmark*
+  (seed) and *Live LLM* with independent resolved counts and mean Brier
+- [x] **Upcoming resolutions**: timeline of open live predictions sorted by
+  `resolution_date`, showing criteria so users see the loop is active
+- [x] **CSV `origin` column**: public download includes `seed|live` for replication
+- [x] **Live-only export**: `run.py export` writes only non-seed predictions to
+  `predictions_live.jsonl` (seed stays in `predictions_seed.json`)
+- [x] **CI guard**: `run.py verify-export` after daily cron; fails if live DB state
+  ≠ committed JSONL (catches silent resolve/export regressions)
+
 ---
 
 ## 6. Success metrics
@@ -207,13 +224,15 @@ LLM accumulation run (12 predictions via Groq):
 | OOD fires → confidence downshift | Qualitative audit |
 | P0 bugs open | 0 |
 | MCP read tools documented | Phase 3 exit |
-|| LLM-generated sources with hallucinated arXiv IDs | 0 (HR-9) |
-|| Resolved predictions surviving cache eviction | 100% (HR-10) |
-|| `predictions_live.jsonl` committed per real-LLM cron run | ✅ (daily) |
+| LLM-generated sources with hallucinated arXiv IDs | 0 (HR-9) |
+| Resolved predictions surviving cache eviction | 100% (HR-10) |
+| `predictions_live.jsonl` committed per real-LLM cron run | ✅ (daily) |
+| Track Record UI shows seed vs live origin | HR-11 (Phase 7) |
+| Live resolved count visible independently of seed | Phase 7 exit |
 
 ---
 
-## 7. Out of scope (v0.6)
+## 7. Out of scope (v0.8)
 
 - Auto-publishing with `require_review: false` as default
 - Financial advice positioning

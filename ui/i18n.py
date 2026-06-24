@@ -220,9 +220,33 @@ Compare your AI scenario with **15+ historical tech transitions**.
     # ── accuracy tab ─────────────────────────────────────────────────────────
     "acc_title": {"en": "Forecast accuracy tracker", "zh": "预测准确度追踪"},
     "acc_intro": {
-        "en": "Tracks AI forecasts vs real outcomes. Lower **Brier score** = better calibration.",
-        "zh": "追踪 AI 预测与现实结果。**Brier 分数**越低表示校准越好。",
+        "en": "Tracks AI forecasts vs real outcomes. **Curated benchmark** rows are verifiable historical demos; **Live LLM** rows come from the daily forecasting cron.",
+        "zh": "追踪 AI 预测与现实结果。**精选基准** 为可核查的历史演示；**Live LLM** 来自每日预测 cron。",
     },
+    "acc_origin_note": {
+        "en": "Two track records are shown separately so you can judge real agent performance without confusing it with curated demos.",
+        "zh": "两类战绩分开展示，避免将真实 LLM 表现与精选演示数据混淆。",
+    },
+    "acc_seed_panel": {"en": "📚 Curated benchmark (seed)", "zh": "📚 精选基准（seed）"},
+    "acc_live_panel": {"en": "🤖 Live LLM predictions", "zh": "🤖 Live LLM 预测"},
+    "acc_seed_explain": {
+        "en": "Hand-picked, source-backed predictions with known outcomes — used to demonstrate calibration honesty (includes deliberate misses).",
+        "zh": "人工精选、有来源背书、结果已知的预测——用于展示诚实的校准能力（含故意 MISS）。",
+    },
+    "acc_live_explain": {
+        "en": "Generated daily by Groq LLM; outcomes resolve automatically when `resolution_date` passes. This is the agent's real public scoreboard.",
+        "zh": "由 Groq LLM 每日生成；到达 `resolution_date` 后自动判定。这是代理的真实公开战绩。",
+    },
+    "acc_upcoming_title": {"en": "Upcoming live resolutions", "zh": "即将判定的 Live 预测"},
+    "acc_upcoming_intro": {
+        "en": "These live predictions will be judged automatically on their resolution date — watch this list shrink as the loop closes.",
+        "zh": "以下 Live 预测将在解析日自动判定——随着闭环运转，此列表会逐渐缩短。",
+    },
+    "acc_no_upcoming": {"en": "No open live predictions scheduled.", "zh": "暂无待判定的 Live 预测。"},
+    "col_origin": {"en": "Origin", "zh": "来源"},
+    "col_days_left": {"en": "Days left", "zh": "剩余天数"},
+    "origin_seed": {"en": "Benchmark", "zh": "基准"},
+    "origin_live": {"en": "Live LLM", "zh": "Live LLM"},
     "acc_total": {"en": "Total predictions", "zh": "预测总数"},
     "acc_open": {"en": "Active / open", "zh": "进行中"},
     "acc_resolved": {"en": "Resolved", "zh": "已解析"},

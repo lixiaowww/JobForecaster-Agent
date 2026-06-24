@@ -10,8 +10,9 @@
   python run.py once --config config.ci.yaml   # CI / auto-publish profile
   python run.py calibrate-jobs       # BLS → KB displacement risk overlay
   python run.py calibrate-jobs --dry-run
-  python run.py export               # dump registry → data/predictions_live.jsonl
+  python run.py export               # dump live registry rows → predictions_live.jsonl
   python run.py export --out path.jsonl
+  python run.py verify-export        # assert DB live state == committed JSONL (HR-11)
   python run.py warmup               # import predictions_live.jsonl → DB (cache-miss recovery)
   python run.py warmup --src path.jsonl
 """
@@ -104,17 +105,43 @@ def cmd_warmup(cfg, src_path: str = "data/predictions_live.jsonl"):
     print(f"warmup: imported {len(added)} new prediction(s) from {src_path}")
 
 
-def cmd_export(cfg, out_path: str = "data/predictions_live.jsonl"):
-    """Dump the registry to a committable JSONL so accumulated real predictions
-    survive cache eviction and become visible to the HF Space demo."""
+def cmd_export(cfg, out_path: str = "data/predictions_live.jsonl", seed_path: str | None = None):
+    """Dump live-only predictions to JSONL (HR-11: seed stays in predictions_seed.json)."""
+    from services.track_record import partition_by_origin, seed_prediction_ids
+
     reg = Registry(cfg["database_path"])
-    preds = sorted(reg.load(), key=lambda p: (p.created_at, p.id))
+    seed_ids = seed_prediction_ids(seed_path)
+    _, live = partition_by_origin(reg.load(), seed_ids)
+    live.sort(key=lambda p: (p.created_at, p.id))
     path = Path(out_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
-        for p in preds:
+        for p in live:
             f.write(p.model_dump_json() + "\n")
-    print(f"exported {len(preds)} prediction(s) to {out_path}")
+    print(f"exported {len(live)} live prediction(s) to {out_path}")
+
+
+def cmd_verify_export(
+    cfg,
+    out_path: str = "data/predictions_live.jsonl",
+    seed_path: str | None = None,
+):
+    """Fail if committed JSONL does not mirror live predictions in the DB (HR-11)."""
+    from services.dashboard_seed import _load_live_rows
+    from services.track_record import partition_by_origin, seed_prediction_ids, verify_live_export_sync
+
+    reg = Registry(cfg["database_path"])
+    seed_ids = seed_prediction_ids(seed_path)
+    _, db_live = partition_by_origin(reg.load(), seed_ids)
+    jsonl_live = _load_live_rows(Path(out_path))
+
+    errors = verify_live_export_sync(db_live, jsonl_live)
+    if errors:
+        print("verify-export FAILED:", file=sys.stderr)
+        for err in errors:
+            print(f"  - {err}", file=sys.stderr)
+        sys.exit(1)
+    print(f"verify-export OK ({len(db_live)} live prediction(s) in sync)")
 
 
 def cmd_approve(cfg):
@@ -189,6 +216,8 @@ def main():
         cmd_calibrate_jobs(cfg, dry_run=dry_run_flag)
     elif cmd == "export":
         cmd_export(cfg, out_path or "data/predictions_live.jsonl")
+    elif cmd == "verify-export":
+        cmd_verify_export(cfg, out_path or "data/predictions_live.jsonl")
     elif cmd == "warmup":
         src = _extract_opt(args, "--src") or out_path or "data/predictions_live.jsonl"
         cmd_warmup(cfg, src)

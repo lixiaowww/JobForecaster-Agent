@@ -80,6 +80,7 @@ jobs:
             exit 0
           fi
           python run.py export --config config.ci.yaml --out data/predictions_live.jsonl
+          python run.py verify-export --config config.ci.yaml --out data/predictions_live.jsonl
           git add data/predictions_live.jsonl
           if git diff --cached --quiet -- data/predictions_live.jsonl; then
             echo "No prediction changes to commit."

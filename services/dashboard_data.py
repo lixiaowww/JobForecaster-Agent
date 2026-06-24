@@ -10,6 +10,12 @@ from registry import Registry
 from schemas import Prediction
 from services.config_loader import load_config
 from services.read_model import get_ood_assessment, get_scoreboard, search_jobs
+from services.track_record import (
+    partition_by_origin,
+    scoreboard_subset,
+    seed_prediction_ids,
+    upcoming_resolutions,
+)
 
 
 def get_scoreboard_data() -> dict[str, Any]:
@@ -18,6 +24,21 @@ def get_scoreboard_data() -> dict[str, Any]:
 
 def get_predictions() -> list[Prediction]:
     return Registry().load()
+
+
+def get_track_record_views() -> dict[str, Any]:
+    """Predictions partitioned by origin with per-origin scoreboards."""
+    preds = get_predictions()
+    seed_ids = seed_prediction_ids()
+    seed_preds, live_preds = partition_by_origin(preds, seed_ids)
+    return {
+        "seed_ids": seed_ids,
+        "seed_preds": seed_preds,
+        "live_preds": live_preds,
+        "seed_scoreboard": scoreboard_subset(seed_preds),
+        "live_scoreboard": scoreboard_subset(live_preds),
+        "upcoming_live": upcoming_resolutions(live_preds),
+    }
 
 
 def build_evolution_prior(scenario: dict[str, Any], *, n_bootstrap: int | None = None) -> ev.EvolutionPrior:
