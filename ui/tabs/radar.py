@@ -41,6 +41,16 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
     st.subheader(t("radar_title"))
     st.markdown(t("radar_intro"))
 
+    # First-visit usage hint
+    if not st.session_state.get("_radar_hint_dismissed"):
+        col_hint, col_btn = st.columns([10, 2])
+        with col_hint:
+            st.caption(t("radar_usage_hint"))
+        with col_btn:
+            if st.button("✕", key="radar_hint_close", help=t("welcome_dismiss")):
+                st.session_state["_radar_hint_dismissed"] = True
+                st.rerun()
+
     # Load and score jobs
     kb_path = job_radar_cfg.get("kb_path", "data/jobs_kb.json")
     all_jobs = job_radar.load_knowledge_base(kb_path)

@@ -51,6 +51,8 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         )
 
     st.caption(t("acc_brier_note"))
+    with st.expander(t("acc_brier_explain_title"), expanded=False):
+        st.markdown(t("acc_brier_explain_body"))
 
     calibration = sb.get("calibration", [])
     if calibration:
@@ -164,6 +166,40 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 st.write(t("acc_no_resolved"))
     else:
         st.write(t("acc_no_preds"))
+
+    # ── Public dataset download ──────────────────────────────────────────────
+    st.markdown("---")
+    st.subheader(t("acc_download_title"))
+    st.markdown(t("acc_download_intro"))
+    if resolved_preds if preds else []:
+        try:
+            csv_rows = []
+            for p in (resolved_preds if preds else []):
+                csv_rows.append({
+                    "id": p.fingerprint(),
+                    "statement": p.statement,
+                    "category": p.category,
+                    "confidence": p.confidence,
+                    "horizon": p.horizon,
+                    "resolution_date": p.resolution_date.isoformat() if p.resolution_date else "",
+                    "outcome": p.outcome,
+                    "brier": p.brier,
+                    "judged_rationale": p.judged_rationale,
+                    "sources": " | ".join(p.sources or []),
+                })
+            if csv_rows:
+                import io
+                csv_df = pd.DataFrame(csv_rows)
+                buf = io.StringIO()
+                csv_df.to_csv(buf, index=False)
+                st.download_button(
+                    label=t("acc_download_btn"),
+                    data=buf.getvalue().encode("utf-8"),
+                    file_name="forecaster_track_record.csv",
+                    mime="text/csv",
+                )
+        except Exception:
+            pass
 
     st.markdown("---")
     st.subheader(t("acc_market_title"))

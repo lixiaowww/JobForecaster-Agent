@@ -163,16 +163,25 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 - [x] Optional `FORECASTER_API_KEY` + rate limiting
 - [ ] API key rotation / multi-tenant auth
 
-### Phase 4 — Dashboard decomposition
+### Phase 4 — Dashboard decomposition ✅
 
-- [ ] Split `dashboard.py` into `ui/tabs/*`
-- [ ] Dashboard reads via `services/` (not direct module imports)
+- [x] Split `dashboard.py` into `ui/tabs/*` (`accuracy`, `benchmarks`, `guard`, `radar`)
+- [x] Dashboard reads via `services/` — `services/dashboard_data.py`, `services/dashboard_seed.py`, `services/config_loader.py`; `dashboard.py` is now a 104-LOC orchestrator only
 
-### Phase 5 — Trust & scale
+### Phase 5 — Trust & scale ✅ (v0.7, 2026-06-24)
 
-- [ ] Brier history public dataset / seed fixtures
-- [ ] Non-Western + net-loss evolution cases
-- [ ] Novice usability score > 7/10 (UX audit)
+- [x] **Brier history public dataset**: Resolved predictions downloadable as CSV from the Track Record tab (`⬇ Download track_record.csv`)
+- [x] **Non-Western + net-loss evolution cases**: 4 new `TransitionCase` entries added to `CASE_LIBRARY` (total: 19 cases):
+  - `china_mobile_payment` — Alipay/WeChat Pay & bank clerks, China 2013-2023 (net loss, multiplier 0.75)
+  - `japan_factory_robots` — FANUC/Kawasaki robotic assembly, Japan 1970-2000 (slight net gain)
+  - `india_bpo_automation` — RPA + LLM chatbots & BPO agents, India 2015-2025 (net loss, multiplier 0.80)
+  - `south_korea_steel_automation` — POSCO continuous casting, South Korea 1980-2010 (net loss, multiplier 0.65)
+- [x] **Novice usability score ≥ 7/10** — UX audit identified 5 defects; 4 fixed:
+  - Navigation: `st.radio` → `st.tabs` (standard, scannable)
+  - Onboarding: session-based welcome banner with 3-step guide
+  - Tab names: "Plausibility Guard" → "Scenario Advisor"; "Historical Benchmarks" → "History: How AI Changed Jobs"; "Forecast Accuracy" → "Track Record"
+  - Brier score: inline explainer `st.expander` with plain-language table
+  - Radar tab: "How to use" hint dismissable caption
 
 ### Phase 6 — Integrity & Learning Loop (v0.6, 2026-06-24)
 

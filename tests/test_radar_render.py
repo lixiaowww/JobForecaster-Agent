@@ -82,6 +82,9 @@ class FakeStreamlit(types.ModuleType):
     def form(self, *a, **k):
         return _Ctx()
 
+    def button(self, *a, **k):
+        return False  # never "clicked" in tests
+
     def form_submit_button(self, *a, **k):
         return False  # never submit → no DB writes
 

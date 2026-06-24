@@ -9,8 +9,8 @@ from ui import i18n
 
 def test_translate_both_languages(monkeypatch):
     monkeypatch.setattr(i18n, "lang", lambda: "en")
-    assert i18n.t("tab_radar") == "Job Forecast Radar"
-    assert i18n._translate("zh", "tab_radar") == "岗位预测雷达"
+    assert i18n.t("tab_radar") == "Job Impact Radar"
+    assert i18n._translate("zh", "tab_radar") == "岗位影响雷达"
 
 
 def test_job_fields_chinese():

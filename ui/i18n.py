@@ -13,13 +13,28 @@ _STRINGS: dict[str, dict[str, str]] = {
         "en": "Autonomous AI × economy forecasting system dashboard",
         "zh": "自主 AI 经济预测系统仪表盘",
     },
-    "tab_radar": {"en": "Job Forecast Radar", "zh": "岗位预测雷达"},
-    "tab_accuracy": {"en": "Forecast Accuracy", "zh": "预测准确度"},
-    "tab_benchmarks": {"en": "Historical Benchmarks", "zh": "历史基准对比"},
-    "tab_guard": {"en": "Plausibility Guard", "zh": "合理性校验"},
+    "tab_radar": {"en": "Job Impact Radar", "zh": "岗位影响雷达"},
+    "tab_accuracy": {"en": "Track Record", "zh": "预测战绩"},
+    "tab_benchmarks": {"en": "History: How AI Changed Jobs", "zh": "历史：AI 如何改变就业"},
+    "tab_guard": {"en": "Scenario Advisor", "zh": "情景顾问"},
     "filter_all": {"en": "All", "zh": "全部"},
     "filter_none": {"en": "None", "zh": "无"},
     "gmm_spinner": {"en": "Computing GMM clustering…", "zh": "正在计算 GMM 聚类…"},
+    # ── welcome banner ───────────────────────────────────────────────────────
+    "welcome_banner": {
+        "en": (
+            "**Welcome to JobForecast Agent** — an AI system that makes falsifiable "
+            "predictions about how AI will reshape jobs, then scores itself honestly. "
+            "**Start here:** use the sidebar to pick an AI scenario, then explore the "
+            "**Job Impact Radar** tab to see how your role is affected."
+        ),
+        "zh": (
+            "**欢迎使用 JobForecast Agent** — 一个对 AI 重塑就业进行可证伪预测、并诚实评分的系统。"
+            "**从这里开始：** 在左侧边栏选择一个 AI 情景，然后切换到 **岗位影响雷达** 标签页，"
+            "查看你的岗位会受到怎样的影响。"
+        ),
+    },
+    "welcome_dismiss": {"en": "Got it, close this banner", "zh": "已了解，关闭此提示"},
 
     # ── sidebar ─────────────────────────────────────────────────────────────
     "sidebar_framework": {"en": "Theoretical framework", "zh": "理论框架"},
@@ -113,22 +128,18 @@ _STRINGS: dict[str, dict[str, str]] = {
     },
 
     # ── guard tab ───────────────────────────────────────────────────────────
-    "guard_title": {"en": "Plausibility guard", "zh": "合理性校验"},
+    "guard_title": {"en": "Scenario Advisor", "zh": "情景顾问"},
     "guard_intro": {
-        "en": """**What is this?**
-Extreme sidebar settings may describe scenarios with no historical precedent.
+        "en": """**Is my scenario realistic?**
+This page compares your sidebar settings against 19 documented historical transitions to tell you whether you are in familiar territory or extrapolating into the unknown.
 
-This page computes the **scenario divergence index** (Mahalanobis distance).
+* **Within historical range (blue):** similar transitions happened before — forecasts can draw on concrete analogies.
+* **Outside historical range (red):** unprecedented territory — the system automatically widens its uncertainty intervals and warns you.""",
+        "zh": """**我的情景现实吗？**
+本页将你的侧边栏设置与 19 个有文献记载的历史技术转型对比，判断你是否处于有据可查的范围内。
 
-* **Within envelope (blue):** historical precedents exist; forecasts anchor on past transitions.
-* **Out of distribution (red):** historically extreme; safety guards widen uncertainty.""",
-        "zh": """**这是什么？**
-侧边栏的极端参数可能对应历史上从未出现过的情景。
-
-本页计算 **情景偏离指数**（马氏距离）。
-
-* **包络线内（蓝色）：** 有历史先例，预测锚定类似转型。
-* **分布外（红色）：** 历史极端情景，安全护栏自动放宽不确定性。""",
+* **历史范围内（蓝色）：** 类似转型曾经发生过——预测可以参照具体历史案例。
+* **历史范围外（红色）：** 前所未有的领域——系统会自动放宽不确定性区间并给出警告。""",
     },
     "guard_divergence": {"en": "Divergence index", "zh": "偏离指数"},
     "guard_threshold": {"en": "Safety threshold", "zh": "安全阈值"},
@@ -220,6 +231,36 @@ Compare your AI scenario with **15+ historical tech transitions**.
         "en": "Brier score: 0.0000 = perfect; 0.2500 ≈ random guessing at 50%.",
         "zh": "Brier 分数：0.0000 = 完美；0.2500 ≈ 50% 随机猜测。",
     },
+    "acc_brier_explain_title": {
+        "en": "📖 What is a Brier score? (click to learn)",
+        "zh": "📖 什么是 Brier 分数？（点击了解）",
+    },
+    "acc_brier_explain_body": {
+        "en": """A **Brier score** measures how accurate probability forecasts are — lower is better.
+
+| Score | What it means |
+|-------|---------------|
+| **0.00** | Perfect: said 100% confident and was always right |
+| **0.05** | Excellent: sharp and well-calibrated |
+| **0.15** | Good: beats most human forecasters |
+| **0.25** | Baseline: equivalent to always saying "50/50" |
+| **1.00** | Worst possible: said 100% confident and was always wrong |
+
+**Formula:** (confidence − outcome)² averaged over all resolved predictions.
+The agent's goal is to stay well below 0.25 — the "coin-flip" baseline.""",
+        "zh": """**Brier 分数** 衡量概率预测的准确性——越低越好。
+
+| 分数 | 含义 |
+|------|------|
+| **0.00** | 完美：声称 100% 把握且每次都对 |
+| **0.05** | 优秀：精准且校准良好 |
+| **0.15** | 良好：超越大多数人类预测者 |
+| **0.25** | 基准线：等同于永远说"各占 50%" |
+| **1.00** | 最差：声称 100% 把握但每次都错 |
+
+**公式：** 所有已解析预测的 (置信度 − 结果)² 均值。
+目标是远低于 0.25（"硬币翻转"基准线）。""",
+    },
     "acc_no_cal": {
         "en": "No calibration data yet. Resolved predictions are required. Demo seed loads on empty HF Spaces.",
         "zh": "暂无校准数据，需要已解析的预测。HF Space 空库时会自动加载演示种子数据。",
@@ -231,6 +272,12 @@ Compare your AI scenario with **15+ historical tech transitions**.
     "acc_no_active": {"en": "No active predictions in this category.", "zh": "该类别无进行中预测。"},
     "acc_no_resolved": {"en": "No resolved predictions in this category.", "zh": "该类别无已解析预测。"},
     "acc_no_preds": {"en": "No predictions in the registry.", "zh": "注册表中无预测记录。"},
+    "acc_download_title": {"en": "📥 Open data: prediction track record", "zh": "📥 开放数据：预测战绩"},
+    "acc_download_intro": {
+        "en": "Download the full resolved-predictions dataset as CSV for independent analysis or replication.",
+        "zh": "以 CSV 格式下载全部已解析预测数据，供独立分析或复现使用。",
+    },
+    "acc_download_btn": {"en": "⬇ Download track_record.csv", "zh": "⬇ 下载 track_record.csv"},
     "acc_market_title": {"en": "Crowd consensus & prediction market", "zh": "群体共识与预测市场"},
     "acc_market_intro": {
         "en": "Stake virtual points on open predictions. Leaderboard settles when outcomes resolve.",
@@ -258,7 +305,14 @@ Compare your AI scenario with **15+ historical tech transitions**.
     "acc_market_err": {"en": "Market error: {e}", "zh": "市场模块错误：{e}"},
 
     # ── radar tab (selected keys; HTML labels passed as vars) ─────────────────
-    "radar_title": {"en": "Job forecast radar", "zh": "岗位预测雷达"},
+    "radar_title": {"en": "Job Impact Radar", "zh": "岗位影响雷达"},
+    "radar_usage_hint": {
+        "en": "💡 **How to use:** Search your job title above, or browse the impact matrix below. "
+              "Select a role to see AI risk level and realistic transition paths — all derived "
+              "from skill-vector analysis, not guesswork.",
+        "zh": "💡 **使用方法：** 在上方搜索你的岗位名称，或直接浏览下方影响矩阵。"
+              "选择一个岗位即可查看 AI 风险等级与现实可行的转型路径——全部基于技能向量分析，非主观臆断。",
+    },
     "radar_intro": {
         "en": """**Welcome!** Search a job title to see displacement risk, skill shifts, and transition paths.
 

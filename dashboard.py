@@ -72,28 +72,31 @@ def _render_main() -> None:
     with st.spinner(t("gmm_spinner")):
         prior = get_cached_prior(scenario_input, lang(), n_boot)
 
-    tab_labels = [
+    # Welcome banner — shown only on the first visit per session
+    if not st.session_state.get("_welcome_dismissed"):
+        with st.container():
+            st.info(
+                t("welcome_banner"),
+                icon="🔮",
+            )
+            if st.button(t("welcome_dismiss"), key="welcome_dismiss_btn"):
+                st.session_state["_welcome_dismissed"] = True
+                st.rerun()
+
+    tab_radar, tab_accuracy, tab_benchmarks, tab_guard = st.tabs([
         f"🎯 {t('tab_radar')}",
         f"📈 {t('tab_accuracy')}",
         f"🧬 {t('tab_benchmarks')}",
-        f"🚨 {t('tab_guard')}",
-    ]
-    selected = st.radio(
-        "section",
-        tab_labels,
-        horizontal=True,
-        label_visibility="collapsed",
-        key="dashboard_section",
-    )
-    idx = tab_labels.index(selected)
+        f"🛡️ {t('tab_guard')}",
+    ])
 
-    if idx == 0:
+    with tab_radar:
         radar.render(scenario_input, prior, job_radar_cfg)
-    elif idx == 1:
+    with tab_accuracy:
         accuracy.render(scenario_input, prior, job_radar_cfg)
-    elif idx == 2:
+    with tab_benchmarks:
         benchmarks.render(scenario_input, prior, job_radar_cfg)
-    else:
+    with tab_guard:
         guard.render(scenario_input, prior, job_radar_cfg)
 
 

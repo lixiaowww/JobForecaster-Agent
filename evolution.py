@@ -248,6 +248,95 @@ CASE_LIBRARY: list[TransitionCase] = [
         notes="Warehouse/logistics grew but did not fully offset retail job losses",
         sources=["BLS OES 2000-2023",
                  "Autor, D. et al. (2020). A New (Training) Paradigm. NBER WP 28388"]),
+
+    # ── Non-Western cases ─────────────────────────────────────────────────────
+    TransitionCase(
+        id="china_mobile_payment", name="Mobile payment & bank clerks — China 2013-2023",
+        technology="Alipay / WeChat Pay super-apps",
+        displaced_occupation="Bank teller / counter clerk",
+        period="2013-2023",
+        augmentation_ratio=0.25, demand_elasticity=0.8, oring_leverage=0.3,
+        skill_distance=0.55, diffusion_years=7, absorbing_sector=0.5,
+        productivity_capture=0.35, task_frontier_open=0.6,
+        net_job_multiplier=0.75, lag_years=8,
+        notes=(
+            "China processed >$60 trillion in mobile payments by 2022; "
+            "PBOC data show bank counter transactions fell >60%; "
+            "teller headcount declined sharply while fintech roles grew, "
+            "but fintech hires did not fully compensate for traditional banking losses."
+        ),
+        sources=[
+            "People's Bank of China Payment Systems Reports 2015-2023",
+            "McKinsey Global Institute (2017). China's Digital Economy: A Leading Global Force",
+            "Caixin (2023). China's Banks Cut 50,000 Tellers in Five Years",
+        ]),
+
+    TransitionCase(
+        id="japan_factory_robots", name="Robotic assembly & factory workers — Japan 1970-2000",
+        technology="Industrial robots (Fanuc / Kawasaki)",
+        displaced_occupation="Assembly-line worker (electronics & autos)",
+        period="1970-2000",
+        augmentation_ratio=0.35, demand_elasticity=0.5, oring_leverage=0.45,
+        skill_distance=0.65, diffusion_years=18, absorbing_sector=0.6,
+        productivity_capture=0.45, task_frontier_open=0.5,
+        net_job_multiplier=1.1, lag_years=15,
+        notes=(
+            "Japan became the world's largest robot deployer by 1980. "
+            "Lifetime employment norms and rapid export growth cushioned displacement; "
+            "net manufacturing employment remained positive until the 1990s. "
+            "Contrast with US: Japan's coordinated industrial policy shifted workers "
+            "to higher-value assembly tasks rather than outright redundancy."
+        ),
+        sources=[
+            "International Federation of Robotics (IFR) World Robotics Reports 1980-2000",
+            "Dore, R. (1987). Taking Japan Seriously. Stanford UP.",
+            "Koike, K. (1994). Learning and Incentive Systems in Japanese Industry. JEP 8(2)",
+        ]),
+
+    TransitionCase(
+        id="india_bpo_automation", name="RPA/chatbot automation & BPO workers — India 2015-2025",
+        technology="Robotic Process Automation + LLM chatbots",
+        displaced_occupation="BPO data-entry / tier-1 customer service agent",
+        period="2015-2025",
+        augmentation_ratio=0.3, demand_elasticity=0.55, oring_leverage=0.35,
+        skill_distance=0.45, diffusion_years=8, absorbing_sector=0.65,
+        productivity_capture=0.3, task_frontier_open=0.6,
+        net_job_multiplier=0.8, lag_years=10,
+        notes=(
+            "India's IT/BPO sector employs ~5 million people; RPA eliminated ~30% of "
+            "repetitive back-office roles at major outsourcers (Infosys, TCS, Wipro). "
+            "Net loss in low-skill BPO partially offset by growth in analytics, AI-ops, "
+            "and cloud roles, but the substitution is faster than reskilling capacity. "
+            "NASSCOM projects a structural 10-15% headcount reduction in traditional BPO."
+        ),
+        sources=[
+            "NASSCOM (2023). Technology Sector in India — Strategic Review",
+            "McKinsey & Company (2023). The State of AI in 2023",
+            "Accenture (2022). Automation and the Future of Work in India",
+        ]),
+
+    TransitionCase(
+        id="south_korea_steel_automation", name="Steel automation & mill workers — South Korea 1980-2010",
+        technology="Continuous casting + computer-controlled rolling mills (POSCO)",
+        displaced_occupation="Steel mill production worker",
+        period="1980-2010",
+        augmentation_ratio=0.3, demand_elasticity=0.4, oring_leverage=0.4,
+        skill_distance=0.7, diffusion_years=20, absorbing_sector=0.5,
+        productivity_capture=0.4, task_frontier_open=0.3,
+        net_job_multiplier=0.65, lag_years=22,
+        notes=(
+            "POSCO's Pohang complex became the world's most efficient steel plant by 1990 "
+            "using computer-controlled continuous casting; output per worker tripled. "
+            "Direct steel mill employment fell despite output growth. "
+            "A net-loss case: downstream fabrication and shipbuilding grew but "
+            "did not fully absorb the displaced steelworkers — similar to US Rust Belt "
+            "dynamics but with faster state-guided retraining programs."
+        ),
+        sources=[
+            "Amsden, A. (1989). Asia's Next Giant: South Korea and Late Industrialization. Oxford UP.",
+            "D'Costa, A.P. (1999). The Global Restructuring of the Steel Industry. Routledge.",
+            "POSCO (2008). POSCO 40th Anniversary History Report",
+        ]),
 ]
 
 
