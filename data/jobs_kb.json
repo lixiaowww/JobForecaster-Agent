@@ -62,7 +62,8 @@
       }
     ],
     "search_aliases": [
-      "loan analyst"
+      "loan analyst",
+      "financial analyst"
     ]
   },
   {
@@ -1395,7 +1396,7 @@
   },
   {
     "id": "hc_radiologist",
-    "title": "Radiologist Assistant / MD",
+    "title": "Radiologist",
     "title_zh": "放射科医生/助理",
     "industry": "Healthcare",
     "category": "transforming",
@@ -1455,9 +1456,7 @@
         "salary_delta": 0.0
       }
     ],
-    "search_aliases": [
-      "医生"
-    ]
+    "search_aliases": []
   },
   {
     "id": "hc_care_coordinator",
@@ -1774,7 +1773,8 @@
     ],
     "search_aliases": [
       "doctor",
-      "physician"
+      "physician",
+      "医生"
     ]
   },
   {

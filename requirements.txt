@@ -19,6 +19,9 @@ scikit-learn>=1.4
 scipy>=1.13
 numpy>=1.26
 
+# Semantic search (job radar — multilingual sentence embeddings)
+sentence-transformers>=3.0
+
 # Publishing
 markdown>=3.5
 

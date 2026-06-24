@@ -8,6 +8,10 @@ max_signals: 30
 max_predictions: 4
 require_review: false
 
+job_radar:
+  search:
+    embedder: hashing   # keep CI offline (HR-1); sentence_transformers used in config.yaml
+
 evolution:
   n_bootstrap: 10
 

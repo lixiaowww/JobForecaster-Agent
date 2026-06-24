@@ -3,6 +3,7 @@ import json
 import math
 import os
 import re
+from typing import Any
 from crowd import HashingEmbedder
 
 def load_knowledge_base(
@@ -126,12 +127,64 @@ class RadarHashingEmbedder(HashingEmbedder):
         return out
 
 
-def _job_embed_text(job: dict) -> str:
-    """Build the lexical search document for a job.
+_ST_MODEL: Any = None  # module-level singleton, loaded once
+_ST_CACHE: dict[str, list[float]] = {}  # md5(text) → normalised vector
 
-    Includes industry + category so queries like "finance" match Finance-industry
-    roles whose titles don't literally contain the word (e.g. "Credit Analyst").
+
+class SentenceEmbedder:
+    """Semantic embedder backed by sentence-transformers (multilingual MiniLM).
+
+    Falls back to RadarHashingEmbedder if the package is not installed so that
+    the codebase stays importable in minimal environments (e.g. CI without the
+    extra dependency).
     """
+
+    MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
+
+    def _model(self) -> Any:
+        global _ST_MODEL
+        if _ST_MODEL is None:
+            from sentence_transformers import SentenceTransformer  # type: ignore
+            _ST_MODEL = SentenceTransformer(self.MODEL_NAME)
+        return _ST_MODEL
+
+    def embed(self, texts: list[str]) -> list[list[float]]:
+        result: list[list[float] | None] = [None] * len(texts)
+        miss_idx: list[int] = []
+        miss_txt: list[str] = []
+        for i, t in enumerate(texts):
+            key = hashlib.md5(t.encode()).hexdigest()
+            if key in _ST_CACHE:
+                result[i] = _ST_CACHE[key]
+            else:
+                miss_idx.append(i)
+                miss_txt.append(t)
+        if miss_txt:
+            model = self._model()
+            vecs = model.encode(miss_txt, normalize_embeddings=True).tolist()
+            for i, (idx, text) in enumerate(zip(miss_idx, miss_txt)):
+                key = hashlib.md5(text.encode()).hexdigest()
+                _ST_CACHE[key] = vecs[i]
+                result[idx] = vecs[i]
+        return result  # type: ignore[return-value]
+
+
+_SENTENCE_EMBEDDER: SentenceEmbedder | None = None
+
+
+def resolve_embedder(search_cfg: dict | None = None) -> Any:
+    """Return the configured embedder: ``sentence_transformers`` or ``hashing``."""
+    global _SENTENCE_EMBEDDER
+    name = (search_cfg or {}).get("embedder", "hashing")
+    if name == "sentence_transformers":
+        if _SENTENCE_EMBEDDER is None:
+            _SENTENCE_EMBEDDER = SentenceEmbedder()
+        return _SENTENCE_EMBEDDER
+    return _default_embedder()
+
+
+def _job_embed_text(job: dict) -> str:
+    """Full lexical document for a job (used for token-overlap scoring)."""
     skills_str = ", ".join(job.get("required_skills", []))
     aliases_str = " ".join(job.get("search_aliases", []))
     parts = [
@@ -144,6 +197,17 @@ def _job_embed_text(job: dict) -> str:
         job.get("description_zh", ""),
         skills_str,
     ]
+    return " ".join(p for p in parts if p)
+
+
+def _job_embed_title(job: dict) -> str:
+    """Short title document for semantic embedding.
+
+    Using only title + aliases keeps the semantic vector focused on the role
+    name rather than letting description vocabulary dilute the match.
+    """
+    aliases_str = " ".join(job.get("search_aliases", []))
+    parts = [job.get("title", ""), job.get("title_zh", ""), aliases_str]
     return " ".join(p for p in parts if p)
 
 
@@ -185,8 +249,9 @@ def normalize_search_query(query: str, search_cfg: dict | None = None) -> str:
 
 
 def _query_tokens(query: str) -> list[str]:
+    # Keep all tokens ≥ 2 chars; only drop pure-ASCII single characters.
+    # This preserves domain abbreviations like "ml", "hr", "qa", "gp".
     tokens = [t for t in _SEARCH_TOKEN.findall(query.lower()) if len(t) >= 2]
-    tokens = [t for t in tokens if not (t.isascii() and len(t) < 3)]
     return [t for t in tokens if t not in _QUERY_STOPWORDS]
 
 
@@ -313,9 +378,13 @@ def _apply_search_scores(
     cfg = search_cfg or _DEFAULT_SEARCH_CONFIG
     query = normalize_search_query(query, cfg)
     if embedder is None:
-        embedder = _default_embedder()
+        embedder = resolve_embedder(cfg)
+    # Semantic embeddings use only title+aliases (focused; avoids description dilution).
+    # Lexical scoring still uses the full document text inside _score_job_match.
+    is_semantic = isinstance(embedder, SentenceEmbedder)
+    embed_fn = _job_embed_title if is_semantic else _job_embed_text
     q_emb = embedder.embed([query])[0]
-    texts = [_job_embed_text(j) for j in jobs]
+    texts = [embed_fn(j) for j in jobs]
     j_embs = embedder.embed(texts)
     for idx, j in enumerate(jobs):
         scores = _score_job_match(query, j, q_emb, j_embs[idx], search_cfg)
@@ -784,7 +853,7 @@ def find_best_match(
     cfg = search_cfg or _DEFAULT_SEARCH_CONFIG
     query = normalize_search_query(query, cfg)
     if embedder is None:
-        embedder = _default_embedder()
+        embedder = resolve_embedder(cfg)
 
     pool = jobs
     ind = _industry_only_query(query)

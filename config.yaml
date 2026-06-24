@@ -42,6 +42,7 @@ job_radar:
   impact_threshold: 0.15
   kb_path: "data/jobs_kb.json"
   search:
+    embedder: sentence_transformers   # paraphrase-multilingual-MiniLM-L12-v2; set to "hashing" for offline/CI
     embed_weight: 0.45
     lex_weight: 0.55
     multi_word_penalty: 0.45
