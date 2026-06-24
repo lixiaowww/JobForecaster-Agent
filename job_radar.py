@@ -557,6 +557,41 @@ def _skill_jaccard(a: dict, b: dict) -> float:
     return len(sa & sb) / len(sa | sb)
 
 
+# Industries that share enough domain knowledge for a realistic lateral move.
+_ADJACENT_INDUSTRIES: dict[str, frozenset[str]] = {
+    "Finance":        frozenset({"Finance", "Legal", "Government"}),
+    "Legal":          frozenset({"Legal", "Finance", "Government"}),
+    "Tech":           frozenset({"Tech", "Media"}),
+    "Healthcare":     frozenset({"Healthcare", "Education"}),
+    "Education":      frozenset({"Education", "Healthcare", "Government"}),
+    "Manufacturing":  frozenset({"Manufacturing", "Construction", "Logistics"}),
+    "Construction":   frozenset({"Construction", "Manufacturing"}),
+    "Logistics":      frozenset({"Logistics", "Manufacturing", "Retail"}),
+    "Retail":         frozenset({"Retail", "Logistics", "Hospitality"}),
+    "Agriculture":    frozenset({"Agriculture", "Manufacturing"}),
+    "Hospitality":    frozenset({"Hospitality", "Retail"}),
+    "Government":     frozenset({"Government", "Legal", "Education"}),
+    "Media":          frozenset({"Media", "Tech"}),
+}
+
+
+def _domain_proximity(a: dict, b: dict) -> float:
+    """Return 1.0 for same industry, 0.5 for adjacent, 0.0 for unrelated.
+
+    Replaces _skill_jaccard in transition scoring — jaccard is always 0 because
+    KB required_skills use unique multi-word phrases that never overlap.
+    """
+    ind_a = (a.get("industry") or "").strip()
+    ind_b = (b.get("industry") or "").strip()
+    if not ind_a or not ind_b:
+        return 0.5  # unknown → neutral
+    if ind_a == ind_b:
+        return 1.0
+    if ind_b in _ADJACENT_INDUSTRIES.get(ind_a, frozenset()):
+        return 0.5
+    return 0.0
+
+
 def _skill_gap(current: dict, target: dict, limit: int = 3) -> list[str]:
     """Target skills the current role lacks — the concrete bridge to close."""
     have = {s.strip().lower() for s in current.get("required_skills", [])}
@@ -683,7 +718,7 @@ def compute_transition_paths(
         is_curated = tid in curated_by_id
         dist = _skill_distance(current_job, tgt)
         proximity = 1.0 - dist
-        jacc = _skill_jaccard(current_job, tgt)
+        domain_prox = _domain_proximity(current_job, tgt)
         tgt_risk = float(tgt.get("displacement_risk") or 0.0)
         risk_reduction = max(0.0, cur_risk - tgt_risk)
         demand_raw = impact_by_id.get(tid, 0.0)
@@ -691,7 +726,7 @@ def compute_transition_paths(
 
         score = (
             w["skill"] * proximity
-            + w["overlap"] * jacc
+            + w["overlap"] * domain_prox   # replaces always-zero jaccard
             + w["risk"] * risk_reduction
             + w["demand"] * demand_norm
         )
