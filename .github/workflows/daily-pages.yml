@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write   # commit accumulated real predictions back to the repo
   pages: write
   id-token: write
 
@@ -34,11 +34,15 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # Rolling key: a fixed key is immutable in Actions cache, so a constant
+      # key would freeze the DB at its first snapshot and predictions would
+      # never accumulate. A per-run key + prefix restore-keys saves a fresh
+      # snapshot each day while restoring the most recent one.
       - name: Restore SQLite registry
         uses: actions/cache@v4
         with:
           path: data/forecaster.db
-          key: forecaster-db-v1
+          key: forecaster-db-${{ github.run_id }}
           restore-keys: |
             forecaster-db-
 
@@ -56,6 +60,28 @@ jobs:
           else
             echo "No GROQ_API_KEY — using mock LLM stub"
             python run.py once --config config.ci.yaml --mock
+          fi
+
+      # Persist accumulated REAL predictions back to the repo so the track
+      # record survives cache eviction and is synced to the HF Space demo.
+      # Mock runs (no GROQ_API_KEY) are skipped — we never commit synthetic data.
+      - name: Accumulate real predictions into the repo
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          if [ -z "$GROQ_API_KEY" ]; then
+            echo "Mock mode — not committing synthetic predictions."
+            exit 0
+          fi
+          python run.py export --config config.ci.yaml --out data/predictions_live.jsonl
+          if git diff --quiet -- data/predictions_live.jsonl; then
+            echo "No prediction changes to commit."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add data/predictions_live.jsonl
+            git commit -m "chore(forecast): accumulate daily real predictions"
+            git push origin HEAD:main
           fi
 
       - name: Verify static site output

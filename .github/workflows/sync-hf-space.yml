@@ -10,6 +10,10 @@ name: Sync to Hugging Face Space
 on:
   push:
     branches: [main]
+  schedule:
+    # 06:30 UTC — 30 min after daily-pages commits accumulated predictions,
+    # so the HF Space mirror picks up the day's real track record.
+    - cron: "30 6 * * *"
   workflow_dispatch:
 
 concurrency:

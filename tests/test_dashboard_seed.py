@@ -47,6 +47,66 @@ def test_ensure_demo_registry_skips_when_populated():
     _clean_predictions()
 
 
+def test_ensure_demo_registry_loads_seed_plus_live(tmp_path):
+    _clean_predictions()
+    seed = tmp_path / "seed.json"
+    seed.write_text(json.dumps([{
+        "statement": "Seed illustrative claim",
+        "rationale": "r", "category": "capital", "confidence": 0.6,
+        "horizon": "2026-Q4", "resolution_date": "2026-12-31",
+        "resolution_criteria": "c", "status": "open",
+    }]), encoding="utf-8")
+
+    live = tmp_path / "live.jsonl"
+    p = Prediction(
+        statement="Live accumulated real prediction",
+        rationale="r", confidence=0.7, horizon="2026-Q4",
+        resolution_date=date(2026, 12, 31), resolution_criteria="c",
+        status=Status.open,
+    ).assign_id()
+    live.write_text(p.model_dump_json() + "\n", encoding="utf-8")
+
+    assert ensure_demo_registry(seed_path=seed, live_path=live) is True
+    statements = {r.statement for r in Registry().load()}
+    assert "Seed illustrative claim" in statements
+    assert "Live accumulated real prediction" in statements
+    _clean_predictions()
+
+
+def test_live_loader_tolerates_missing_file_and_bad_lines(tmp_path):
+    _clean_predictions()
+    seed = tmp_path / "seed.json"
+    seed.write_text(json.dumps([{
+        "statement": "Only seed here",
+        "rationale": "r", "category": "capital", "confidence": 0.6,
+        "horizon": "2026-Q4", "resolution_date": "2026-12-31",
+        "resolution_criteria": "c", "status": "open",
+    }]), encoding="utf-8")
+    live = tmp_path / "live.jsonl"
+    live.write_text("not json\n\n{broken}\n", encoding="utf-8")
+    # corrupt/missing live lines must not break seeding
+    assert ensure_demo_registry(seed_path=seed, live_path=live) is True
+    assert Registry().scoreboard()["total"] == 1
+    _clean_predictions()
+
+
+def test_export_round_trip(tmp_path):
+    import run
+    _clean_predictions()
+    p = Prediction(
+        statement="Export me back to the repo",
+        rationale="r", confidence=0.5, horizon="2026-Q4",
+        resolution_date=date(2026, 12, 31), resolution_criteria="c",
+        status=Status.open,
+    ).assign_id()
+    Registry().add_many([p])
+    out = tmp_path / "live.jsonl"
+    run.cmd_export({"database_path": "data/forecaster.db"}, str(out))
+    lines = [ln for ln in out.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    assert any("Export me back to the repo" in ln for ln in lines)
+    _clean_predictions()
+
+
 def test_seed_is_an_honest_sourced_track_record():
     """Guard the credibility of the public demo's track record:
     enough resolved bets, a non-trivial number of MISSES (no fake perfection),

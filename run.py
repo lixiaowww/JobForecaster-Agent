@@ -10,6 +10,8 @@
   python run.py once --config config.ci.yaml   # CI / auto-publish profile
   python run.py calibrate-jobs       # BLS → KB displacement risk overlay
   python run.py calibrate-jobs --dry-run
+  python run.py export               # dump registry → data/predictions_live.jsonl
+  python run.py export --out path.jsonl
 """
 from __future__ import annotations
 
@@ -79,6 +81,19 @@ def cmd_calibrate_jobs(cfg, *, dry_run: bool = False):
     print(json.dumps(result, indent=2))
 
 
+def cmd_export(cfg, out_path: str = "data/predictions_live.jsonl"):
+    """Dump the registry to a committable JSONL so accumulated real predictions
+    survive cache eviction and become visible to the HF Space demo."""
+    reg = Registry(cfg["database_path"])
+    preds = sorted(reg.load(), key=lambda p: (p.created_at, p.id))
+    path = Path(out_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as f:
+        for p in preds:
+            f.write(p.model_dump_json() + "\n")
+    print(f"exported {len(preds)} prediction(s) to {out_path}")
+
+
 def cmd_approve(cfg):
     pending = Path("pending")
     mds = sorted(pending.glob("*.md")) if pending.exists() else []
@@ -102,21 +117,30 @@ def cmd_approve(cfg):
     print("approved and published")
 
 
+def _extract_opt(args: list[str], name: str) -> str | None:
+    if name in args:
+        idx = args.index(name)
+        if idx + 1 >= len(args):
+            print(f"error: {name} requires a value", file=sys.stderr)
+            sys.exit(2)
+        val = args[idx + 1]
+        del args[idx : idx + 2]
+        return val
+    return None
+
+
 def _parse_args(argv: list[str]) -> tuple[list[str], str | None]:
     args = list(argv)
     config_path = os.environ.get("FORECASTER_CONFIG")
-    if "--config" in args:
-        idx = args.index("--config")
-        if idx + 1 >= len(args):
-            print("error: --config requires a path", file=sys.stderr)
-            sys.exit(2)
-        config_path = args[idx + 1]
-        del args[idx : idx + 2]
+    val = _extract_opt(args, "--config")
+    if val is not None:
+        config_path = val
     return args, config_path
 
 
 def main():
     args, config_path = _parse_args(sys.argv[1:])
+    out_path = _extract_opt(args, "--out")
     mock_flag = "--mock" in args
     dry_run_flag = "--dry-run" in args
     if mock_flag:
@@ -140,6 +164,8 @@ def main():
         cmd_approve(cfg)
     elif cmd == "calibrate-jobs":
         cmd_calibrate_jobs(cfg, dry_run=dry_run_flag)
+    elif cmd == "export":
+        cmd_export(cfg, out_path or "data/predictions_live.jsonl")
     else:
         print(__doc__)
         sys.exit(1)
