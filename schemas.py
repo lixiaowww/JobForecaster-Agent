@@ -146,6 +146,7 @@ class JobFeedback(SQLModel, table=True):
     company: Optional[str] = None
     status: str                 # "employed", "unemployed", "transitioning"
     confidence: float           # 0.0 to 1.0 (subjective job security/confidence)
+    experience_level: str = "mid"   # junior | mid | senior (HR-13)
     transition_target: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     # P1.2 follow-up tracking
@@ -195,7 +196,26 @@ def make_engine(path: str | _Path) -> Engine:
     path.parent.mkdir(parents=True, exist_ok=True)
     eng = create_engine(f"sqlite:///{path}", echo=False)
     SQLModel.metadata.create_all(eng)
+    _migrate_sqlite_columns(eng)
     return eng
+
+
+def _migrate_sqlite_columns(eng: Engine) -> None:
+    """Lightweight SQLite column adds (no Alembic). Idempotent."""
+    from sqlalchemy import inspect, text
+
+    insp = inspect(eng)
+    if not insp.has_table("jobfeedback"):
+        return
+    cols = {c["name"] for c in insp.get_columns("jobfeedback")}
+    if "experience_level" not in cols:
+        with eng.begin() as conn:
+            conn.execute(
+                text(
+                    "ALTER TABLE jobfeedback "
+                    "ADD COLUMN experience_level VARCHAR NOT NULL DEFAULT 'mid'"
+                )
+            )
 
 
 # ---------------------------------------------------------------------------

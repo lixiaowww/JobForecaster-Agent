@@ -357,3 +357,87 @@ def test_kb_transition_targets_resolve():
             norm = job_radar._normalize_transition_target(raw)
             assert norm is not None
             assert norm["target_id"] in ids, f"{j['id']} -> missing {norm['target_id']}"
+
+
+# --------------------------------------------------------------------------- #
+# Phase 8 — search config, tiers, personalization (HR-3 / HR-12 / HR-13)
+# --------------------------------------------------------------------------- #
+
+def test_search_match_tier_from_config():
+    cfg = {"tier_no_match": 0.42, "tier_strong": 0.65}
+    assert job_radar.search_match_tier(0.30, cfg) == "none"
+    assert job_radar.search_match_tier(0.50, cfg) == "weak"
+    assert job_radar.search_match_tier(0.70, cfg) == "strong"
+
+
+def test_resolve_search_config_merges_yaml_shape():
+    cfg = job_radar.resolve_search_config({
+        "search": {"tier_strong": 0.68, "embed_weight": 0.5},
+    })
+    assert cfg["tier_strong"] == 0.68
+    assert cfg["embed_weight"] == 0.5
+    assert cfg["tier_no_match"] == 0.42
+
+
+def test_personalization_weights_sum_to_one():
+    w = job_radar.personalization_weights(experience_level="junior")
+    assert abs(sum(w.values()) - 1.0) < 0.01
+    w2 = job_radar.personalization_weights(experience_level="senior")
+    assert abs(sum(w2.values()) - 1.0) < 0.01
+
+
+def test_transition_paths_respect_retrain_cap():
+    kb = _kb()
+    cur = next(j for j in kb if j["id"] == "fin_credit_analyst")
+    paths = job_radar.compute_transition_paths(
+        cur,
+        kb,
+        dict(ev.CURRENT_AI_SCENARIO),
+        top_k=10,
+        experience_level="junior",
+        max_retrain_months=6,
+        job_radar_cfg={"personalization": {"junior_retrain_cap_months": 6}},
+    )
+    assert paths
+    assert all(p["retrain_months"] <= 6 for p in paths)
+
+
+def test_rank_jobs_by_transition_score_orders_by_fit():
+    kb = _kb()
+    anchor = next(j for j in kb if j["id"] == "fin_credit_analyst")
+    pool = [j for j in kb if j["category"] in ("emerging", "transforming")][:20]
+    ranked = job_radar.rank_jobs_by_transition_score(anchor, pool, dict(ev.CURRENT_AI_SCENARIO))
+    scores = [j["transition_score"] for j in ranked]
+    assert scores == sorted(scores, reverse=True)
+
+
+def test_empirical_metrics_stratified_by_experience(tmp_path, monkeypatch):
+    from schemas import JobFeedback, make_engine
+    from sqlmodel import Session
+
+    eng = make_engine(tmp_path / "fb.db")
+    monkeypatch.setattr("schemas.engine", eng)
+
+    with Session(eng) as session:
+        for _ in range(5):
+            session.add(JobFeedback(
+                job_title="Role A", industry="Tech", status="employed",
+                confidence=0.8, experience_level="junior",
+            ))
+        for _ in range(3):
+            session.add(JobFeedback(
+                job_title="Role A", industry="Tech", status="unemployed",
+                confidence=0.5, experience_level="senior",
+            ))
+        session.commit()
+
+    all_metrics = job_radar.get_empirical_metrics()
+    assert all_metrics["Role A"]["total_responses"] == 8
+
+    junior_metrics = job_radar.get_empirical_metrics("junior")
+    assert junior_metrics["Role A"]["total_responses"] == 5
+    assert junior_metrics["Role A"]["stratified"] is True
+
+    senior_metrics = job_radar.get_empirical_metrics("senior")
+    assert senior_metrics["Role A"]["total_responses"] == 8
+    assert senior_metrics["Role A"]["stratified"] is False

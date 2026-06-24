@@ -10,8 +10,10 @@ from datetime import datetime, timedelta, timezone
 from schemas import JobFeedback
 from ui.i18n import (
     EMPLOYMENT_STATUS_CODES,
+    EXPERIENCE_LEVEL_CODES,
     INDUSTRY_CODES,
     employment_status_label,
+    experience_level_label,
     filter_all_label,
     industry_label,
     job_category_label,
@@ -53,6 +55,9 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
 
     # Load and score jobs
     kb_path = job_radar_cfg.get("kb_path", "data/jobs_kb.json")
+    search_cfg = job_radar.resolve_search_config(job_radar_cfg)
+    user_experience = st.session_state.get("radar_experience_level", "mid")
+    user_retrain_cap = st.session_state.get("radar_max_retrain_months")
     all_jobs = job_radar.load_knowledge_base(kb_path)
 
     # Field-feedback calibration: blend real user-submitted outcomes into
@@ -64,7 +69,10 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             merge_field_calibration_into_jobs,
         )
 
-        empirical_data = job_radar.get_empirical_metrics()
+        empirical_data = job_radar.get_empirical_metrics(
+            user_experience,
+            job_radar_cfg=job_radar_cfg,
+        )
         _field_recs = compute_field_calibration(all_jobs, empirical_data)
         if _field_recs:
             all_jobs = merge_field_calibration_into_jobs(all_jobs, _field_recs)
@@ -112,38 +120,55 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         beta = job_radar_cfg.get("beta", 0.4)
         
         filtered_jobs = job_radar.filter_by_industry(scored_jobs, selected_industry)
-        final_jobs = job_radar.get_hybrid_scores(filtered_jobs, search_query, alpha, beta)
-        
-        # Dynamic KB expansion: if query has no close match, ask LLM to generate a profile
+        final_jobs = job_radar.get_hybrid_scores(
+            filtered_jobs, search_query, alpha, beta, search_cfg=search_cfg,
+        )
+
+        anchor_job = None
         llm_generated_profile = None
         if search_query:
-            best_sim, best_job = job_radar.find_best_match(search_query, final_jobs)
-            if best_sim < job_radar._SIMILARITY_THRESHOLD:
+            best_sim, best_job = job_radar.find_best_match(
+                search_query, final_jobs, search_cfg=search_cfg,
+            )
+            tier = job_radar.search_match_tier(best_sim, search_cfg)
+            if tier == "none":
                 with st.spinner(t("radar_llm_spin", q=search_query)):
                     llm_generated_profile = job_radar.generate_job_profile_via_llm(search_query)
                     if llm_generated_profile:
-                        # Score the new profile and add to results
-                        new_scored = job_radar.compute_impact_scores([llm_generated_profile], scenario_input)
-                        new_hybrid = job_radar.get_hybrid_scores(new_scored, search_query, alpha, beta)
-                        # Apply industry filter to LLM result
-                        if selected_industry == "All" or llm_generated_profile.get("industry") == selected_industry:
+                        new_scored = job_radar.compute_impact_scores(
+                            [llm_generated_profile], scenario_input,
+                        )
+                        new_hybrid = job_radar.get_hybrid_scores(
+                            new_scored, search_query, alpha, beta, search_cfg=search_cfg,
+                        )
+                        if (
+                            selected_industry == "All"
+                            or llm_generated_profile.get("industry") == selected_industry
+                        ):
                             final_jobs = new_hybrid + final_jobs
-                        # Also add to all_jobs for the rest of the page (UX-2: badge)
                         llm_generated_profile["title"] += " 🤖" + t("radar_ai_badge")
                         all_jobs.append(llm_generated_profile)
+                        anchor_job = llm_generated_profile
                         st.info(t("radar_llm_ok", title=job_title(llm_generated_profile)))
                     else:
                         st.warning(t("radar_llm_fail"))
-            elif best_sim < job_radar._STRONG_MATCH_THRESHOLD:
                 st.warning(t(
-                    "radar_search_weak",
+                    "radar_match_tier_none",
+                    q=search_query,
+                    sim=best_sim,
+                ))
+            elif tier == "weak":
+                anchor_job = best_job
+                st.warning(t(
+                    "radar_match_tier_weak",
                     title=job_title(best_job),
                     sim=best_sim,
                     q=search_query,
                 ))
             else:
+                anchor_job = best_job
                 st.success(t(
-                    "radar_search_hit",
+                    "radar_match_tier_strong",
                     title=job_title(best_job),
                     sim=best_sim,
                     q=search_query,
@@ -159,16 +184,36 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         at_risk_list = [j for j in final_jobs if j.get("category") == "at_risk"]
         opportunity_list = [j for j in final_jobs if j.get("category") in ("emerging", "transforming")]
         
-        # Sort lists properly based on whether a search query is active
+        # Sort lists: retrieval for at-risk; transition fit for opportunities when anchored (HR-12)
         if search_query:
             at_risk_list.sort(
                 key=lambda x: (x.get("combined_similarity", 0.0), x.get("hybrid_score", 0.0)),
                 reverse=True,
             )
-            opportunity_list.sort(
-                key=lambda x: (x.get("combined_similarity", 0.0), x.get("hybrid_score", 0.0)),
-                reverse=True,
-            )
+            if anchor_job:
+                st.caption(t("radar_search_retrieval_note"))
+                st.caption(t("radar_anchor_auto", title=job_title(anchor_job)))
+                transition_ranked = job_radar.rank_jobs_by_transition_score(
+                    anchor_job,
+                    opportunity_list,
+                    scenario_input,
+                    experience_level=user_experience,
+                    max_retrain_months=user_retrain_cap,
+                    job_radar_cfg=job_radar_cfg,
+                )
+                opp_by_id = {j["id"]: j for j in opportunity_list}
+                opportunity_list = []
+                for tr in transition_ranked:
+                    base = opp_by_id.get(tr["id"])
+                    if base:
+                        merged = base.copy()
+                        merged["transition_score"] = tr.get("transition_score", 0.0)
+                        opportunity_list.append(merged)
+            else:
+                opportunity_list.sort(
+                    key=lambda x: (x.get("combined_similarity", 0.0), x.get("hybrid_score", 0.0)),
+                    reverse=True,
+                )
         else:
             # Sort by absolute impact severity
             at_risk_list.sort(key=lambda x: x.get("impact_score", 0.0)) # most negative first
@@ -276,9 +321,14 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         job_by_id = {j["id"]: j for j in dropdown_jobs}
         job_ids = [j["id"] for j in dropdown_jobs]
 
+        default_idx = 0
+        if anchor_job and anchor_job.get("id") in job_by_id:
+            default_idx = job_ids.index(anchor_job["id"])
+
         selected_job_id = st.selectbox(
             t("radar_select_role"),
             job_ids,
+            index=default_idx,
             format_func=lambda jid: job_title(job_by_id[jid])
             + " ("
             + industry_label(job_by_id[jid]["industry"])
@@ -308,7 +358,13 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
             # Transition paths derived live from skill-vector distance,
             # risk reduction and scenario demand (not a static KB list).
             transitions = job_radar.compute_transition_paths(
-                current_job_obj, all_jobs, scenario_input, top_k=3
+                current_job_obj,
+                all_jobs,
+                scenario_input,
+                top_k=3,
+                experience_level=user_experience,
+                max_retrain_months=user_retrain_cap,
+                job_radar_cfg=job_radar_cfg,
             )
             
             # Empirical metrics for the selected job (reuse the calibration query)
@@ -472,6 +528,11 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     list(EMPLOYMENT_STATUS_CODES),
                     format_func=employment_status_label,
                 )
+                fb_experience = st.selectbox(
+                    t("radar_fb_experience"),
+                    list(EXPERIENCE_LEVEL_CODES),
+                    format_func=experience_level_label,
+                )
                 fb_confidence = st.slider(
                     t("radar_fb_confidence"), min_value=0, max_value=100, value=50,
                 ) / 100.0
@@ -495,6 +556,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     company=fb_company if fb_company else None,
                     status=fb_status,
                     confidence=fb_confidence,
+                    experience_level=fb_experience,
                     transition_target=fb_target if fb_target != none_lbl else None,
                     email=email_val,
                     follow_up_due_at=datetime.now(timezone.utc) + timedelta(days=180) if email_val else None,

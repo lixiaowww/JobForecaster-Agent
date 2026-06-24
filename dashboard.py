@@ -51,7 +51,7 @@ def _render_main() -> None:
         "kb_path": "data/jobs_kb.json",
     })
 
-    scenario_input = render_sidebar()
+    scenario_input = render_sidebar(job_radar_cfg)
 
     st.markdown(f"""
     <div class="header-container">

@@ -4,7 +4,14 @@ from __future__ import annotations
 import streamlit as st
 import evolution as ev
 
-from ui.i18n import render_language_selector, t, var_help, var_label
+from ui.i18n import (
+    EXPERIENCE_LEVEL_CODES,
+    experience_level_label,
+    render_language_selector,
+    t,
+    var_help,
+    var_label,
+)
 
 _PRESETS: dict[str, dict] = {
     "baseline": ev.CURRENT_AI_SCENARIO,
@@ -26,7 +33,7 @@ _PRESETS: dict[str, dict] = {
 }
 
 
-def render_sidebar() -> dict:
+def render_sidebar(job_radar_cfg: dict | None = None) -> dict:
     render_language_selector()
 
     with st.sidebar.expander(f"🧠 {t('sidebar_framework')}", expanded=False):
@@ -77,6 +84,36 @@ def render_sidebar() -> dict:
                     step=0.05,
                     help=var_help(var),
                 )
+
+    st.sidebar.markdown("---")
+    st.sidebar.markdown(f"### 👤 {t('sidebar_profile')}")
+    st.sidebar.caption(t("sidebar_profile_help"))
+    pcfg = (job_radar_cfg or {}).get("personalization", {})
+    exp_default = st.session_state.get("radar_experience_level", "mid")
+    exp_idx = (
+        EXPERIENCE_LEVEL_CODES.index(exp_default)
+        if exp_default in EXPERIENCE_LEVEL_CODES
+        else 1
+    )
+    experience_level = st.sidebar.selectbox(
+        t("radar_profile_experience"),
+        EXPERIENCE_LEVEL_CODES,
+        index=exp_idx,
+        format_func=experience_level_label,
+        key="sidebar_experience_level",
+    )
+    cap_key = f"{experience_level}_retrain_cap_months"
+    default_cap = int(pcfg.get(cap_key, {"junior": 6, "mid": 12, "senior": 24}[experience_level]))
+    max_retrain = st.sidebar.slider(
+        t("radar_profile_retrain_cap"),
+        min_value=3,
+        max_value=36,
+        value=int(st.session_state.get("radar_max_retrain_months", default_cap)),
+        step=1,
+        key="sidebar_max_retrain",
+    )
+    st.session_state["radar_experience_level"] = experience_level
+    st.session_state["radar_max_retrain_months"] = max_retrain
 
     st.sidebar.markdown("---")
     st.sidebar.markdown(t("sidebar_harness"))

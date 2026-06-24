@@ -23,6 +23,7 @@ def test_job_fields_chinese():
 def test_industry_and_status_chinese():
     assert i18n._translate("zh", "industry_finance") == "金融"
     assert i18n._translate("zh", "emp_status_employed") == "在职"
+    assert i18n._translate("zh", "exp_level_junior") == "初级（在岗 0–3 年）"
     assert i18n._translate("zh", "pred_labor") == "劳动力"
     assert i18n._job_category_label_for("zh", "at_risk") == "高风险"
 

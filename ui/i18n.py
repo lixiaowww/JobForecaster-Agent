@@ -84,6 +84,19 @@ _STRINGS: dict[str, dict[str, str]] = {
         "en": "If this dashboard is useful, consider supporting our work!",
         "zh": "如果这个仪表盘对你有帮助，欢迎支持我们的工作！",
     },
+    "sidebar_profile": {"en": "Your career profile", "zh": "你的职业画像"},
+    "sidebar_profile_help": {
+        "en": "Personalizes transition path ranking and retrain tolerance (session only).",
+        "zh": "个性化转型路径排序与可接受再培训时长（仅本会话）。",
+    },
+    "radar_profile_experience": {"en": "Experience level", "zh": "资历档位"},
+    "radar_profile_retrain_cap": {
+        "en": "Max retrain months you'll accept",
+        "zh": "可接受的最长再培训（月）",
+    },
+    "exp_level_junior": {"en": "Junior (0–3 years in role)", "zh": "初级（在岗 0–3 年）"},
+    "exp_level_mid": {"en": "Mid-level (3–8 years)", "zh": "中级（3–8 年）"},
+    "exp_level_senior": {"en": "Senior (8+ years)", "zh": "高级（8 年以上）"},
 
     # ── economic variables ───────────────────────────────────────────────────
     "var_augmentation_ratio_label": {"en": "Augmentation ratio", "zh": "增强比例"},
@@ -377,6 +390,32 @@ The agent's goal is to stay well below 0.25 — the "coin-flip" baseline.""",
         "zh": "与「{q}」弱匹配（相关度 {sim:.2f} → **{title}**）。"
               "查询仅部分命中知识库——下方结果为近似排序。",
     },
+    "radar_match_tier_none": {
+        "en": "No confident match for «{q}» (relevance {sim:.2f}). "
+              "Trying AI profile generation or browse the matrix below.",
+        "zh": "与「{q}」无可靠匹配（相关度 {sim:.2f}）。"
+              "将尝试 AI 生成画像，或浏览下方岗位矩阵。",
+    },
+    "radar_match_tier_weak": {
+        "en": "Weak text match for «{q}»: **{title}** (relevance {sim:.2f}). "
+              "Anchor role set below — career paths ranked by transition fit, not search text.",
+        "zh": "与「{q}」弱文本匹配：**{title}**（相关度 {sim:.2f}）。"
+              "下方已设锚定岗位——职业路径按转型契合度排序，非搜索文本。",
+    },
+    "radar_match_tier_strong": {
+        "en": "Strong text match for «{q}»: **{title}** (relevance {sim:.2f}). "
+              "Text retrieval only — transition recommendations use skill fit below.",
+        "zh": "与「{q}」强文本匹配：**{title}**（相关度 {sim:.2f}）。"
+              "仅为文本检索——转型推荐见下方技能契合度排序。",
+    },
+    "radar_search_retrieval_note": {
+        "en": "At-risk list sorted by search relevance. Opportunity list sorted by **transition fit** from your anchor role.",
+        "zh": "高风险列表按搜索相关度排序。机会列表按锚定岗位的**转型契合度**排序。",
+    },
+    "radar_anchor_auto": {
+        "en": "Search anchor: **{title}** — change via dropdown in Transition Paths.",
+        "zh": "搜索锚定：**{title}** — 可在「转型路径」下拉框中修改。",
+    },
     "badge_ai": {"en": "AI-native", "zh": "AI 原生"},
     "badge_non_ai": {"en": "Non-AI", "zh": "非 AI"},
     "lbl_skill_overlap": {"en": "Skill overlap", "zh": "技能重叠度"},
@@ -480,6 +519,10 @@ The agent's goal is to stay well below 0.25 — the "coin-flip" baseline.""",
         "zh": "6 个月后询问转型结果，不会出售或共享。",
     },
     "radar_fb_status": {"en": "Employment status", "zh": "就业状态"},
+    "radar_fb_experience": {
+        "en": "Years in this role (experience level)",
+        "zh": "当前岗位从业资历",
+    },
     "radar_fb_confidence": {"en": "Job security confidence (0–100)", "zh": "工作安全感（0–100）"},
     "radar_fb_target": {"en": "Target role if transitioning", "zh": "转型目标岗位"},
     "radar_fb_submit": {"en": "Submit survey", "zh": "提交问卷"},
@@ -564,6 +607,8 @@ EMPLOYMENT_STATUS_CODES: tuple[str, ...] = (
     "employed", "unemployed", "transitioning",
 )
 
+EXPERIENCE_LEVEL_CODES: tuple[str, ...] = ("junior", "mid", "senior")
+
 
 def lang() -> str:
     import streamlit as st
@@ -643,6 +688,13 @@ def industry_label(name: str) -> str:
 
 def employment_status_label(code: str) -> str:
     key = f"emp_status_{code.lower()}"
+    if key in _STRINGS:
+        return _translate(lang(), key)
+    return code
+
+
+def experience_level_label(code: str) -> str:
+    key = f"exp_level_{code.lower()}"
     if key in _STRINGS:
         return _translate(lang(), key)
     return code

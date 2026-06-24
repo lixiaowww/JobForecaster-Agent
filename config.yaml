@@ -41,6 +41,24 @@ job_radar:
   beta: 0.4            # semantic similarity weight
   impact_threshold: 0.15
   kb_path: "data/jobs_kb.json"
+  search:
+    embed_weight: 0.45
+    lex_weight: 0.55
+    multi_word_penalty: 0.45
+    industry_only_boost: 0.08
+    tier_no_match: 0.42    # below → no KB anchor / LLM expansion
+    tier_weak: 0.55        # informational mid-band within weak tier
+    tier_strong: 0.65      # at/above → strong text match (HR-12)
+  transition:
+    skill: 0.40
+    overlap: 0.15
+    risk: 0.25
+    demand: 0.20
+  personalization:
+    junior_retrain_cap_months: 6
+    mid_retrain_cap_months: 12
+    senior_retrain_cap_months: 24
+    min_stratified_responses: 5
 
 # ---- job market calibration (BLS to KB displacement risk overlay) ----
 job_market:

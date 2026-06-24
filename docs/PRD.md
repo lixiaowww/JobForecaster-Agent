@@ -1,7 +1,7 @@
 # Product Requirement Document (PRD) — forecaster-agent
 
-**Version:** 0.8 (Live Track Record Credibility)  
-**Last updated:** 2026-06-24
+**Version:** 0.9 (Personalized Job Radar & Search Quality)  
+**Last updated:** 2026-06-23
 
 An autonomous AI × economy forecasting system that generates, calibrates, and publishes **falsifiable** predictions — with explicit limits on historical extrapolation.
 
@@ -90,10 +90,22 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 |------------|--------|
 | 65 occupation profiles, 13 industries | ✅ |
 | Hybrid RAG (α·structural + β·semantic) | ✅ |
-| Career transition paths | ✅ |
-| BLS verification layer | ✅ |
+| **Search retrieval** (query↔job text: embedding + lexical `combined_similarity`) | ✅ v0.8 hotfix |
+| **Transition recommendation** (`compute_transition_paths`: skill 40% + overlap 15% + risk 25% + demand 20%) | ✅ |
+| Search vs transition paths kept separate (HR-12) | ✅ Phase 8 |
+| User-facing match tiers (无匹配 / 弱 / 强) | ✅ Phase 8 |
+| Personalized transition weights (experience level, retrain tolerance) | ✅ Phase 8 |
+| Field survey: canonical title + experience level (HR-13) | ✅ Phase 8 |
+| BLS + field-feedback calibration overlay | ✅ |
 | Prediction market UI | ✅ |
 | LLM KB expansion for unknown titles | ✅ (needs API key) |
+
+**Two crowd surfaces (do not conflate):**
+
+| Surface | Purpose | Minimum identity |
+|---------|---------|------------------|
+| **Field feedback** (`JobFeedback`, Radar survey) | Calibrate displacement risk + empirical transition targets | Canonical **job title** + **experience level** (HR-13) |
+| **Prediction crowd** (`contribution`, REST/Telegram) | Anti-anchoring probability submissions | `contributor_id` only; optional expert weighting is out of scope |
 
 ### 2.5 Read model / external integration seam (`services/read_model.py`)
 
@@ -123,6 +135,8 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 | **HR-9** | Citation integrity | LLM-generated `sources` URLs pass schema check; arXiv IDs must not reference a future YYMM; `example.com` / placeholder domains rejected at parse time. Enforced in `forecast._sanitize_sources()`. |
 | **HR-10** | Resolved-state durability | `run.py export` serialises `status`, `outcome`, `brier`, `resolved_at`; `ensure_demo_registry` reloads them via `model_validate_json` preserving resolution. Track record must never regress to all-`open` after a cache eviction. |
 | **HR-11** | Origin transparency | Every prediction shown in the Track Record tab carries an explicit `origin` badge (`seed` = curated benchmark, `live` = daily LLM cron). `run.py export` writes **live-only** rows to `predictions_live.jsonl`; `run.py verify-export` fails CI if DB live state diverges from the committed file after a resolve. |
+| **HR-12** | Retrieval ≠ recommendation | Job **search** ranks by `combined_similarity` (query↔occupation text). **Transition fit** ranks by `transition_score` from `compute_transition_paths()` only. UI and API must not present search hits as career recommendations without an anchor role + transition pass. Thresholds in `config.yaml` (HR-3), not raw embedding cosine (~0.7 is wrong scale for `HashingEmbedder`). |
+| **HR-13** | Field feedback profile | Radar career survey collects **canonical `job_title`** (KB dropdown, not free text) plus **`experience_level`** (bucket: junior / mid / senior, or years-in-role bands). Aggregates keyed by title today; stratify by `(title, experience_level)` when n≥5 per cell. Powers personalized retrain tolerance and transition weight overrides. |
 
 ---
 
@@ -133,7 +147,9 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 | `database_path` | Documented SQLite location (engine in `schemas.py`) |
 | `evolution.n_bootstrap` | GMM bootstrap iterations (use `10` in tests) |
 | `evolution.scenario` | Optional override of `CURRENT_AI_SCENARIO` |
-| `job_radar.*` | Hybrid RAG weights and KB path |
+| `job_radar.*` | Hybrid RAG weights, KB path, transition weights |
+| `job_radar.search.*` | `combined_no_match`, `combined_weak`, `combined_strong`, embed/lex blend (Phase 8 — move from code constants) |
+| `job_radar.personalization.*` | Experience-level weight overrides, max retrain months (Phase 8) |
 | `crowd.*` | Gate thresholds (for Phase 2 API) |
 | `require_review` | Publishing safety gate |
 
@@ -213,6 +229,38 @@ performance.
 - [x] **CI guard**: `run.py verify-export` after daily cron; fails if live DB state
   ≠ committed JSONL (catches silent resolve/export regressions)
 
+### Phase 8 — Personalized Job Radar & Search Quality (v0.9, 2026-06-23)
+
+Problem: search retrieval and career recommendation were conflated — e.g. a finance
+process-improvement query surfacing an unrelated AI trading role. Raw embedding cosine
+(~0.15 legacy threshold, or user-intuitive ~0.7) is the wrong scale for
+`HashingEmbedder`; recommendations also ignored user seniority (novice vs senior retrain
+cost) and field survey lacked tenure.
+
+**Design principles (ranking priorities for transition paths):**
+
+1. **Skill extensibility** — skill-vector proximity + shared skills (bridgeable gap)
+2. **User fit** — experience level caps acceptable `retrain_months`; juniors favour lower-gap targets
+3. **Forward demand** — scenario-driven demand under active diffusion assumptions
+
+**Shipped pre-Phase-8 (search hotfix, not yet HR-3 compliant):**
+
+- [x] `combined_similarity = 0.45·embed + 0.55·lexical`, multi-word token penalty, industry-only boost
+- [x] Code constants `_SIMILARITY_THRESHOLD=0.42`, `_STRONG_MATCH_THRESHOLD=0.55`; sort by `combined_similarity`
+- [x] Tests in `tests/test_job_radar.py`
+
+**Phase 8 deliverables:**
+
+- [x] **HR-12** Enforce retrieval≠recommendation in Radar UI: search → pick anchor role → rank browse/related by `transition_score`
+- [x] **HR-3** Move search thresholds + embed/lex blend to `config.yaml` → `job_radar.search.*`
+- [x] **User-facing tiers** on `combined_similarity`: 无匹配 (&lt; weak) / 弱 / 强 (replace misleading single green banner)
+- [x] **HR-13** Add `JobFeedback.experience_level`; survey field + i18n; migration-safe default for existing rows
+- [x] **Stratified field calibration** — `get_empirical_metrics()` groups by `(title, experience_level)` when n≥5; fallback to title-only
+- [x] **Sidebar user profile** (session): experience level + max retrain months → override `_TRANSITION_WEIGHTS` / filter candidates
+- [x] **Strong-match threshold audit** — target ~0.65–0.70 on calibrated combined score (after config move + tier labelling)
+
+**Explicitly out of Phase 8:** prediction-crowd contributor job-title collection; Indeed/LinkedIn scraping; real embedding model swap (stays behind `Embedder` Protocol, HR-1).
+
 ---
 
 ## 6. Success metrics
@@ -229,12 +277,17 @@ performance.
 | `predictions_live.jsonl` committed per real-LLM cron run | ✅ (daily) |
 | Track Record UI shows seed vs live origin | HR-11 (Phase 7) |
 | Live resolved count visible independently of seed | Phase 7 exit |
+| Search strong-match precision (manual audit, n≥20 queries) | ≥ 80% relevant anchor role (Phase 8) |
+| Field survey includes experience level | HR-13 (Phase 8) |
+| Transition cards respect user retrain cap when profile set | Phase 8 |
 
 ---
 
-## 7. Out of scope (v0.8)
+## 7. Out of scope (v0.9)
 
 - Auto-publishing with `require_review: false` as default
 - Financial advice positioning
 - Real-money prediction markets
 - Commercial API without BUSL commercial license
+- Using raw embedding cosine (~0.7) as user-facing "similarity" without combined score + tier labels
+- Collecting job title / tenure on **prediction** crowd submissions (HR-13 applies to field feedback only)

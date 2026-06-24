@@ -119,22 +119,92 @@ def _industry_only_query(query: str) -> str | None:
     return None
 
 
-def _score_job_match(query: str, job: dict, q_emb: list[float], j_emb: list[float]) -> dict:
+# --------------------------------------------------------------------------- #
+# Search config (HR-3) — defaults mirror pre-Phase-8 code constants
+# --------------------------------------------------------------------------- #
+
+_DEFAULT_SEARCH_CONFIG: dict = {
+    "embed_weight": 0.45,
+    "lex_weight": 0.55,
+    "multi_word_penalty": 0.45,
+    "industry_only_boost": 0.08,
+    "tier_no_match": 0.42,
+    "tier_weak": 0.55,
+    "tier_strong": 0.65,
+}
+
+_DEFAULT_TRANSITION_CONFIG: dict = {
+    "skill": 0.40,
+    "overlap": 0.15,
+    "risk": 0.25,
+    "demand": 0.20,
+}
+
+_DEFAULT_PERSONALIZATION_CONFIG: dict = {
+    "junior_retrain_cap_months": 6,
+    "mid_retrain_cap_months": 12,
+    "senior_retrain_cap_months": 24,
+    "min_stratified_responses": 5,
+}
+
+EXPERIENCE_LEVELS: tuple[str, ...] = ("junior", "mid", "senior")
+
+# Backward-compat module aliases (tests / legacy imports)
+_SIMILARITY_THRESHOLD = _DEFAULT_SEARCH_CONFIG["tier_no_match"]
+_STRONG_MATCH_THRESHOLD = _DEFAULT_SEARCH_CONFIG["tier_weak"]
+
+
+def resolve_search_config(job_radar_cfg: dict | None = None) -> dict:
+    """Merge ``config.yaml`` → ``job_radar.search`` with offline-safe defaults."""
+    cfg = job_radar_cfg or {}
+    return {**_DEFAULT_SEARCH_CONFIG, **cfg.get("search", {})}
+
+
+def resolve_transition_config(job_radar_cfg: dict | None = None) -> dict:
+    cfg = job_radar_cfg or {}
+    return {**_DEFAULT_TRANSITION_CONFIG, **cfg.get("transition", {})}
+
+
+def resolve_personalization_config(job_radar_cfg: dict | None = None) -> dict:
+    cfg = job_radar_cfg or {}
+    return {**_DEFAULT_PERSONALIZATION_CONFIG, **cfg.get("personalization", {})}
+
+
+def search_match_tier(sim: float, search_cfg: dict | None = None) -> str:
+    """User-facing retrieval tier: ``none`` | ``weak`` | ``strong`` (HR-12)."""
+    cfg = search_cfg or _DEFAULT_SEARCH_CONFIG
+    if sim < float(cfg["tier_no_match"]):
+        return "none"
+    if sim < float(cfg["tier_strong"]):
+        return "weak"
+    return "strong"
+
+
+def _score_job_match(
+    query: str,
+    job: dict,
+    q_emb: list[float],
+    j_emb: list[float],
+    search_cfg: dict | None = None,
+) -> dict:
     """Blend embedding + lexical overlap; penalise multi-word queries that only hit one token."""
+    cfg = search_cfg or _DEFAULT_SEARCH_CONFIG
+    w_emb = float(cfg["embed_weight"])
+    w_lex = float(cfg["lex_weight"])
     emb_sim = sum(a * b for a, b in zip(q_emb, j_emb))
     text = _job_embed_text(job)
     lex = _lexical_overlap(query, text)
-    combined = 0.45 * emb_sim + 0.55 * lex
+    combined = w_emb * emb_sim + w_lex * lex
 
     tokens = _query_tokens(query)
     if len(tokens) >= 2:
         hits = sum(1 for t in tokens if t in text.lower())
         min_hits = max(2, (len(tokens) + 1) // 2)
         if hits < min_hits:
-            combined *= 0.45
+            combined *= float(cfg["multi_word_penalty"])
 
     if _industry_only_query(query) and not is_ai_role(job):
-        combined = min(1.0, combined + 0.08)
+        combined = min(1.0, combined + float(cfg["industry_only_boost"]))
 
     return {
         "semantic_similarity": round(emb_sim, 3),
@@ -143,19 +213,31 @@ def _score_job_match(query: str, job: dict, q_emb: list[float], j_emb: list[floa
     }
 
 
-def _apply_search_scores(jobs: list[dict], query: str, embedder=None) -> list[dict]:
+def _apply_search_scores(
+    jobs: list[dict],
+    query: str,
+    embedder=None,
+    search_cfg: dict | None = None,
+) -> list[dict]:
     if embedder is None:
         embedder = _default_embedder()
     q_emb = embedder.embed([query])[0]
     texts = [_job_embed_text(j) for j in jobs]
     j_embs = embedder.embed(texts)
     for idx, j in enumerate(jobs):
-        scores = _score_job_match(query, j, q_emb, j_embs[idx])
+        scores = _score_job_match(query, j, q_emb, j_embs[idx], search_cfg)
         j.update(scores)
     return jobs
 
 
-def get_hybrid_scores(jobs: list[dict], query: str, alpha: float, beta: float, embedder=None) -> list[dict]:
+def get_hybrid_scores(
+    jobs: list[dict],
+    query: str,
+    alpha: float,
+    beta: float,
+    embedder=None,
+    search_cfg: dict | None = None,
+) -> list[dict]:
     """
     Calculates hybrid score: alpha * impact_score + beta * search relevance.
     When a query is present, relevance uses combined embedding + lexical overlap
@@ -170,7 +252,7 @@ def get_hybrid_scores(jobs: list[dict], query: str, alpha: float, beta: float, e
             j["hybrid_score"] = round(alpha * j.get("impact_score", 0.0), 3)
         return jobs
 
-    _apply_search_scores(jobs, query, embedder)
+    _apply_search_scores(jobs, query, embedder, search_cfg)
     # When searching, weight relevance heavily so impact_score does not dominate ordering.
     search_alpha, search_beta = 0.05, 0.95
     for j in jobs:
@@ -276,12 +358,7 @@ def get_transition_details(current_job_id: str, all_jobs: list[dict]) -> list[di
 
 # Default weights for the composite transition score. Override via
 # config.yaml -> job_radar.transition.{skill,overlap,risk,demand}.
-_TRANSITION_WEIGHTS = {
-    "skill": 0.40,    # skill-vector proximity (ease of transition)
-    "overlap": 0.15,  # shared concrete skills (Jaccard)
-    "risk": 0.25,     # reduction in automation/displacement risk
-    "demand": 0.20,   # target's forward demand under the active scenario
-}
+_TRANSITION_WEIGHTS = dict(_DEFAULT_TRANSITION_CONFIG)
 
 # Skill vectors live in [0, 1]^8, so the max Euclidean distance is sqrt(8).
 _MAX_SKILL_DIST = math.sqrt(8.0)
@@ -313,6 +390,43 @@ def _skill_gap(current: dict, target: dict, limit: int = 3) -> list[str]:
     return gap[:limit]
 
 
+def personalization_weights(
+    base: dict | None = None,
+    *,
+    experience_level: str = "mid",
+    personalization_cfg: dict | None = None,
+) -> dict:
+    """Adjust transition score weights for user seniority (HR-2 pure, testable)."""
+    w = {**_TRANSITION_WEIGHTS, **(base or {})}
+    pcfg = personalization_cfg or _DEFAULT_PERSONALIZATION_CONFIG
+    level = experience_level if experience_level in EXPERIENCE_LEVELS else "mid"
+    if level == "junior":
+        w["overlap"] = w.get("overlap", 0.15) + 0.05
+        w["skill"] = w.get("skill", 0.40) + 0.05
+        w["demand"] = max(0.0, w.get("demand", 0.20) - 0.05)
+    elif level == "senior":
+        w["demand"] = w.get("demand", 0.20) + 0.05
+        w["risk"] = w.get("risk", 0.25) + 0.05
+        w["overlap"] = max(0.0, w.get("overlap", 0.15) - 0.05)
+    total = sum(w.values()) or 1.0
+    return {k: round(v / total, 4) for k, v in w.items()}
+
+
+def retrain_cap_for_level(
+    experience_level: str,
+    personalization_cfg: dict | None = None,
+    override_months: int | None = None,
+) -> int:
+    """Max acceptable retrain months for the user's experience band."""
+    if override_months is not None:
+        return int(override_months)
+    pcfg = personalization_cfg or _DEFAULT_PERSONALIZATION_CONFIG
+    key = f"{experience_level}_retrain_cap_months"
+    if experience_level in EXPERIENCE_LEVELS and key in pcfg:
+        return int(pcfg[key])
+    return int(pcfg.get("mid_retrain_cap_months", 12))
+
+
 def compute_transition_paths(
     current_job: dict,
     all_jobs: list[dict],
@@ -320,6 +434,9 @@ def compute_transition_paths(
     *,
     top_k: int = 3,
     weights: dict | None = None,
+    experience_level: str | None = None,
+    max_retrain_months: int | None = None,
+    job_radar_cfg: dict | None = None,
 ) -> list[dict]:
     """Derive transition targets live from skill-vector distance, risk reduction
     and scenario-driven demand — instead of reading static ``transition_targets``.
@@ -327,7 +444,21 @@ def compute_transition_paths(
     Returns detail dicts compatible with the radar transition cards, with extra
     transparency fields (skill_distance, transition_score, demand_outlook).
     """
-    w = {**_TRANSITION_WEIGHTS, **(weights or {})}
+    tcfg = resolve_transition_config(job_radar_cfg)
+    pcfg = resolve_personalization_config(job_radar_cfg)
+    if weights is None and experience_level:
+        w = personalization_weights(
+            tcfg,
+            experience_level=experience_level,
+            personalization_cfg=pcfg,
+        )
+    else:
+        w = {**tcfg, **(weights or {})}
+    retrain_cap = retrain_cap_for_level(
+        experience_level or "mid",
+        pcfg,
+        max_retrain_months,
+    )
     cur_risk = float(current_job.get("displacement_risk") or 0.0)
 
     # Score every other job under the active scenario in one pass.
@@ -360,6 +491,9 @@ def compute_transition_paths(
             + w["risk"] * risk_reduction
             + w["demand"] * demand_norm
         )
+        retrain_months = int(round(3 + 21 * dist))
+        if retrain_months > retrain_cap:
+            continue
 
         candidates.append({
             "id": tgt["id"],
@@ -378,7 +512,7 @@ def compute_transition_paths(
             "target_displacement_risk": tgt_risk,
             "demand_outlook": round(demand_raw, 3),
             # Retraining time scales with skill distance: 3..24 months.
-            "retrain_months": int(round(3 + 21 * dist)),
+            "retrain_months": retrain_months,
             "skill_bridge_skills": _skill_gap(current_job, tgt),
             "required_skills_preview": tgt.get("required_skills", [])[:2],
         })
@@ -429,52 +563,71 @@ def save_job_feedback(feedback_obj) -> None:
         session.commit()
 
 
-def get_empirical_metrics() -> dict:
+def _aggregate_feedback_metrics(f_list: list) -> dict:
+    total = len(f_list)
+    unemployed = sum(1 for f in f_list if f.status == "unemployed")
+    transitioning = sum(1 for f in f_list if f.status == "transitioning")
+    emp_displacement_rate = (unemployed + transitioning) / total if total else 0.0
+    avg_confidence = sum(f.confidence for f in f_list) / total if total else 1.0
+    targets: dict[str, int] = {}
+    for f in f_list:
+        if f.transition_target:
+            t_title = f.transition_target.strip()
+            targets[t_title] = targets.get(t_title, 0) + 1
+    sorted_targets = sorted(targets.items(), key=lambda x: x[1], reverse=True)
+    return {
+        "total_responses": total,
+        "unemployed_count": unemployed,
+        "transitioning_count": transitioning,
+        "empirical_displacement_rate": round(emp_displacement_rate, 3),
+        "average_confidence": round(avg_confidence, 3),
+        "top_empirical_targets": [t[0] for t in sorted_targets[:3]],
+    }
+
+
+def get_empirical_metrics(
+    experience_level: str | None = None,
+    *,
+    job_radar_cfg: dict | None = None,
+) -> dict:
     """
     Aggregates JobFeedback records to compute empirical displacement rates,
     average worker confidence, and top transition targets by job title.
+
+    When *experience_level* is set and a (title, level) cell has ≥
+  min_stratified_responses, that cell is used; otherwise falls back to title-only.
     """
     from schemas import engine, JobFeedback
     from sqlmodel import Session, select
-    
-    metrics = {}
+
+    pcfg = resolve_personalization_config(job_radar_cfg)
+    min_cell = int(pcfg.get("min_stratified_responses", 5))
+
     with Session(engine) as session:
-        statement = select(JobFeedback)
-        feedbacks = session.exec(statement).all()
-        
-    # Group feedbacks by job title
-    by_job = {}
+        feedbacks = session.exec(select(JobFeedback)).all()
+
+    by_title: dict[str, list] = {}
+    by_title_level: dict[tuple[str, str], list] = {}
     for f in feedbacks:
-        # Canonicalize job title key
         title = f.job_title.strip()
-        by_job.setdefault(title, []).append(f)
-        
-    for title, f_list in by_job.items():
-        total = len(f_list)
-        unemployed = sum(1 for f in f_list if f.status == "unemployed")
-        transitioning = sum(1 for f in f_list if f.status == "transitioning")
-        
-        emp_displacement_rate = (unemployed + transitioning) / total if total else 0.0
-        avg_confidence = sum(f.confidence for f in f_list) / total if total else 1.0
-        
-        # Find most common transition targets
-        targets = {}
-        for f in f_list:
-            if f.transition_target:
-                t_title = f.transition_target.strip()
-                targets[t_title] = targets.get(t_title, 0) + 1
-                
-        sorted_targets = sorted(targets.items(), key=lambda x: x[1], reverse=True)
-        top_targets = [t[0] for t in sorted_targets[:3]]
-        
-        metrics[title] = {
-            "total_responses": total,
-            "unemployed_count": unemployed,
-            "transitioning_count": transitioning,
-            "empirical_displacement_rate": round(emp_displacement_rate, 3),
-            "average_confidence": round(avg_confidence, 3),
-            "top_empirical_targets": top_targets
-        }
+        level = getattr(f, "experience_level", None) or "mid"
+        by_title.setdefault(title, []).append(f)
+        by_title_level.setdefault((title, level), []).append(f)
+
+    metrics: dict[str, dict] = {}
+    for title, all_for_title in by_title.items():
+        pool = all_for_title
+        stratified = False
+        if experience_level:
+            cell = by_title_level.get((title, experience_level), [])
+            if len(cell) >= min_cell:
+                pool = cell
+                stratified = True
+        entry = _aggregate_feedback_metrics(pool)
+        entry["stratified"] = stratified
+        if stratified:
+            entry["experience_level"] = experience_level
+        metrics[title] = entry
     return metrics
 
 
@@ -482,15 +635,18 @@ def get_empirical_metrics() -> dict:
 # Dynamic KB expansion via LLM (when search query has no close match)
 # ---------------------------------------------------------------------------
 
-_SIMILARITY_THRESHOLD = 0.42   # below → no confident KB match (LLM expansion)
-_STRONG_MATCH_THRESHOLD = 0.55  # above → green "search hit" banner
 
-
-def find_best_match(query: str, jobs: list[dict], embedder=None) -> tuple[float, dict | None]:
+def find_best_match(
+    query: str,
+    jobs: list[dict],
+    embedder=None,
+    search_cfg: dict | None = None,
+) -> tuple[float, dict | None]:
     """Return (combined_similarity, best_job) for the query against the KB."""
     if not jobs or not query:
         return 0.0, None
 
+    cfg = search_cfg or _DEFAULT_SEARCH_CONFIG
     if embedder is None:
         embedder = _default_embedder()
 
@@ -501,9 +657,38 @@ def find_best_match(query: str, jobs: list[dict], embedder=None) -> tuple[float,
         if subset:
             pool = subset
 
-    _apply_search_scores(pool, query, embedder)
+    _apply_search_scores(pool, query, embedder, cfg)
     best = max(pool, key=lambda j: j.get("combined_similarity", 0.0))
     return best.get("combined_similarity", 0.0), best
+
+
+def rank_jobs_by_transition_score(
+    anchor: dict,
+    jobs: list[dict],
+    scenario: dict,
+    *,
+    experience_level: str | None = None,
+    max_retrain_months: int | None = None,
+    job_radar_cfg: dict | None = None,
+) -> list[dict]:
+    """HR-12: rank occupations by transition fit from *anchor*, not text search."""
+    paths = compute_transition_paths(
+        anchor,
+        jobs,
+        scenario,
+        top_k=len(jobs),
+        experience_level=experience_level,
+        max_retrain_months=max_retrain_months,
+        job_radar_cfg=job_radar_cfg,
+    )
+    score_by_id = {p["id"]: p["transition_score"] for p in paths}
+    ranked = []
+    for j in jobs:
+        copy = j.copy()
+        copy["transition_score"] = score_by_id.get(j["id"], 0.0)
+        ranked.append(copy)
+    ranked.sort(key=lambda x: x.get("transition_score", 0.0), reverse=True)
+    return ranked
 
 
 # --------------------------------------------------------------------------- #
