@@ -12,28 +12,50 @@ from typing import Iterable
 from sqlmodel import Session, select, SQLModel
 
 try:
-    from .schemas import engine, Prediction, Status
+    from .schemas import engine as _default_engine, make_engine, Prediction, Status
 except ImportError:
-    from schemas import engine, Prediction, Status
+    from schemas import engine as _default_engine, make_engine, Prediction, Status
 
 
 class Registry:
-    def __init__(self, path: str | Path | None = None):
-        # path is kept for backward compatibility but unused as engine is configured centrally
-        SQLModel.metadata.create_all(engine)
+    """Persistent store for predictions.
+
+    Parameters
+    ----------
+    path:
+        Path to the SQLite file.  ``None`` (default) → shared production DB
+        (``data/forecaster.db``).  Pass a ``tmp_path``-based path in tests to
+        get full isolation without manual cleanup.
+    engine:
+        Pre-built SQLAlchemy engine.  When supplied, *path* is ignored.
+        Useful for in-process ``:memory:`` DBs in unit tests.
+    """
+
+    def __init__(
+        self,
+        path: str | Path | None = None,
+        *,
+        engine=None,
+    ):
+        if engine is not None:
+            self._engine = engine
+        elif path is not None:
+            self._engine = make_engine(path)
+        else:
+            self._engine = _default_engine
+        SQLModel.metadata.create_all(self._engine)
 
     # ---- io ---------------------------------------------------------------
     def load(self) -> list[Prediction]:
-        with Session(engine) as session:
+        with Session(self._engine) as session:
             statement = select(Prediction)
             return list(session.exec(statement).all())
 
     def _write_all(self, preds: Iterable[Prediction]) -> None:
         """Bulk overwrite table. Kept for compatibility."""
-        with Session(engine) as session:
-            # Delete existing
-            session.query(Prediction).delete()
-            # Add all
+        from sqlmodel import delete as _delete
+        with Session(self._engine) as session:
+            session.exec(_delete(Prediction))
             for p in preds:
                 session.add(p)
             session.commit()
@@ -42,7 +64,7 @@ class Registry:
     def add_many(self, preds: Iterable[Prediction]) -> list[Prediction]:
         """Append new predictions, skipping duplicates (same statement + horizon)."""
         fresh = []
-        with Session(engine) as session:
+        with Session(self._engine) as session:
             for p in preds:
                 p.assign_id()
                 # Check if exists
@@ -60,7 +82,7 @@ class Registry:
         return fresh
 
     def update(self, pred: Prediction) -> None:
-        with Session(engine) as session:
+        with Session(self._engine) as session:
             db_pred = session.get(Prediction, pred.id)
             if db_pred:
                 # Update attributes
@@ -72,7 +94,7 @@ class Registry:
     # ---- queries ----------------------------------------------------------
     def due(self, today: date | None = None) -> list[Prediction]:
         today = today or date.today()
-        with Session(engine) as session:
+        with Session(self._engine) as session:
             statement = select(Prediction).where(
                 Prediction.status.in_([Status.open, Status.due]),
                 Prediction.resolution_date <= today
@@ -80,21 +102,21 @@ class Registry:
             return list(session.exec(statement).all())
 
     def recent_resolved(self, limit: int = 25) -> list[Prediction]:
-        with Session(engine) as session:
+        with Session(self._engine) as session:
             statement = select(Prediction).where(
                 Prediction.status.in_([Status.resolved_true, Status.resolved_false])
             ).order_by(Prediction.resolved_at.desc()).limit(limit)
             return list(session.exec(statement).all())
 
     def open_predictions(self) -> list[Prediction]:
-        with Session(engine) as session:
+        with Session(self._engine) as session:
             statement = select(Prediction).where(
                 Prediction.status.in_([Status.open, Status.due])
             )
             return list(session.exec(statement).all())
 
     def get(self, pred_id: str) -> Prediction | None:
-        with Session(engine) as session:
+        with Session(self._engine) as session:
             return session.get(Prediction, pred_id)
 
     # ---- scoring ----------------------------------------------------------

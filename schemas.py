@@ -174,10 +174,35 @@ class PredictionBet(SQLModel, table=True):
 
 
 import os
+from pathlib import Path as _Path
 from sqlmodel import create_engine
-os.makedirs("data", exist_ok=True)
-DATABASE_URL = "sqlite:///data/forecaster.db"
-engine = create_engine(DATABASE_URL, echo=False)
+from sqlalchemy.engine import Engine
 
-# Create all tables on first import (idempotent due to extend_existing=True)
-SQLModel.metadata.create_all(engine)
+_DEFAULT_DB_PATH = "data/forecaster.db"
+
+
+def make_engine(path: str | _Path) -> Engine:
+    """Create (and initialise) a SQLite engine for *path*.
+
+    Creates the parent directory if needed.  All SQLModel tables are created on
+    first call (idempotent: ``extend_existing=True`` on every model).
+
+    Use this instead of the module-level ``engine`` whenever you need an
+    isolated database — e.g. in tests or when running against a non-default
+    database path from config.
+    """
+    path = _Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    eng = create_engine(f"sqlite:///{path}", echo=False)
+    SQLModel.metadata.create_all(eng)
+    return eng
+
+
+# ---------------------------------------------------------------------------
+# Default (production) engine — lazily initialised so that importing schemas
+# does NOT create the data/ directory in test environments that pass an
+# explicit path to make_engine().
+# ---------------------------------------------------------------------------
+os.makedirs("data", exist_ok=True)
+DATABASE_URL = f"sqlite:///{_DEFAULT_DB_PATH}"
+engine = make_engine(_DEFAULT_DB_PATH)  # backward-compat module-level export

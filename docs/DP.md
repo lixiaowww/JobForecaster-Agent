@@ -229,7 +229,7 @@ CI: `.github/workflows/ci.yml` — Python 3.11 + 3.12 matrix.
 | No `MockLLMClient` for offline `run.py once` | P2 | open |
 | `src/` package layout + Poetry lock | P3 | open |
 | Alembic migrations | P3 | open |
-| SQLite engine global singleton, poor test isolation | P3 | open |
+| SQLite engine global singleton, poor test isolation | P3 | ✅ `make_engine()` + `Registry(engine=…)` + `isolated_registry` fixture |
 
 ---
 
