@@ -1,7 +1,7 @@
 # Product Requirement Document (PRD) — forecaster-agent
 
-**Version:** 0.5 (Harness-aligned)  
-**Last updated:** 2026-06-23
+**Version:** 0.6 (Integrity & Learning Loop)  
+**Last updated:** 2026-06-24
 
 An autonomous AI × economy forecasting system that generates, calibrates, and publishes **falsifiable** predictions — with explicit limits on historical extrapolation.
 
@@ -120,6 +120,8 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 | **HR-6** | Model-agnostic LLM | Single seam: `forecast.call_llm()` (Groq → Anthropic) |
 | **HR-7** | Citable job profiles | Every `JobProfile.sources` non-empty |
 | **HR-8** | BUSL-1.1 license | Commercial SaaS/API requires separate license |
+| **HR-9** | Citation integrity | LLM-generated `sources` URLs pass schema check; arXiv IDs must not reference a future YYMM; `example.com` / placeholder domains rejected at parse time. Enforced in `forecast._sanitize_sources()`. |
+| **HR-10** | Resolved-state durability | `run.py export` serialises `status`, `outcome`, `brier`, `resolved_at`; `ensure_demo_registry` reloads them via `model_validate_json` preserving resolution. Track record must never regress to all-`open` after a cache eviction. |
 
 ---
 
@@ -172,6 +174,19 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 - [ ] Non-Western + net-loss evolution cases
 - [ ] Novice usability score > 7/10 (UX audit)
 
+### Phase 6 — Integrity & Learning Loop (v0.6, 2026-06-24)
+
+Findings from joint architect / open-source engineer / PM review after first real
+LLM accumulation run (12 predictions via Groq):
+
+- [x] **HR-9** Citation sanitiser: `forecast._sanitize_sources()` strips hallucinated arXiv IDs and placeholder domains at parse time
+- [x] **Horizon normalisation**: `forecast._normalize_horizon()` coerces `"2027"` → `"2027-Q4"`, `"2027-H1"` → `"2027-Q2"` before persisting
+- [x] **Accuracy tab sources**: `judged_rationale` surfaced in resolved-predictions table so users can independently verify
+- [x] **Groq rate-limit degradation**: `call_llm` detects 429 / `RateLimitError`, retries once after 60 s, falls back to `RuntimeError` with structured message rather than silent failure
+- [x] **User feedback visibility**: Radar tab shows "N jobs calibrated from your feedback" badge when `field_calibration` has data, closing the perception gap
+- [x] **ROOT_CAUSE contrastive pairs** in `predictions_seed.json` + `track_record_summary` WRONG entries show 280-char rationale window
+- [x] **PR-aligned commit-back**: `predictions_live.jsonl` now correctly detects new/changed file via `git add` before `git diff --cached`
+
 ---
 
 ## 6. Success metrics
@@ -183,10 +198,13 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 | OOD fires → confidence downshift | Qualitative audit |
 | P0 bugs open | 0 |
 | MCP read tools documented | Phase 3 exit |
+|| LLM-generated sources with hallucinated arXiv IDs | 0 (HR-9) |
+|| Resolved predictions surviving cache eviction | 100% (HR-10) |
+|| `predictions_live.jsonl` committed per real-LLM cron run | ✅ (daily) |
 
 ---
 
-## 7. Out of scope (v0.5)
+## 7. Out of scope (v0.6)
 
 - Auto-publishing with `require_review: false` as default
 - Financial advice positioning

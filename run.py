@@ -12,6 +12,8 @@
   python run.py calibrate-jobs --dry-run
   python run.py export               # dump registry → data/predictions_live.jsonl
   python run.py export --out path.jsonl
+  python run.py warmup               # import predictions_live.jsonl → DB (cache-miss recovery)
+  python run.py warmup --src path.jsonl
 """
 from __future__ import annotations
 
@@ -79,6 +81,27 @@ def cmd_calibrate_jobs(cfg, *, dry_run: bool = False):
 
     result = run_calibration(cfg, dry_run=dry_run)
     print(json.dumps(result, indent=2))
+
+
+def cmd_warmup(cfg, src_path: str = "data/predictions_live.jsonl"):
+    """Import a committed JSONL back into the DB.
+
+    Used in CI to recover the track record when the Actions cache has expired.
+    Idempotent: predictions already in the DB are silently skipped (dedup on fingerprint).
+    """
+    from services.dashboard_seed import _load_live_rows
+
+    path = Path(src_path)
+    if not path.is_file():
+        print(f"warmup: {src_path} not found — nothing to import")
+        return
+    rows = _load_live_rows(path)
+    if not rows:
+        print("warmup: file empty — nothing to import")
+        return
+    reg = Registry(cfg["database_path"])
+    added = reg.add_many(rows)
+    print(f"warmup: imported {len(added)} new prediction(s) from {src_path}")
 
 
 def cmd_export(cfg, out_path: str = "data/predictions_live.jsonl"):
@@ -166,6 +189,9 @@ def main():
         cmd_calibrate_jobs(cfg, dry_run=dry_run_flag)
     elif cmd == "export":
         cmd_export(cfg, out_path or "data/predictions_live.jsonl")
+    elif cmd == "warmup":
+        src = _extract_opt(args, "--src") or out_path or "data/predictions_live.jsonl"
+        cmd_warmup(cfg, src)
     else:
         print(__doc__)
         sys.exit(1)

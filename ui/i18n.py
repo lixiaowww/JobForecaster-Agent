@@ -327,6 +327,12 @@ Compare your AI scenario with **15+ historical tech transitions**.
         "zh": "📊 风险已由 {n} 条真实现场反馈校准：{base:.0f}% → {cal:.0f}%"
               "（按样本量加权，且有上限约束）。",
     },
+    "radar_field_calibrated_badge": {
+        "en": "📊 {n} occupation(s) calibrated from real user feedback "
+              "({total} survey response(s)). Displacement risk scores reflect actual outcomes.",
+        "zh": "📊 {n} 个职业已根据真实用户反馈校准"
+              "（共 {total} 条调研回复）。置换风险评分已反映实际结果。",
+    },
     "radar_ai_badge": {"en": " (AI estimate)", "zh": "（AI 估算）"},
     "radar_matrix": {"en": "Occupation impact matrix", "zh": "职业影响矩阵"},
     "radar_at_risk": {"en": "At-risk & transforming roles", "zh": "高风险与转型中岗位"},
@@ -447,6 +453,8 @@ Compare your AI scenario with **15+ historical tech transitions**.
     "col_outcome": {"en": "Outcome", "zh": "结果"},
     "col_brier": {"en": "Brier", "zh": "Brier"},
     "col_rationale": {"en": "Rationale", "zh": "判定理由"},
+    "col_sources": {"en": "Source", "zh": "来源"},
+    "col_sources_label": {"en": "View", "zh": "查看"},
     "outcome_true": {"en": "TRUE", "zh": "成立"},
     "outcome_false": {"en": "FALSE", "zh": "不成立"},
 }

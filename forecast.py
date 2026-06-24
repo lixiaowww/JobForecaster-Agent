@@ -15,6 +15,8 @@ from __future__ import annotations
 
 import json
 import os
+import re
+import time
 from datetime import date, datetime
 from pathlib import Path
 from typing import Optional
@@ -84,7 +86,11 @@ def call_llm(
 
 
 def _call_groq(system: str, user: str, *, max_tokens: int, model: str, api_key: str) -> str:
-    """Call Groq's OpenAI-compatible chat completions endpoint."""
+    """Call Groq's OpenAI-compatible chat completions endpoint.
+
+    One automatic retry on HTTP 429 (rate-limit), honouring the Retry-After header
+    up to 60 seconds. Subsequent failures propagate as RuntimeError.
+    """
     import requests  # already in requirements.txt
 
     payload = {
@@ -99,10 +105,24 @@ def _call_groq(system: str, user: str, *, max_tokens: int, model: str, api_key: 
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
     }
-    resp = requests.post(_GROQ_ENDPOINT, json=payload, headers=headers, timeout=60)
-    resp.raise_for_status()
-    data = resp.json()
-    return data["choices"][0]["message"]["content"]
+
+    for attempt in range(1, 3):  # attempts 1 and 2
+        resp = requests.post(_GROQ_ENDPOINT, json=payload, headers=headers, timeout=60)
+        if resp.status_code == 429 and attempt == 1:
+            retry_after = int(resp.headers.get("Retry-After", "60"))
+            wait = min(retry_after, 60)
+            print(f"  Groq rate-limited (429); retrying after {wait}s …")
+            time.sleep(wait)
+            continue
+        try:
+            resp.raise_for_status()
+        except Exception as exc:
+            raise RuntimeError(
+                f"Groq API error (HTTP {resp.status_code}): {resp.text[:300]}"
+            ) from exc
+        return resp.json()["choices"][0]["message"]["content"]
+
+    raise RuntimeError("Groq rate-limit not cleared after one retry.")
 
 
 def _call_anthropic(system: str, user: str, *, max_tokens: int, model: str) -> str:
@@ -117,6 +137,71 @@ def _call_anthropic(system: str, user: str, *, max_tokens: int, model: str) -> s
         messages=[{"role": "user", "content": user}],
     )
     return "\n".join(b.text for b in resp.content if getattr(b, "type", "") == "text")
+
+
+# ---------------------------------------------------------------------------
+# Citation & horizon quality guards (HR-9)
+# ---------------------------------------------------------------------------
+
+_ARXIV_ID_RE = re.compile(r"arxiv\.org/abs/(\d{2})(\d{2})\.\d+", re.IGNORECASE)
+_BAD_DOMAINS = {"example.com", "example.org", "placeholder.com", "placeholder.org"}
+
+
+def _sanitize_sources(sources: object) -> list[str]:
+    """Strip hallucinated or malformed URLs from LLM-generated sources.
+
+    Rules (applied in order):
+    1. Must be a non-empty string starting with http:// or https://.
+    2. Domain must not be a known placeholder (example.com etc.).
+    3. If an arXiv URL, the YYMM prefix must not be in the future.
+    """
+    if not isinstance(sources, list):
+        return []
+    today = date.today()
+    good: list[str] = []
+    for s in sources:
+        if not isinstance(s, str) or not s.strip():
+            continue
+        s = s.strip()
+        if not s.startswith(("http://", "https://")):
+            continue
+        # Reject placeholder domains
+        try:
+            domain = s.split("/")[2].lower().removeprefix("www.")
+        except IndexError:
+            continue
+        if domain in _BAD_DOMAINS:
+            continue
+        # Reject hallucinated arXiv IDs (YYMM in the future)
+        m = _ARXIV_ID_RE.search(s)
+        if m:
+            yy, mm = int(m.group(1)), int(m.group(2))
+            pub_year, pub_month = 2000 + yy, mm
+            if pub_year > today.year or (
+                pub_year == today.year and pub_month > today.month
+            ):
+                print(f"  ! dropped hallucinated arXiv source: {s}")
+                continue
+        good.append(s)
+    return good
+
+
+def _normalize_horizon(h: object) -> str:
+    """Coerce loose horizon strings to canonical YYYY-QN format.
+
+    Mapping:
+      "2027"      → "2027-Q4"   (bare year = year-end)
+      "2027-H1"   → "2027-Q2"   (first half = Q2)
+      "2027-H2"   → "2027-Q4"   (second half = Q4)
+      "2027-Q3"   → "2027-Q3"   (already canonical, pass through)
+    """
+    h = str(h).strip() if h else ""
+    if re.fullmatch(r"\d{4}", h):
+        return f"{h}-Q4"
+    m = re.fullmatch(r"(\d{4})-H([12])", h)
+    if m:
+        return f"{m.group(1)}-Q{'2' if m.group(2) == '1' else '4'}"
+    return h
 
 
 # ---------------------------------------------------------------------------
@@ -207,6 +292,8 @@ for near-certainties."""
     preds: list[Prediction] = []
     for item in data.get("predictions", []):
         try:
+            item["sources"] = _sanitize_sources(item.get("sources", []))
+            item["horizon"] = _normalize_horizon(item.get("horizon", ""))
             preds.append(Prediction.model_validate(item).assign_id())
         except Exception as e:
             print(f"  ! skipped malformed prediction: {e}")

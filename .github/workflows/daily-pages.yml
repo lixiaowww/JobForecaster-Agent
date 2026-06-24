@@ -49,6 +49,12 @@ jobs:
       - name: Ensure data directory
         run: mkdir -p data site
 
+      # HR-10: when the Actions cache expires the DB is empty, but the committed
+      # predictions_live.jsonl still has the full history. Warm the DB from it
+      # so the track record is never lost. Idempotent when cache is fresh.
+      - name: Warm DB from committed live predictions (cache-miss recovery)
+        run: python run.py warmup --config config.ci.yaml
+
       - name: Run forecasting cycle
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}

@@ -135,15 +135,31 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         with col_resolved:
             st.markdown(f"### {t('acc_resolved_list', n=len(resolved_preds))}")
             if resolved_preds:
-                resolved_df = pd.DataFrame([{
-                    t("col_id"): p.fingerprint(),
-                    t("col_statement"): p.statement,
-                    t("col_outcome"): t("outcome_true") if p.outcome else t("outcome_false"),
-                    t("col_confidence"): f"{p.confidence*100:.0f}%",
-                    t("col_brier"): f"{p.brier:.4f}" if p.brier is not None else "",
-                    t("col_rationale"): p.judged_rationale,
-                } for p in resolved_preds])
-                st.dataframe(resolved_df, width="stretch", hide_index=True)
+                col_src_key = t("col_sources")
+                resolved_rows = []
+                for p in resolved_preds:
+                    first_src = (p.sources or [])[0] if p.sources else ""
+                    resolved_rows.append({
+                        t("col_id"): p.fingerprint(),
+                        t("col_statement"): p.statement,
+                        t("col_outcome"): t("outcome_true") if p.outcome else t("outcome_false"),
+                        t("col_confidence"): f"{p.confidence*100:.0f}%",
+                        t("col_brier"): f"{p.brier:.4f}" if p.brier is not None else "",
+                        t("col_rationale"): p.judged_rationale,
+                        col_src_key: first_src,
+                    })
+                resolved_df = pd.DataFrame(resolved_rows)
+                st.dataframe(
+                    resolved_df,
+                    column_config={
+                        col_src_key: st.column_config.LinkColumn(
+                            t("col_sources"),
+                            display_text=t("col_sources_label"),
+                        ),
+                    },
+                    use_container_width=True,
+                    hide_index=True,
+                )
             else:
                 st.write(t("acc_no_resolved"))
     else:

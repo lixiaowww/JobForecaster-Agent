@@ -107,6 +107,77 @@ def test_export_round_trip(tmp_path):
     _clean_predictions()
 
 
+def test_cmd_warmup_imports_live_predictions(tmp_path):
+    """cmd_warmup re-populates the DB from a JSONL (cache-miss recovery)."""
+    import run
+
+    _clean_predictions()
+    p1 = Prediction(
+        statement="Warmup import test prediction",
+        rationale="test",
+        category="labor",
+        confidence=0.7,
+        horizon="2027-Q4",
+        resolution_date=date(2027, 12, 31),
+        resolution_criteria="test",
+        status=Status.open,
+    ).assign_id()
+    p2 = Prediction(
+        statement="Second warmup prediction",
+        rationale="test",
+        category="compute",
+        confidence=0.6,
+        horizon="2026-Q4",
+        resolution_date=date(2026, 12, 31),
+        resolution_criteria="test",
+        status=Status.open,
+    ).assign_id()
+
+    # Export them to a JSONL
+    live_path = tmp_path / "warmup.jsonl"
+    live_path.write_text(
+        p1.model_dump_json() + "\n" + p2.model_dump_json() + "\n",
+        encoding="utf-8",
+    )
+
+    # Now warmup into a fresh DB
+    _clean_predictions()
+    run.cmd_warmup({"database_path": "data/forecaster.db"}, str(live_path))
+
+    statements = {p.statement for p in Registry().load()}
+    assert "Warmup import test prediction" in statements
+    assert "Second warmup prediction" in statements
+    _clean_predictions()
+
+
+def test_cmd_warmup_is_idempotent(tmp_path):
+    """Running warmup twice does not duplicate predictions."""
+    import run
+
+    _clean_predictions()
+    p = Prediction(
+        statement="Idempotent warmup prediction",
+        rationale="test",
+        category="macro",
+        confidence=0.5,
+        horizon="2027-Q4",
+        resolution_date=date(2027, 12, 31),
+        resolution_criteria="test",
+        status=Status.open,
+    ).assign_id()
+
+    live_path = tmp_path / "idem.jsonl"
+    live_path.write_text(p.model_dump_json() + "\n", encoding="utf-8")
+
+    cfg = {"database_path": "data/forecaster.db"}
+    run.cmd_warmup(cfg, str(live_path))
+    run.cmd_warmup(cfg, str(live_path))  # second call
+
+    preds = [x for x in Registry().load() if x.statement == "Idempotent warmup prediction"]
+    assert len(preds) == 1, "warmup must be idempotent (no duplicate)"
+    _clean_predictions()
+
+
 def test_seed_is_an_honest_sourced_track_record():
     """Guard the credibility of the public demo's track record:
     enough resolved bets, a non-trivial number of MISSES (no fake perfection),

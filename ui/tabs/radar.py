@@ -58,8 +58,22 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         _field_recs = compute_field_calibration(all_jobs, empirical_data)
         if _field_recs:
             all_jobs = merge_field_calibration_into_jobs(all_jobs, _field_recs)
+            total_responses = sum(
+                empirical_data.get(jid, {}).get("n_responses", 0)
+                for jid in _field_recs
+            )
+            st.info(
+                t(
+                    "radar_field_calibrated_badge",
+                    n=len(_field_recs),
+                    total=total_responses,
+                )
+            )
+        else:
+            _field_recs = {}
     except Exception:
         empirical_data = {}
+        _field_recs = {}
 
     if not all_jobs:
         st.warning(t("radar_kb_missing"))

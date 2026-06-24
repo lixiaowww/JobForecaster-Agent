@@ -1,7 +1,7 @@
 # Design Proposal (DP) — forecaster-agent
 
-**Version:** 0.5 (Harness-aligned)  
-**Last updated:** 2026-06-23
+**Version:** 0.6 (Integrity & Learning Loop)  
+**Last updated:** 2026-06-24
 
 Architectural design implementing [PRD.md](./PRD.md) under Harness Engineering standards.
 
@@ -222,17 +222,94 @@ CI: `.github/workflows/ci.yml` — Python 3.11 + 3.12 matrix.
 
 ## 9. Known technical debt
 
-| Item | Priority |
-|------|----------|
-| `dashboard.py` monolith (~1150 LOC) | P1 |
-| Discord/Telegram crowd bots | ✅ `bots/` |
-| No `MockLLMClient` for offline `run.py once` | P2 |
-| `src/` package layout + Poetry lock | P3 |
-| Alembic migrations | P3 |
+| Item | Priority | Status |
+|------|----------|--------|
+| `dashboard.py` monolith (~1150 LOC) | P1 | open |
+| Discord/Telegram crowd bots | P2 | ✅ `bots/` |
+| No `MockLLMClient` for offline `run.py once` | P2 | open |
+| `src/` package layout + Poetry lock | P3 | open |
+| Alembic migrations | P3 | open |
+| SQLite engine global singleton, poor test isolation | P3 | open |
 
 ---
 
-## 10. Security & compliance defaults
+## 10. v0.6 Design additions (Integrity & Learning Loop)
+
+### 10.1 Citation sanitiser (HR-9)
+
+Location: `forecast._sanitize_sources(sources: list[str]) -> list[str]`
+
+Rules applied at `_parse_json` time before a `Prediction` is persisted:
+
+| Check | Action |
+|-------|--------|
+| Not a string or empty | drop |
+| Doesn't start with `http://` or `https://` | drop |
+| Domain is `example.com`, `example.org`, or `placeholder` | drop |
+| arXiv URL whose YYMM is in the future | drop (hallucinated) |
+| All other URLs | keep as-is (no live HEAD check, stays offline-safe) |
+
+Tests: `tests/test_forecast_quality.py::test_sanitize_sources`
+
+### 10.2 Horizon normalisation (HR-consistent formatting)
+
+Location: `forecast._normalize_horizon(h: str) -> str`
+
+| Input | Output | Rule |
+|-------|--------|------|
+| `"2027"` | `"2027-Q4"` | bare year → year-end quarter |
+| `"2027-H1"` | `"2027-Q2"` | half-year → closing quarter |
+| `"2027-H2"` | `"2027-Q4"` | half-year → closing quarter |
+| `"2027-Q3"` | `"2027-Q3"` | already canonical, pass through |
+
+Applied in `_parse_json` alongside `_sanitize_sources`.
+
+Tests: `tests/test_forecast_quality.py::test_normalize_horizon`
+
+### 10.3 Resolved-state durability (HR-10)
+
+`run.py export` serialises the full `Prediction` via `model_dump_json()`, which
+includes `status`, `outcome`, `brier`, `resolved_at`. On reload,
+`Prediction.model_validate_json(line)` restores the resolved state. `_coerce`
+in `dashboard_seed.py` back-fills missing `brier` / `resolved_at` only when the
+status already indicates resolution, so it is idempotent.
+
+Invariant test: `tests/test_dashboard_seed.py::test_ensure_demo_registry_loads_seed_plus_live`
+already asserts both seed and live statements are present after a round-trip.
+
+### 10.4 Groq rate-limit degradation (P2-A)
+
+`forecast.call_llm` wraps the Groq call in a retry block:
+
+```
+try:
+    return _call_once(system, user, max_tokens, model)
+except RateLimitError:
+    time.sleep(60)
+    return _call_once(system, user, max_tokens, model)
+except Exception as exc:
+    raise RuntimeError(f"LLM call failed: {exc}") from exc
+```
+
+- One retry with 60-second back-off avoids wasted runs on transient 429.
+- Still raises after one retry so CI never hangs forever.
+- `RateLimitError` import: `from groq import RateLimitError` (guarded with
+  `ImportError` fallback to keep the harness offline-safe).
+
+### 10.5 User feedback visibility (P2-B)
+
+`ui/tabs/radar.py` shows a `st.info` badge with count of calibrated jobs when
+`_field_recs` (from `compute_field_calibration`) is non-empty:
+
+```
+ℹ️  3 occupations calibrated from real user feedback (N=47 responses)
+```
+
+This closes the perception gap: users know their survey answers matter.
+
+---
+
+## 11. Security & compliance defaults
 
 - `require_review: true` — never change default in repo
 - Disclaimer in every published report (`publish.DISCLAIMER`)
