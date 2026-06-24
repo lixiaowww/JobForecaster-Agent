@@ -1,6 +1,6 @@
 # Product Requirement Document (PRD) — forecaster-agent
 
-**Version:** 0.10 (Semantic Job Search + Query Calibration Agent)  
+**Version:** 0.11 (Self-Evolving Transition Recommendations)  
 **Last updated:** 2026-06-24
 
 An autonomous AI × economy forecasting system that generates, calibrates, and publishes **falsifiable** predictions — with explicit limits on historical extrapolation.
@@ -92,6 +92,9 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 | Hybrid RAG (α·structural + β·semantic) | ✅ |
 | **Search retrieval** (`combined_similarity`: semantic embed + lexical blend) | ✅ v0.10 |
 | **Transition recommendation** (`compute_transition_paths`: skill 40% + overlap 15% + risk 25% + demand 20%) | ✅ |
+| **Skill semantic similarity** (`_skill_semantic_sim`: SentenceEmbedder cosine on required_skills) | ✅ v0.11 |
+| **Domain proximity** (`_domain_proximity`: adjacent-industry graph, replaces dead jaccard) | ✅ v0.11 |
+| **LLM confidence gate** (transition score gated by `_transition_confidence` from evaluator) | ✅ v0.11 |
 | Search vs transition paths kept separate (HR-12) | ✅ Phase 8 |
 | Anchored search hides misleading at-risk column (weak text scores) | ✅ Phase 8 / v0.10 |
 | Hot-role KB coverage (`CORE_HOT_ROLE_QUERIES` + `search_aliases`) | ✅ v0.10 |
@@ -139,7 +142,33 @@ Continuous **retrieval QA loop** — discovers search queries, evaluates KB matc
 | `query-agent apply` | After human review | Apply all `pending/job_calibration/*.json` (incl. `kb_profile_new`) |
 | `query-agent ingest-logs` | HF export merge | Merge external search JSONL into `data/radar_search_log.jsonl` |
 
-### 2.6 Read model / external integration seam (`services/read_model.py`)
+### 2.6 Transition Evaluator (`services/transition_evaluator/`, Phase 10)
+
+LLM-as-judge system that continuously fills and validates the KB's `transition_targets`, enabling the knowledge base to self-improve over time without manual curation.
+
+| Capability | Status |
+|------------|--------|
+| `evaluate_pair(anchor, candidate)` → Groq feasibility 0.0–1.0 + reasoning | ✅ |
+| Persistent cache (`data/transition_eval_cache.json`, key: `anchor→candidate`) | ✅ |
+| `missing_pairs(jobs)` — only targets jobs with empty `transition_targets` | ✅ |
+| `run_evaluation_pass(jobs, max_pairs, min_feasibility=0.55)` → promote to KB | ✅ |
+| `_promote_to_kb` — appends to `transition_targets` with `_source: "llm_eval"` + `confidence` | ✅ |
+| Wired into daily calibration loop (`run_calibration_cycle` post-step) | ✅ |
+| CLI: `python run.py query-agent transition-eval [N]` | ✅ |
+
+**Scoring guide used by LLM judge:**
+
+| Range | Label | Retraining |
+|-------|-------|------------|
+| 0.85–1.0 | Natural progression | 0–6 months |
+| 0.60–0.84 | Adjacent move | 6–18 months |
+| 0.35–0.59 | Deliberate pivot | 18–36 months |
+| 0.10–0.34 | Major reskill | substantial |
+| 0.00–0.09 | Extreme leap | very high effort |
+
+Pairs scoring ≥ 0.55 are promoted to KB; `retrain_months = max(2, round(24 × (1 − feasibility)))`.
+
+### 2.7 Read model / external integration seam (`services/read_model.py`)
 
 | Capability | Status |
 |------------|--------|
@@ -354,6 +383,45 @@ Production search upgraded from hashing-only to **multilingual sentence embeddin
 
 See [RELEASE_v0.10.md](./RELEASE_v0.10.md) for score lift table and commit list.
 
+### Phase 10 — Self-Evolving Transition Recommendations (v0.11, 2026-06-24)
+
+Problem: `transition_score` used a dead `_skill_jaccard` (always 0) for overlap, and cross-industry leaps (Accounts Receivable → AI Engineer) were scored unrealistically high because demand + risk-reduction signals dominated. KB transition_targets for new roles were empty — no way to bootstrap without manual curation.
+
+**Design principles:**
+
+1. **Skill extensibility** — real required_skills cosine similarity (`_skill_semantic_sim`), not bag-of-words
+2. **Industry proximity** — explicit adjacent-industry graph (`_domain_proximity`) penalises unrelated domain jumps
+3. **LLM arbitration** — LLM-as-judge provides pair-level confidence scores that gate the final score
+4. **Incremental self-improvement** — nightly pass fills uncached pairs; KB grows automatically
+
+**Shipped:**
+
+- [x] `_skill_semantic_sim(a, b)` — SentenceEmbedder cosine on `required_skills` text; cached by sorted `(id_a, id_b)`; falls back gracefully when no embedder
+- [x] `_domain_proximity(a, b)` — same-industry=1.0, adjacent=0.5 (Finance↔Legal, Tech↔Media, etc.), unrelated=0.0
+- [x] Overlap term: `0.65 × skill_semantic_sim + 0.35 × domain_proximity` (replaces dead jaccard)
+- [x] LLM confidence gate: `score *= (0.5 + confidence × 0.5)` when `_transition_confidence` cached on target job
+- [x] `services/transition_evaluator/evaluate.py` — LLM-as-judge (Groq llama-3.3-70b); 5-tier feasibility scale
+- [x] `services/transition_evaluator/cache.py` — persistent `data/transition_eval_cache.json`; 118+ pairs cached
+- [x] `run_evaluation_pass()` wired into `run_calibration_cycle` — runs after every query calibration pass
+- [x] CLI: `python run.py query-agent transition-eval [N]`
+- [x] KB: lawyer, cybersecurity_analyst, ai_engineer transition_targets now LLM-validated (11 entries promoted)
+
+**Transition quality improvements:**
+
+| Role queried | Before (v0.10) | After (v0.11) |
+|---|---|---|
+| Accounts Receivable Manager | → AI Engineer (Finance↔Tech leap) | → AI Financial Compliance Auditor (Finance, domain-matched) |
+| Cybersecurity Analyst | no curated targets | → AI Agent Fleet Manager (Tech, LLM-validated) |
+| Lawyer | no curated targets | → Corporate General Counsel (Legal, conf=0.9) |
+
+**Self-evolution path:**
+```
+daily: query-agent run
+  → query calibration (alias/profile gaps)
+  → transition-eval pass (fill empty transition_targets via LLM)
+  → new roles auto-bootstrapped on next CI run
+```
+
 ---
 
 ## 6. Success metrics
@@ -377,6 +445,9 @@ See [RELEASE_v0.10.md](./RELEASE_v0.10.md) for score lift table and commit list.
 | `query-agent run` daily with zero P0 regressions | Phase 9 |
 | Search gaps auto-closed via alias/title_alias (weekly) | Qualitative — trace + commit log |
 | LLM fallback rate on top queries (logged) | Phase 9 P2 |
+| Transition recommendations stay within same or adjacent industry | Phase 10 |
+| LLM-evaluated transition pairs (`transition_eval_cache.json`) | ≥ 200 pairs (growing daily) |
+| New KB roles bootstrapped within 1 daily cycle | Phase 10 self-evolution |
 
 ---
 

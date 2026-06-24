@@ -1,6 +1,6 @@
 # Design Proposal (DP) — forecaster-agent
 
-**Version:** 0.10 (Semantic Job Search + Query Calibration Agent)  
+**Version:** 0.11 (Self-Evolving Transition Recommendations)  
 **Last updated:** 2026-06-24
 
 Architectural design implementing [PRD.md](./PRD.md) under Harness Engineering standards.
@@ -34,21 +34,26 @@ forecaster-agent/
 ├── schemas.py               # SQLModel entities + engine
 ├── services/
 │   ├── read_model.py        # read-only API seam (MCP/REST target)
-│   └── job_query_agent/     # Phase 9: retrieval QA loop
-│       ├── discover.py
-│       ├── evaluate.py
-│       ├── propose.py
-│       ├── simulate.py
-│       ├── apply.py
-│       ├── loop.py
-│       ├── traces.py
-│       └── audit.py
+│   ├── job_query_agent/     # Phase 9: retrieval QA loop
+│   │   ├── discover.py
+│   │   ├── evaluate.py
+│   │   ├── propose.py
+│   │   ├── simulate.py
+│   │   ├── apply.py
+│   │   ├── loop.py
+│   │   ├── traces.py
+│   │   └── audit.py
+│   └── transition_evaluator/  # Phase 10: LLM-as-judge self-evolution
+│       ├── __init__.py
+│       ├── cache.py           # persistent data/transition_eval_cache.json
+│       └── evaluate.py        # evaluate_pair + run_evaluation_pass + _promote_to_kb
 ├── dashboard.py             # Streamlit UI
-├── tests/                   # offline harness (HR-1)
+├── tests/                   # offline harness (HR-1), 190 tests
 ├── data/
 │   ├── forecaster.db
 │   ├── jobs_kb.json
-│   └── query_seed.json      # Phase 9 seed queries
+│   ├── query_seed.json               # Phase 9 seed queries (115+)
+│   └── transition_eval_cache.json    # Phase 10 cached LLM scores
 ├── pending/
 │   └── job_calibration/     # Phase 9 human-review proposals
 └── docs/
@@ -641,12 +646,13 @@ discover_queries(cfg)
 ### 14.6 CLI
 
 ```bash
-python run.py query-agent audit        # CI: exit 1 on P0 / weak-core
-python run.py query-agent once         # audit + queue proposals (no auto-apply)
-python run.py query-agent run          # closed loop: simulate + auto-apply safe fixes
+python run.py query-agent audit              # CI: exit 1 on P0 / weak-core
+python run.py query-agent once               # audit + queue proposals (no auto-apply)
+python run.py query-agent run                # closed loop: simulate + auto-apply safe fixes
 python run.py query-agent run --dry-run
-python run.py query-agent apply        # apply all pending/job_calibration/*.json
+python run.py query-agent apply              # apply all pending/job_calibration/*.json
 python run.py query-agent ingest-logs path.jsonl   # merge HF export into search log
+python run.py query-agent transition-eval [N]      # Phase 10: LLM-evaluate up to N pairs
 ```
 
 | Workflow | Step |
@@ -747,6 +753,128 @@ Rationale: embedding the full description diluted role-name similarity (e.g. unr
 - `requirements.txt`: `sentence-transformers>=3.0`
 - `Dockerfile`: pre-download `paraphrase-multilingual-MiniLM-L12-v2`
 - Release notes: [RELEASE_v0.10.md](./RELEASE_v0.10.md)
+
+---
+
+## 16. Phase 10 — Self-Evolving Transition Recommendations (v0.11, implemented)
+
+### 16.1 Problem with prior transition scoring
+
+Three compounding defects caused poor career-path recommendations:
+
+| Defect | Root cause | Symptom |
+|--------|------------|---------|
+| Dead overlap signal | `_skill_jaccard` always returned 0 (BLS skill vectors ≠ actual skill text) | 15% weight completely ignored |
+| Demand/risk dominance | `risk_reduction + demand_norm` pushed all at-risk roles toward highest-demand targets | Accountant → AI Engineer, regardless of industry |
+| Missing LLM validation | Curated `transition_targets` existed for ~50 roles; new roles had empty targets | No guidance for new KB entries |
+
+### 16.2 Scoring formula (v0.11)
+
+```python
+skill_sem   = _skill_semantic_sim(current_job, tgt)    # [0, 1]
+domain_prox = _domain_proximity(current_job, tgt)       # 0.0 / 0.5 / 1.0
+overlap_signal = 0.65 * skill_sem + 0.35 * domain_prox
+
+score = (
+    w["skill"]  * proximity          # 40%: economic skill sensitivity
+  + w["overlap"]* overlap_signal     # 15%: real skill + domain adjacency
+  + w["risk"]   * risk_reduction     # 25%: displacement risk improvement
+  + w["demand"] * demand_norm        # 20%: forward demand forecast
+)
+if llm_conf is not None:
+    score *= (0.5 + llm_conf * 0.5)  # LLM confidence gate
+```
+
+### 16.3 `_skill_semantic_sim(a, b)`
+
+```python
+def _skill_semantic_sim(a: dict, b: dict) -> float:
+    # text = ", ".join(required_skills) for each job
+    # embed with SentenceEmbedder (lazy-loaded singleton)
+    # cosine similarity; cached by sorted (id_a, id_b)
+    # returns 0.0 when no embedder (CI path, HR-1)
+```
+
+Cache key: `(min(id_a, id_b), max(id_a, id_b))` → float in `_SKILL_SEM_CACHE`.
+
+### 16.4 `_domain_proximity(a, b)`
+
+Adjacency graph (`_ADJACENT_INDUSTRIES`) encodes industry clusters:
+
+```python
+_ADJACENT_INDUSTRIES = {
+    "Finance": {"Legal", "Government"},
+    "Legal":   {"Finance", "Government"},
+    "Tech":    {"Media"},
+    "Manufacturing": {"Construction", "Logistics"},
+    ...
+}
+# same industry → 1.0; adjacent → 0.5; unrelated → 0.0
+```
+
+Finance→Finance transitions are naturally domain-proximate (1.0); Finance→Tech jumps pay a 0.5 penalty even if skill similarity is moderate.
+
+### 16.5 `services/transition_evaluator/` architecture
+
+```
+cache.py
+  _load(path) / _save(path)
+  key(a, b) = "{anchor_id}→{candidate_id}"
+  get(aid, cid) / put(aid, cid, feasibility, reasoning)
+  missing_pairs(jobs, top_k=5)   # only jobs with empty transition_targets
+
+evaluate.py
+  _SYSTEM  — 5-tier feasibility prompt (see §16.6)
+  _prompt(anchor, candidate) — injects required_skills + skill gap
+  evaluate_pair(anchor, candidate, force=False) → dict | None
+  run_evaluation_pass(jobs, max_pairs=40, min_feasibility=0.55) → summary
+  _promote_to_kb(anchor_id, cand_id, result, kb_path)
+    → appends {target_id, retrain_months, skill_bridge, confidence, _source: "llm_eval"}
+    → retrain_months = max(2, round(24 × (1 − feasibility)))
+```
+
+### 16.6 LLM judge system prompt (5-tier scale)
+
+```
+0.85–1.0  Natural progression — same domain, 0–6 months upskilling
+0.60–0.84 Adjacent move — related domain, 6–18 months
+0.35–0.59 Deliberate pivot — adjacent industry, 18–36 months
+0.10–0.34 Major reskill — different domain, substantial retraining
+0.00–0.09 Extreme leap — almost no skill overlap
+```
+
+Returns `{"feasibility": float, "reasoning": "max 20 words", "recommended": bool}`.
+
+### 16.7 Integration into calibration loop
+
+```python
+# services/job_query_agent/loop.py — after query calibration rounds
+if not dry_run and auto_apply.enabled:
+    transition_summary = run_evaluation_pass(
+        fresh_jobs, kb_path=kb_path,
+        max_pairs=cfg.get("transition_eval_max_pairs", 40),
+    )
+return {..., "transition_eval": transition_summary}
+```
+
+The daily CI workflow thus runs:
+```
+pytest → query-agent audit → (daily cron) query-agent run
+  → round 1..N: query calibration
+  → post-calibration: transition-eval (fill empty targets)
+  → commit jobs_kb.json if any promotions
+```
+
+### 16.8 Config
+
+```yaml
+job_query_agent:
+  auto_apply:
+    enabled: true
+  transition_eval_max_pairs: 40   # pairs per daily run
+```
+
+No new harness invariant required — evaluation uses existing Groq LLM seam (HR-6) and falls back silently when key absent (non-fatal, `skipped` count in summary).
 
 ---
 

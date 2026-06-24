@@ -19,7 +19,7 @@ of historical extrapolation.
 [![CI](https://github.com/your-org/forecaster-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/forecaster-agent/actions)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![License](https://img.shields.io/badge/license-BUSL--1.1-green)
-![Tests](https://img.shields.io/badge/tests-59%20offline-brightgreen)
+![Tests](https://img.shields.io/badge/tests-190%20offline-brightgreen)
 
 ---
 
@@ -112,7 +112,7 @@ cp .env.example .env          # GROQ_API_KEY (free) or ANTHROPIC_API_KEY
 
 **Run the offline test suite first (no API key needed):**
 ```bash
-python -m pytest tests/       # 59 tests, ~16s, zero network
+python -m pytest tests/       # 190 tests, ~22s, zero network
 ```
 
 Then run a single cycle:
@@ -131,6 +131,16 @@ python run.py loop       # run forever at config.yaml interval
 python run.py resolve    # grade + score due predictions only
 python run.py score      # print calibration scoreboard
 python run.py approve    # publish queued pending/ items (review gate)
+
+# Phase 9 — job search calibration agent
+python run.py query-agent audit              # CI: exit 1 on P0 regression or weak-core
+python run.py query-agent once               # audit + queue proposals to pending/
+python run.py query-agent run                # discover → simulate → auto-apply safe fixes
+python run.py query-agent apply              # merge human-approved pending/*.json
+python run.py query-agent ingest-logs f.jsonl  # merge HF/Radar search log export
+
+# Phase 10 — transition self-evolution
+python run.py query-agent transition-eval [N]  # LLM-evaluate up to N uncached pairs
 ```
 
 ### MCP (read-only, optional)
@@ -224,19 +234,24 @@ forecast.py           LLM reasoning: generate predictions + judge past ones
 crowd.py              Crowd gate: entropy × soundness gate + sparse selection
 evolution.py          Job evolution agent: case library, PCA/GMM, OOD detector
 publish.py            Render md/html/json + file/webhook/git backends + review gate
-run.py                CLI: once | loop | resolve | score | approve
+run.py                CLI: once | loop | resolve | score | approve | query-agent *
 loop.py               Orchestrator: resolve → ingest → evolution → forecast → publish
 dashboard.py          Streamlit 4-tab visual analytics dashboard
-job_radar.py          Hybrid RAG retrieval engine + LLM KB expansion
+job_radar.py          Hybrid RAG retrieval + semantic embeddings + transition scoring
 ui/                        Streamlit tabs + sidebar (dashboard split)
-services/read_model.py       Read-only seam (MCP + REST)
-services/crowd_service.py    Crowd submit + gate (Phase 2)
-services/dashboard_data.py     Dashboard data via services layer
+services/read_model.py             Read-only seam (MCP + REST)
+services/crowd_service.py          Crowd submit + gate (Phase 2)
+services/dashboard_data.py         Dashboard data via services layer
+services/job_query_agent/          Phase 9: retrieval QA loop (audit, calibrate, apply)
+services/transition_evaluator/     Phase 10: LLM-as-judge self-evolving transition KB
+data/jobs_kb.json                  ~80 occupation profiles (curated + LLM-generated)
+data/query_seed.json               115+ calibration seed queries (EN + zh)
+data/transition_eval_cache.json    Cached LLM transition feasibility scores
 bots/                      Telegram + Discord crowd bots
 docs/BOTS.md               Bot setup
 paths.py              PROJECT_ROOT (import bootstrap)
 forecast_system.md    Forecasting system prompt (economic theory grounding)
-tests/                Offline harness: crowd, evolution, registry
+tests/                Offline harness: 190 tests, zero network (HR-1)
 docs/PRD.md           Product requirements (Harness invariants)
 docs/DP.md            Design proposal
 docs/MCP.md           MCP server setup (Cursor / Claude Desktop)
