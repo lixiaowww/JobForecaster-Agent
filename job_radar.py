@@ -531,8 +531,14 @@ def compute_transition_paths(
     max_retrain_months: int | None = None,
     job_radar_cfg: dict | None = None,
 ) -> list[dict]:
-    """Derive transition targets live from skill-vector distance, risk reduction
-    and scenario-driven demand — instead of reading static ``transition_targets``.
+    """Derive transition targets from KB-curated hints (when available) or dynamic
+    skill-vector distance, risk reduction and scenario-driven demand.
+
+    When ``current_job`` has ``transition_targets`` entries covering at least
+    ``top_k`` slots, those IDs form the candidate pool so that human-validated
+    paths are surface first.  Dynamic scoring still runs on the pool so results
+    remain scenario-responsive.  For jobs without curated targets the algorithm
+    falls back to the full job list (excluding ``at_risk`` roles).
 
     Returns detail dicts compatible with the radar transition cards, with extra
     transparency fields (skill_distance, transition_score, demand_outlook).
@@ -562,20 +568,44 @@ def compute_transition_paths(
     d_min, d_max = (min(demands), max(demands)) if demands else (0.0, 1.0)
     d_span = (d_max - d_min) or 1.0
 
+    # Build candidate pool: KB-curated targets take priority when there are enough
+    # to fill top_k; otherwise fall through to the full dynamic pool.
+    curated_entries = current_job.get("transition_targets") or []
+    curated_by_id: dict[str, dict] = {
+        ce["target_id"]: ce for ce in curated_entries if ce.get("target_id")
+    }
+    job_by_id = {j["id"]: j for j in all_jobs}
+
+    if len(curated_by_id) >= top_k:
+        # Curated pool first; pad with dynamic candidates if more are needed
+        curated_jobs = [job_by_id[tid] for tid in curated_by_id if tid in job_by_id]
+        dynamic_jobs = [
+            j for j in all_jobs
+            if j.get("id") not in curated_by_id
+            and j.get("id") != current_job.get("id")
+            and j.get("category") != "at_risk"
+        ]
+        pool = curated_jobs + dynamic_jobs
+    else:
+        curated_by_id = {}  # not enough curated → full dynamic
+        pool = [j for j in all_jobs if j.get("id") != current_job.get("id")]
+
     candidates = []
-    for tgt in all_jobs:
+    for tgt in pool:
         if tgt.get("id") == current_job.get("id"):
             continue
         # Don't recommend jumping into another high-displacement (dying) role.
         if tgt.get("category") == "at_risk":
             continue
 
+        tid = tgt.get("id", "")
+        is_curated = tid in curated_by_id
         dist = _skill_distance(current_job, tgt)
         proximity = 1.0 - dist
         jacc = _skill_jaccard(current_job, tgt)
         tgt_risk = float(tgt.get("displacement_risk") or 0.0)
         risk_reduction = max(0.0, cur_risk - tgt_risk)
-        demand_raw = impact_by_id.get(tgt["id"], 0.0)
+        demand_raw = impact_by_id.get(tid, 0.0)
         demand_norm = (demand_raw - d_min) / d_span
 
         score = (
@@ -584,12 +614,23 @@ def compute_transition_paths(
             + w["risk"] * risk_reduction
             + w["demand"] * demand_norm
         )
-        retrain_months = int(round(3 + 21 * dist))
-        if retrain_months > retrain_cap:
-            continue
+        # KB-curated targets bypass the retrain cap and use the KB's time estimate.
+        curated_hint = curated_by_id.get(tid, {})
+        if is_curated:
+            retrain_months = int(curated_hint.get("retrain_months") or round(3 + 21 * dist))
+        else:
+            retrain_months = int(round(3 + 21 * dist))
+            if retrain_months > retrain_cap:
+                continue
+
+        # Prefer KB skill bridge text over computed gap when available.
+        kb_bridge = curated_hint.get("skill_bridge", "")
+        bridge_skills = (
+            [kb_bridge] if kb_bridge else _skill_gap(current_job, tgt)
+        )
 
         candidates.append({
-            "id": tgt["id"],
+            "id": tid,
             "title": tgt.get("title"),
             "title_zh": tgt.get("title_zh"),
             "industry": tgt.get("industry"),
@@ -604,13 +645,14 @@ def compute_transition_paths(
             "current_displacement_risk": cur_risk,
             "target_displacement_risk": tgt_risk,
             "demand_outlook": round(demand_raw, 3),
-            # Retraining time scales with skill distance: 3..24 months.
             "retrain_months": retrain_months,
-            "skill_bridge_skills": _skill_gap(current_job, tgt),
+            "skill_bridge_skills": bridge_skills,
             "required_skills_preview": tgt.get("required_skills", [])[:2],
         })
 
     candidates.sort(key=lambda c: c["transition_score"], reverse=True)
+    # Surface curated candidates first (stable-sort tie-breaking).
+    candidates.sort(key=lambda c: c["id"] not in curated_by_id)
     return candidates[:top_k]
 
 

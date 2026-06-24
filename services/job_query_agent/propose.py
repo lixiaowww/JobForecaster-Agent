@@ -26,8 +26,13 @@ class CalibrationProposal:
 
 
 def _slug(text: str) -> str:
-    s = re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")
-    return s[:48] or "query"
+    # Keep ASCII alphanumeric; replace non-ASCII runs with a short hash so that
+    # CJK queries (e.g. 人工智能工程师) don't all collapse to "query".
+    ascii_part = re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")[:40]
+    if ascii_part:
+        return ascii_part
+    import hashlib
+    return "q_" + hashlib.md5(text.encode()).hexdigest()[:8]
 
 
 def propose_from_verdict(

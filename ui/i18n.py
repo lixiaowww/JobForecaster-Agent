@@ -407,8 +407,16 @@ The agent's goal is to stay well below 0.25 — the "coin-flip" baseline.""",
         "zh": "AI 估算岗位不展示高风险列——知识库搜索相关度无意义。请查看下方转型路径。",
     },
     "radar_matrix_at_risk_anchor_skip": {
-        "en": "At-risk column hidden while a search anchor is set — Logistics and similar roles are **not** related to your query (weak text scores < 0.42). See **transition paths** below for career options from your anchor role.",
-        "zh": "已设搜索锚定岗位时不展示高风险列——物流调度等岗位与您的查询**无关**（文本相关度 < 0.42）。请查看下方**转型路径**了解从锚定岗位出发的职业选项。",
+        "en": "At-risk column hidden — unrelated roles would appear here due to low text scores. See **Transition Paths** below.",
+        "zh": "已隐藏高风险列——文本相关度低的无关岗位会误导显示。请查看下方**转型路径**。",
+    },
+    "radar_your_role": {
+        "en": "Your searched role",
+        "zh": "您搜索的职位",
+    },
+    "radar_impact_score": {
+        "en": "AI impact",
+        "zh": "AI 影响",
     },
     "radar_match_tier_weak": {
         "en": "Weak text match for «{q}»: **{title}** (relevance {sim:.2f}). "

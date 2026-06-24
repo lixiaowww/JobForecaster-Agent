@@ -60,6 +60,9 @@
         "retrain_months": 8,
         "salary_delta": 0.12
       }
+    ],
+    "search_aliases": [
+      "loan analyst"
     ]
   },
   {
@@ -123,6 +126,10 @@
         "retrain_months": 4,
         "salary_delta": 0.18
       }
+    ],
+    "search_aliases": [
+      "financial advisor",
+      "investment advisor"
     ]
   },
   {
@@ -186,6 +193,10 @@
         "retrain_months": 3,
         "salary_delta": 0.17
       }
+    ],
+    "search_aliases": [
+      "risk analyst",
+      "risk manager"
     ]
   },
   {
@@ -249,6 +260,10 @@
         "retrain_months": 4,
         "salary_delta": 0.1
       }
+    ],
+    "search_aliases": [
+      "algorithmic trader",
+      "quant trader"
     ]
   },
   {
@@ -312,6 +327,9 @@
         "retrain_months": 4,
         "salary_delta": 0.1
       }
+    ],
+    "search_aliases": [
+      "ai compliance officer"
     ]
   },
   {
@@ -391,7 +409,8 @@
       "frontend developer",
       "程序员",
       "软件开发",
-      "开发工程师"
+      "开发工程师",
+      "web developer"
     ],
     "industry": "Tech",
     "category": "transforming",
@@ -433,22 +452,22 @@
     ],
     "transition_targets": [
       {
-        "target_id": "mfg_roboticist",
-        "skill_bridge": "Develop proficiency in Robot Operating System (ROS), Cobot Teach Pendant Programming to transition into the Collaborative Robot (Cobot) Integrator role.",
+        "target_id": "tech_data_scientist",
+        "skill_bridge": "Extend into statistical modelling, experiment design, and causal inference; leverage existing Python and API skills.",
         "retrain_months": 4,
-        "salary_delta": 0.18
-      },
-      {
-        "target_id": "edu_ai_learning_guide",
-        "skill_bridge": "Develop proficiency in Instructional System Design (ISD), Adaptive Learning Algorithms to transition into the AI Learning Experience Designer role.",
-        "retrain_months": 4,
-        "salary_delta": 0.18
+        "salary_delta": 0.1
       },
       {
         "target_id": "tech_prompt_eng",
         "skill_bridge": "Develop proficiency in Prompt Design Patterns, Vector Database Operations to transition into the Prompt Engineer & LLM Specialist role.",
         "retrain_months": 5,
         "salary_delta": 0.19
+      },
+      {
+        "target_id": "tech_ai_infra_eng",
+        "skill_bridge": "Build on system architecture and API design skills; add Kubernetes orchestration, GPU cluster management, and distributed storage.",
+        "retrain_months": 6,
+        "salary_delta": 0.22
       }
     ]
   },
@@ -529,7 +548,9 @@
     "search_aliases": [
       "data science",
       "machine learning scientist",
-      "数据科学"
+      "数据科学",
+      "ml engineer",
+      "machine learning engineer"
     ],
     "industry": "Tech",
     "category": "transforming",
@@ -783,6 +804,10 @@
         "retrain_months": 8,
         "salary_delta": 0.12
       }
+    ],
+    "search_aliases": [
+      "qa engineer",
+      "quality assurance"
     ]
   },
   {
@@ -846,6 +871,9 @@
         "retrain_months": 3,
         "salary_delta": 0.1
       }
+    ],
+    "search_aliases": [
+      "mlops engineer"
     ]
   },
   {
@@ -1035,6 +1063,10 @@
         "retrain_months": 8,
         "salary_delta": 0.12
       }
+    ],
+    "search_aliases": [
+      "assembly worker",
+      "factory worker"
     ]
   },
   {
@@ -1161,6 +1193,9 @@
         "retrain_months": 3,
         "salary_delta": 0.1
       }
+    ],
+    "search_aliases": [
+      "robotics engineer"
     ]
   },
   {
@@ -1287,6 +1322,9 @@
         "retrain_months": 3,
         "salary_delta": 0.1
       }
+    ],
+    "search_aliases": [
+      "digital twin engineer"
     ]
   },
   {
@@ -1350,6 +1388,9 @@
         "retrain_months": 7,
         "salary_delta": 0.11
       }
+    ],
+    "search_aliases": [
+      "cnc operator"
     ]
   },
   {
@@ -1413,6 +1454,9 @@
         "retrain_months": 4,
         "salary_delta": 0.0
       }
+    ],
+    "search_aliases": [
+      "医生"
     ]
   },
   {
@@ -1727,6 +1771,10 @@
         "retrain_months": 3,
         "salary_delta": 0.0
       }
+    ],
+    "search_aliases": [
+      "doctor",
+      "physician"
     ]
   },
   {
@@ -1790,6 +1838,9 @@
         "retrain_months": 4,
         "salary_delta": 0.0
       }
+    ],
+    "search_aliases": [
+      "教师"
     ]
   },
   {
@@ -1853,6 +1904,10 @@
         "retrain_months": 3,
         "salary_delta": 0.18
       }
+    ],
+    "search_aliases": [
+      "curriculum designer",
+      "instructional designer"
     ]
   },
   {
@@ -1979,6 +2034,9 @@
         "retrain_months": 3,
         "salary_delta": 0.1
       }
+    ],
+    "search_aliases": [
+      "ux designer"
     ]
   },
   {
@@ -2105,6 +2163,10 @@
         "retrain_months": 7,
         "salary_delta": 0.11
       }
+    ],
+    "search_aliases": [
+      "legal assistant",
+      "律师"
     ]
   },
   {
@@ -2357,6 +2419,9 @@
         "retrain_months": 3,
         "salary_delta": 0.0
       }
+    ],
+    "search_aliases": [
+      "attorney"
     ]
   },
   {
@@ -2420,6 +2485,9 @@
         "retrain_months": 10,
         "salary_delta": 0.14
       }
+    ],
+    "search_aliases": [
+      "warehouse worker"
     ]
   },
   {
@@ -2483,6 +2551,9 @@
         "retrain_months": 7,
         "salary_delta": 0.11
       }
+    ],
+    "search_aliases": [
+      "logistics coordinator"
     ]
   },
   {
@@ -2672,6 +2743,9 @@
         "retrain_months": 9,
         "salary_delta": 0.12
       }
+    ],
+    "search_aliases": [
+      "truck driver"
     ]
   },
   {
@@ -3239,6 +3313,9 @@
       "BLS: Construction Managers",
       "O*NET 47-1011.00 - First-Line Supervisors of Construction Trades",
       "McKinsey Global Institute: Reinventing Construction"
+    ],
+    "search_aliases": [
+      "construction manager"
     ]
   },
   {
@@ -4058,6 +4135,10 @@
       "BLS: Substance Abuse, Behavioral Disorder, and Mental Health Counselors",
       "O*NET 21-1014.00 - Mental Health Counselors",
       "WHO: Mental Health Atlas 2023"
+    ],
+    "search_aliases": [
+      "mental health counselor",
+      "therapist"
     ]
   },
   {
@@ -4122,6 +4203,10 @@
       "O*NET 29-1141.00 - Registered Nurses",
       "WHO: Palliative Care Fact Sheet",
       "NHPCO: Facts and Figures on Hospice Care"
+    ],
+    "search_aliases": [
+      "registered nurse",
+      "护士"
     ]
   },
   {
@@ -4185,6 +4270,9 @@
       "BLS: Special Education Teachers",
       "O*NET 25-2051.00 - Special Education Teachers",
       "UNESCO: Inclusive Education Policy Guide"
+    ],
+    "search_aliases": [
+      "teacher"
     ]
   },
   {
@@ -4311,6 +4399,579 @@
       "BLS: Cargo and Freight Agents",
       "O*NET 43-5011.00 - Cargo and Freight Agents",
       "NCBFAA: Licensed Customs Broker Industry Outlook"
+    ]
+  },
+  {
+    "id": "accountant",
+    "title": "Accountant",
+    "title_zh": "会计师",
+    "industry": "Finance",
+    "category": "at_risk",
+    "description": "An accountant prepares and examines financial records, ensures accuracy and compliance with laws and regulations. AI-powered accounting software has increased efficiency but also displaces some accounting tasks. However, high-level accounting tasks requiring expertise and judgment are less likely to be automated.",
+    "description_zh": "会计师准备和审查财务记录，确保准确性和遵守法律法规。人工智能会计软件提高了效率，但也取代了一些会计任务。然而，需要专长和判断力的高级会计任务不太可能被自动化。",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": -0.2,
+      "oring_leverage": 0.6,
+      "skill_distance": -0.3,
+      "diffusion_years": 0.5,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.7,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": 0.1,
+    "displacement_risk": 0.6,
+    "required_skills": [
+      "financial analysis",
+      "accounting software",
+      "tax law",
+      "auditing"
+    ],
+    "skill_vector": [
+      0.8,
+      0.4,
+      0.6,
+      0.7,
+      0.3,
+      0.5,
+      0.2,
+      0.9
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "Gartner"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "fin_credit_analyst",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      }
+    ],
+    "search_aliases": [
+      "会计"
+    ]
+  },
+  {
+    "id": "civil_engineer",
+    "title": "Civil Engineer",
+    "title_zh": "土木工程师",
+    "industry": "Construction",
+    "category": "transforming",
+    "description": "Civil engineers design and develop infrastructure projects such as roads, bridges, and buildings. AI is increasingly used in civil engineering for tasks like structural analysis and design optimization, but human expertise is still required for complex decision-making and on-site management. As a result, civil engineers will need to adapt to new technologies and workflows.",
+    "description_zh": "土木工程师设计和开发基础设施项目，如道路、桥梁和建筑。人工智能正在土木工程领域中被用于诸如结构分析和设计优化等任务，但人类的专业知识仍然需要用于复杂的决策和现场管理。因此，土木工程师需要适应新技术和工作流程。",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": 0.2,
+      "oring_leverage": 0.1,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.5,
+      "absorbing_sector": 0.6,
+      "productivity_capture": 0.7,
+      "task_frontier_open": 0.8
+    },
+    "base_demand_trend": 0.2,
+    "displacement_risk": 0.3,
+    "required_skills": [
+      "project management",
+      "structural analysis",
+      "design optimization",
+      "collaboration"
+    ],
+    "skill_vector": [
+      0.8,
+      0.6,
+      0.7,
+      0.5,
+      0.4,
+      0.3,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "ASCE"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "con_site_foreman",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      }
+    ]
+  },
+  {
+    "id": "cloud_architect",
+    "title": "Cloud Architect",
+    "title_zh": "云计算架构师",
+    "industry": "Tech",
+    "category": "transforming",
+    "description": "Cloud architects design and build cloud computing systems for organizations, ensuring scalability, security, and efficiency. AI is increasingly used to optimize cloud resources and automate tasks, but human expertise is still required to design and manage complex systems. As a result, cloud architects must adapt to new technologies and workflows.",
+    "description_zh": "云计算架构师负责设计和构建云计算系统，确保其可扩展性、安全性和效率。人工智能正在被用于优化云资源和自动化任务，但人类的专业知识仍然需要设计和管理复杂的系统。因此，云计算架构师必须适应新技术和工作流程.",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": 0.2,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.5,
+      "absorbing_sector": 0.7,
+      "productivity_capture": 0.8,
+      "task_frontier_open": 0.9
+    },
+    "base_demand_trend": 0.3,
+    "displacement_risk": 0.2,
+    "required_skills": [
+      "cloud computing",
+      "architecture",
+      " cybersecurity",
+      "DevOps"
+    ],
+    "skill_vector": [
+      0.8,
+      0.7,
+      0.9,
+      0.6,
+      0.5,
+      0.4,
+      0.3,
+      0.2
+    ],
+    "emergence_year": null,
+    "sources": [
+      "Gartner",
+      "Forrester"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "tech_ai_infra_eng",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      },
+      {
+        "target_id": "tech_project_manager",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      }
+    ]
+  },
+  {
+    "id": "cybersecurity_analyst",
+    "title": "Cybersecurity Analyst",
+    "title_zh": "网络安全分析师",
+    "industry": "Tech",
+    "category": "transforming",
+    "description": "A cybersecurity analyst is responsible for protecting computer systems and networks from cyber threats. AI and machine learning are increasingly being used to detect and prevent cyber attacks, but human analysts are still needed to interpret results and make strategic decisions. As AI becomes more prevalent, the role of the cybersecurity analyst will evolve to focus on high-level threat analysis and mitigation strategy.",
+    "description_zh": "网络安全分析师负责保护计算机系统和网络免受网络威胁。人工智能和机器学习越来越被用于检测和防止网络攻击，但仍需要人类分析师来解释结果并做出战略决策。随着人工智能的普遍采用，网络安全分析师的角色将演变为重点进行高级威胁分析和缓解策略。",
+    "sensitivity": {
+      "augmentation_ratio": 0.5,
+      "demand_elasticity": 0.2,
+      "oring_leverage": 0.3,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.6,
+      "absorbing_sector": 0.1,
+      "productivity_capture": 0.7,
+      "task_frontier_open": 0.8
+    },
+    "base_demand_trend": 0.3,
+    "displacement_risk": 0.2,
+    "required_skills": [
+      " threat analysis",
+      "incident response",
+      "security protocols",
+      "programming"
+    ],
+    "skill_vector": [
+      0.8,
+      0.6,
+      0.7,
+      0.4,
+      0.3,
+      0.2,
+      0.1,
+      0.9
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "Cybersecurity Ventures"
+    ],
+    "transition_targets": []
+  },
+  {
+    "id": "devops_engineer",
+    "title": "DevOps Engineer",
+    "title_zh": "开发运维工程师",
+    "industry": "Tech",
+    "category": "transforming",
+    "description": "A DevOps engineer is responsible for ensuring the smooth operation of software systems, from development to deployment. AI is increasingly being used to automate testing, deployment, and monitoring, which may displace some tasks but also create new opportunities for DevOps engineers to focus on higher-level tasks. However, the need for human judgment and expertise in complex systems will continue to drive demand for skilled DevOps engineers.",
+    "description_zh": "开发运维工程师负责确保软件系统从开发到部署的顺畅运行。人工智能正越来越被用于自动化测试、部署和监控，这可能会取代一些任务，但也会为开发运维工程师创造新的机会，让他们集中于更高层次的任务。然而，在复杂系统中对人类判断和专长的需求将继续推动对具备技能的开发运维工程师的需求。",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": 0.2,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.5,
+      "absorbing_sector": 0.7,
+      "productivity_capture": 0.8,
+      "task_frontier_open": 0.9
+    },
+    "base_demand_trend": 0.3,
+    "displacement_risk": 0.2,
+    "required_skills": [
+      "cloud_computing",
+      "containerization",
+      "continuous_integration",
+      "programming_languages"
+    ],
+    "skill_vector": [
+      0.8,
+      0.7,
+      0.9,
+      0.6,
+      0.5,
+      0.4,
+      0.3,
+      0.2
+    ],
+    "emergence_year": null,
+    "sources": [
+      "Gartner",
+      "Forrester",
+      "Dice"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "tech_ai_infra_eng",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      },
+      {
+        "target_id": "cloud_architect",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      },
+      {
+        "target_id": "cybersecurity_analyst",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      }
+    ]
+  },
+  {
+    "id": "lawyer",
+    "title": "Lawyer",
+    "title_zh": "律师",
+    "industry": "Legal",
+    "category": "transforming",
+    "description": "Lawyers provide legal advice and representation to clients, with AI augmenting research and documentation tasks. However, complex decision-making and human judgment remain essential skills. AI may displace some routine tasks, but not the entire profession.",
+    "description_zh": "律师为客户提供法律建议和代表，人工智能可以辅助研究和文档工作。但是，复杂决策和人类判断仍然是必备技能。人工智能可能会取代一些常规任务，但不会取代整个职业。",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": -0.2,
+      "oring_leverage": 0.1,
+      "skill_distance": 0.6,
+      "diffusion_years": 0.3,
+      "absorbing_sector": 0.2,
+      "productivity_capture": 0.5,
+      "task_frontier_open": 0.8
+    },
+    "base_demand_trend": 0.1,
+    "displacement_risk": 0.25,
+    "required_skills": [
+      "critical thinking",
+      "communication",
+      "problem solving",
+      "legal knowledge"
+    ],
+    "skill_vector": [
+      0.8,
+      0.7,
+      0.9,
+      0.6,
+      0.4,
+      0.3,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "ABA"
+    ],
+    "transition_targets": [],
+    "search_aliases": [
+      "lawyer",
+      "律师"
+    ]
+  },
+  {
+    "id": "marketing_manager",
+    "title": "Marketing Manager",
+    "title_zh": "营销经理",
+    "industry": "Retail",
+    "category": "transforming",
+    "description": "The marketing manager is responsible for developing and implementing marketing strategies to reach target audiences. AI is increasingly used in marketing to analyze customer data and create personalized campaigns. However, human judgment and creativity are still essential in marketing, making it a transforming role.",
+    "description_zh": "营销经理负责开发和实施营销策略以达到目标受众。人工智能在营销中越来越多地用于分析客户数据和创建个性化的活动。但是，人类的判断和创造力在营销中仍然至关重要，因此这是一个转型的角色。",
+    "sensitivity": {
+      "augmentation_ratio": 0.5,
+      "demand_elasticity": 0.2,
+      "oring_leverage": 0.1,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.4,
+      "absorbing_sector": 0.2,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.5
+    },
+    "base_demand_trend": 0.1,
+    "displacement_risk": 0.4,
+    "required_skills": [
+      "marketing strategy",
+      "data analysis",
+      "creative writing",
+      "project management"
+    ],
+    "skill_vector": [
+      0.6,
+      0.4,
+      0.7,
+      0.3,
+      0.5,
+      0.2,
+      0.8,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "Gartner"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "tech_data_scientist",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      }
+    ]
+  },
+  {
+    "id": "mechanical_engineer",
+    "title": "Mechanical Engineer",
+    "title_zh": "机械工程师",
+    "industry": "Manufacturing",
+    "category": "transforming",
+    "description": "Mechanical engineers design, build, and test mechanical systems, but AI is increasingly used to optimize design and simulation, potentially augmenting their work. AI-powered tools can analyze complex systems and provide insights, reducing the need for human intervention in some tasks. However, mechanical engineers will still be needed to interpret results and make high-level decisions.",
+    "description_zh": "机械工程师负责设计、建造和测试机械系统，但是人工智能越来越多地被用于优化设计和模拟，可能会增强他们的工作。人工智能工具可以分析复杂系统并提供见解，减少对人工干预的需求。但是，机械工程师仍然需要解释结果并做出高级决策。",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": 0.2,
+      "oring_leverage": 0.1,
+      "skill_distance": -0.3,
+      "diffusion_years": 0.5,
+      "absorbing_sector": 0.2,
+      "productivity_capture": 0.4,
+      "task_frontier_open": 0.6
+    },
+    "base_demand_trend": 0.1,
+    "displacement_risk": 0.25,
+    "required_skills": [
+      "mathematics",
+      "physics",
+      "programming",
+      "problem_solving"
+    ],
+    "skill_vector": [
+      0.8,
+      0.7,
+      0.6,
+      0.5,
+      0.4,
+      0.3,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "O*NET"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "mfg_roboticist",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      },
+      {
+        "target_id": "tech_data_scientist",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      }
+    ]
+  },
+  {
+    "id": "sales_representative",
+    "title": "Sales Representative",
+    "title_zh": "销售代表",
+    "industry": "Retail",
+    "category": "at_risk",
+    "description": "Sales representatives work with customers to understand their needs and provide them with suitable products or services. AI-powered sales tools and chatbots are increasingly being used to automate parts of the sales process, potentially displacing some sales representatives. However, human sales representatives can still provide personalized service and build relationships with customers.",
+    "description_zh": "销售代表与客户合作，了解他们的需求，并为他们提供合适的产品或服务。 人工智能销售工具和聊天机器人越来越被用于自动销售流程的某些部分，可能会取代一些销售代表。 然而，人类销售代表仍然可以提供个性化服务，并与客户建立关系。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": 0.1,
+      "oring_leverage": 0.5,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.6,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.7,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": 0.1,
+    "displacement_risk": 0.6,
+    "required_skills": [
+      "communication",
+      "negotiation",
+      "problem_solving",
+      "relationship_building"
+    ],
+    "skill_vector": [
+      0.8,
+      0.7,
+      0.6,
+      0.9,
+      0.4,
+      0.3,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "Gartner"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "marketing_manager",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      }
+    ]
+  },
+  {
+    "id": "ai_engineer",
+    "title": "AI Engineer",
+    "title_zh": "人工智能工程师",
+    "industry": "Tech",
+    "category": "emerging",
+    "description": "AI engineers design and develop artificial intelligence systems, including machine learning models and natural language processing algorithms. They apply AI techniques to solve complex problems in various industries. AI engineers are in high demand due to the rapid growth of AI adoption across sectors.",
+    "description_zh": "人工智能工程师设计和开发人工智能系统，包括机器学习模型和自然语言处理算法。他们将人工智能技术应用于解决各个行业中的复杂问题。由于人工智能在各个领域的快速采用，人工智能工程师需求量很大。",
+    "sensitivity": {
+      "augmentation_ratio": 0.8,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.4,
+      "skill_distance": 0.2,
+      "diffusion_years": 0.5,
+      "absorbing_sector": 0.6,
+      "productivity_capture": 0.9,
+      "task_frontier_open": 0.8
+    },
+    "base_demand_trend": 0.4,
+    "displacement_risk": 0.1,
+    "required_skills": [
+      "Machine Learning",
+      "Deep Learning",
+      "Natural Language Processing",
+      "Python"
+    ],
+    "skill_vector": [
+      0.9,
+      0.8,
+      0.7,
+      0.6,
+      0.5,
+      0.4,
+      0.3,
+      0.2
+    ],
+    "emergence_year": 2028,
+    "sources": [
+      "BLS",
+      "Gartner"
+    ],
+    "transition_targets": [],
+    "search_aliases": [
+      "人工智能工程师"
+    ]
+  },
+  {
+    "id": "data_engineer",
+    "title": "Data Engineer",
+    "title_zh": "数据工程师",
+    "industry": "Tech",
+    "category": "transforming",
+    "description": "A data engineer designs, builds, and maintains large-scale data systems, with AI increasingly being used to automate data processing and analysis. However, the role still requires human expertise to ensure data quality and develop AI models. Data engineers work with various tools and technologies to enable data-driven decision-making.",
+    "description_zh": "数据工程师设计、构建和维护大规模数据系统，人工智能越来越被用于自动化数据处理和分析。然而，数据工程师仍然需要人工专家来确保数据质量和开发人工智能模型。数据工程师使用各种工具和技术来实现数据驱动的决策。",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": 0.2,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.5,
+      "absorbing_sector": 0.8,
+      "productivity_capture": 0.7,
+      "task_frontier_open": 0.9
+    },
+    "base_demand_trend": 0.3,
+    "displacement_risk": 0.2,
+    "required_skills": [
+      "Data Warehousing",
+      "ETL",
+      "NoSQL",
+      "Cloud Computing"
+    ],
+    "skill_vector": [
+      0.8,
+      0.6,
+      0.4,
+      0.7,
+      0.9,
+      0.5,
+      0.3,
+      0.2
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "Indeed"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "tech_data_scientist",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      },
+      {
+        "target_id": "cloud_architect",
+        "skill_bridge": null,
+        "retrain_months": null,
+        "salary_delta": null
+      }
+    ],
+    "search_aliases": [
+      "数据工程师"
     ]
   }
 ]

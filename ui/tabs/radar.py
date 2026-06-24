@@ -267,6 +267,30 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         with col_risk:
             st.markdown(f"#### {t('radar_at_risk')}")
             if anchor_job and search_query:
+                # Show the anchor job's own risk card so the user understands their role's status.
+                aj = anchor_job
+                aj_imp = aj.get("impact_score", 0.0)
+                aj_cat = aj.get("category", "transforming")
+                if aj_cat == "at_risk":
+                    cat_color, cat_label = "#ff5555", t("status_high_disp")
+                elif aj_cat == "transforming":
+                    cat_color, cat_label = "#ffaa55", t("status_transforming")
+                else:
+                    cat_color, cat_label = "#55ff55", t("status_emerging")
+                st.markdown(f"""
+                <div class="metric-card" style="text-align: left; margin-bottom: 0.8rem; border-color: #333a44; background: rgba(22,27,34,0.6);">
+                    <div style="font-size:0.7rem;color:#8b949e !important;margin-bottom:0.3rem;">{t('radar_your_role')}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4 style="margin: 0; font-size: 1.1rem; color: #c9d1d9 !important;">{job_title(aj)}</h4>
+                        <span style="font-weight: bold; color: {cat_color};">{cat_label}</span>
+                    </div>
+                    <p style="font-size: 0.9rem; margin: 0.4rem 0; color: #8b949e !important; line-height: 1.4;">{job_description(aj)}</p>
+                    <div style="font-size: 0.8rem; color: #8b949e !important; padding-top: 0.3rem; border-top: 1px solid #30363d;">
+                        <strong>{t('lbl_displacement')}:</strong> {aj.get('displacement_risk', 0.0) * 100:.0f}%
+                        &nbsp;·&nbsp; <strong>{t('radar_impact_score')}:</strong> {aj_imp:+.2f}
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
                 st.caption(t("radar_matrix_at_risk_anchor_skip"))
             elif anchor_from_llm and search_query:
                 st.caption(t("radar_matrix_at_risk_skipped"))
