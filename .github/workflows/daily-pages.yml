@@ -91,6 +91,26 @@ jobs:
             git push origin HEAD:main
           fi
 
+      - name: Job query calibration loop (Phase 9)
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          if [ -z "$GROQ_API_KEY" ]; then
+            echo "No GROQ_API_KEY — alias/title auto-apply only; kb_profile_new uses LLM cache if present."
+          else
+            echo "Groq available — kb_profile_new may call LLM for high-traffic KB gaps (≥3 log hits)."
+          fi
+          python run.py query-agent run --config config.yaml
+          git add data/jobs_kb.json config.yaml data/radar_search_log.jsonl pending/job_calibration/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No KB/config calibration changes to commit."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "chore(query-agent): auto-apply search calibration"
+            git push origin HEAD:main
+          fi
+
       - name: Verify static site output
         run: |
           test -f site/index.html

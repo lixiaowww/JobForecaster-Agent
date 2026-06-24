@@ -16,7 +16,11 @@
   python run.py warmup               # import predictions_live.jsonl → DB (cache-miss recovery)
   python run.py warmup --src path.jsonl
   python run.py query-agent audit    # Phase 9: job search calibration audit (CI)
-  python run.py query-agent once     # audit + JSON summary (non-failing weak gaps)
+  python run.py query-agent once     # audit + queue proposals (non-auto)
+  python run.py query-agent run      # discover → evaluate → auto-apply safe fixes
+  python run.py query-agent run --dry-run
+  python run.py query-agent apply    # merge approved pending/job_calibration/*.json
+  python run.py query-agent ingest-logs path.jsonl  # merge HF/Radar search export
 """
 from __future__ import annotations
 
@@ -52,6 +56,7 @@ def load_config(path: str | None = None) -> dict:
     cfg.setdefault("require_review", True)
     cfg.setdefault("evolution", {"n_bootstrap": 50})
     cfg.setdefault("mock_llm", False)
+    cfg["_config_path"] = str(cfg_path.resolve())
     return cfg
 
 
@@ -146,15 +151,21 @@ def cmd_verify_export(
     print(f"verify-export OK ({len(db_live)} live prediction(s) in sync)")
 
 
-def cmd_query_agent(cfg, *, subcmd: str = "audit"):
+def cmd_query_agent(
+    cfg,
+    *,
+    subcmd: str = "audit",
+    dry_run: bool = False,
+    extra_args: list[str] | None = None,
+):
     from services.job_query_agent.audit import run_audit
 
+    extra_args = extra_args or []
     agent_cfg = cfg.setdefault("job_query_agent", {})
     if subcmd == "audit":
         summary = run_audit(cfg, write_traces=True, queue_proposals=False)
         print(json.dumps(summary, indent=2))
     elif subcmd == "once":
-        # Informational run: still fails on P0 regression, logs gaps without CI noise
         fail_weak = agent_cfg.get("evaluate", {}).get("fail_on_weak_core", True)
         agent_cfg.setdefault("evaluate", {})["fail_on_weak_core"] = fail_weak
         try:
@@ -163,6 +174,30 @@ def cmd_query_agent(cfg, *, subcmd: str = "audit"):
             print(str(exc), file=sys.stderr)
             sys.exit(1)
         print(json.dumps(summary, indent=2))
+    elif subcmd == "run":
+        from services.job_query_agent.loop import run_calibration_cycle
+
+        summary = run_calibration_cycle(cfg, write_traces=True, dry_run=dry_run)
+        print(json.dumps(summary, indent=2))
+        if summary["final"]["p0_regressions"] > 0:
+            sys.exit(1)
+    elif subcmd == "apply":
+        from services.job_query_agent.apply import run_apply_pending
+
+        ids = [a for a in extra_args if not a.startswith("-")]
+        summary = run_apply_pending(cfg, dry_run=dry_run, proposal_ids=ids or None)
+        print(json.dumps(summary, indent=2))
+    elif subcmd == "ingest-logs":
+        from services.job_query_agent.search_log import merge_search_logs
+
+        if not extra_args:
+            print("usage: query-agent ingest-logs <path.jsonl>", file=sys.stderr)
+            sys.exit(2)
+        log_path = agent_cfg.get("discover", {}).get(
+            "search_log_path", "data/radar_search_log.jsonl",
+        )
+        merged = merge_search_logs(extra_args[0], log_path)
+        print(json.dumps({"merged": merged, "dest": log_path}, indent=2))
     else:
         print(f"unknown query-agent subcommand: {subcmd}", file=sys.stderr)
         sys.exit(2)
@@ -247,7 +282,8 @@ def main():
         cmd_warmup(cfg, src)
     elif cmd == "query-agent":
         sub = args[1] if len(args) > 1 else "audit"
-        cmd_query_agent(cfg, subcmd=sub)
+        extra = args[2:] if len(args) > 2 else []
+        cmd_query_agent(cfg, subcmd=sub, dry_run=dry_run_flag, extra_args=extra)
     else:
         print(__doc__)
         sys.exit(1)

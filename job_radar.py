@@ -171,14 +171,16 @@ _QUERY_TITLE_ALIASES: dict[str, str] = {
 }
 
 
-def normalize_search_query(query: str) -> str:
+def normalize_search_query(query: str, search_cfg: dict | None = None) -> str:
     """Map high-traffic alternate titles to canonical KB search phrases."""
     q = (query or "").strip()
     if not q:
         return q
+    cfg = search_cfg or _DEFAULT_SEARCH_CONFIG
+    aliases = cfg.get("title_aliases") or _QUERY_TITLE_ALIASES
     key = q.lower()
-    if key in _QUERY_TITLE_ALIASES:
-        return _QUERY_TITLE_ALIASES[key]
+    if key in aliases:
+        return aliases[key]
     return q
 
 
@@ -216,6 +218,7 @@ _DEFAULT_SEARCH_CONFIG: dict = {
     "tier_no_match": 0.42,
     "tier_weak": 0.55,
     "tier_strong": 0.65,
+    "title_aliases": {},
 }
 
 _DEFAULT_TRANSITION_CONFIG: dict = {
@@ -242,7 +245,10 @@ _STRONG_MATCH_THRESHOLD = _DEFAULT_SEARCH_CONFIG["tier_weak"]
 def resolve_search_config(job_radar_cfg: dict | None = None) -> dict:
     """Merge ``config.yaml`` → ``job_radar.search`` with offline-safe defaults."""
     cfg = job_radar_cfg or {}
-    return {**_DEFAULT_SEARCH_CONFIG, **cfg.get("search", {})}
+    merged = {**_DEFAULT_SEARCH_CONFIG, **cfg.get("search", {})}
+    file_aliases = dict(merged.get("title_aliases") or {})
+    merged["title_aliases"] = {**_QUERY_TITLE_ALIASES, **file_aliases}
+    return merged
 
 
 def resolve_transition_config(job_radar_cfg: dict | None = None) -> dict:
@@ -304,7 +310,8 @@ def _apply_search_scores(
     embedder=None,
     search_cfg: dict | None = None,
 ) -> list[dict]:
-    query = normalize_search_query(query)
+    cfg = search_cfg or _DEFAULT_SEARCH_CONFIG
+    query = normalize_search_query(query, cfg)
     if embedder is None:
         embedder = _default_embedder()
     q_emb = embedder.embed([query])[0]
@@ -732,8 +739,8 @@ def find_best_match(
     if not jobs or not query:
         return 0.0, None
 
-    query = normalize_search_query(query)
     cfg = search_cfg or _DEFAULT_SEARCH_CONFIG
+    query = normalize_search_query(query, cfg)
     if embedder is None:
         embedder = _default_embedder()
 
@@ -822,7 +829,7 @@ def get_cached_job_profile(query: str, path: str | None = None) -> dict | None:
     return _load_llm_cache(path).get(sig)
 
 
-def generate_job_profile_via_llm(query: str) -> dict | None:
+def generate_job_profile_via_llm(query: str, *, kb_path: str = "data/jobs_kb.json") -> dict | None:
     """Use the LLM to generate a full KB-compatible job profile for an unknown role.
 
     Returns a dict matching the KB schema, or None on failure. Results are cached
@@ -834,7 +841,7 @@ def generate_job_profile_via_llm(query: str) -> dict | None:
     if cached is not None:
         cached = dict(cached)
         cached["_from_cache"] = True
-        _append_to_kb(cached)  # ensure KB has it (idempotent by id)
+        _append_to_kb(cached, kb_path)  # ensure KB has it (idempotent by id)
         return cached
 
     try:
@@ -904,7 +911,7 @@ Be realistic and well-calibrated with displacement_risk."""
         cache = _load_llm_cache()
         cache[_query_signature(query)] = profile
         _save_llm_cache(cache)
-        _append_to_kb(profile)
+        _append_to_kb(profile, kb_path)
 
         return profile
 

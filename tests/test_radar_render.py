@@ -45,7 +45,7 @@ class FakeStreamlit(types.ModuleType):
         pass
 
     def caption(self, *a, **k):
-        pass
+        self.markdowns.append(str(a[0]) if a else "")
 
     def info(self, *a, **k):
         pass
@@ -209,3 +209,17 @@ def test_render_with_search_query_hit(monkeypatch, cfg, prior):
     radar, fake = _install_fake(monkeypatch, search_text="financial analyst")
     radar.render(dict(ev.CURRENT_AI_SCENARIO), prior, cfg)
     assert fake.errors == []
+
+
+def test_anchored_search_hides_unrelated_at_risk(monkeypatch, cfg, prior):
+    """HR-12: strong anchor search must not list weakly-related roles in at-risk column."""
+    from ui.i18n import _STRINGS
+
+    radar, fake = _install_fake(monkeypatch, search_text="software engineer")
+    radar.render(dict(ev.CURRENT_AI_SCENARIO), prior, cfg)
+    assert fake.errors == []
+    skip = _STRINGS["radar_matrix_at_risk_anchor_skip"]["en"]
+    assert any(skip in m for m in fake.markdowns)
+    # At-risk cards use a red-tinted border; opportunity/transition cards do not.
+    at_risk_cards = [m for m in fake.markdowns if "border-color: #442222" in m]
+    assert not any("Logistics Dispatcher" in m for m in at_risk_cards)

@@ -1,7 +1,7 @@
 # Design Proposal (DP) — forecaster-agent
 
-**Version:** 0.9 (Personalized Job Radar & Search Quality)  
-**Last updated:** 2026-06-23
+**Version:** 0.10 (Job Query Calibration Agent)  
+**Last updated:** 2026-06-24
 
 Architectural design implementing [PRD.md](./PRD.md) under Harness Engineering standards.
 
@@ -29,16 +29,28 @@ forecaster-agent/
 ├── forecast.py              # LLM seam + prediction/judge
 ├── evolution.py             # case library, PCA/GMM, OOD
 ├── crowd.py                 # crowd gate
-├── job_radar.py             # hybrid RAG
+├── job_radar.py             # hybrid RAG + search retrieval + transition paths
 ├── registry.py              # SQLite registry
 ├── schemas.py               # SQLModel entities + engine
 ├── services/
-│   └── read_model.py        # read-only API seam (MCP/REST target)
+│   ├── read_model.py        # read-only API seam (MCP/REST target)
+│   └── job_query_agent/     # Phase 9: retrieval QA loop
+│       ├── discover.py
+│       ├── evaluate.py
+│       ├── propose.py
+│       ├── simulate.py
+│       ├── apply.py
+│       ├── loop.py
+│       ├── traces.py
+│       └── audit.py
 ├── dashboard.py             # Streamlit UI
 ├── tests/                   # offline harness (HR-1)
 ├── data/
 │   ├── forecaster.db
-│   └── jobs_kb.json
+│   ├── jobs_kb.json
+│   └── query_seed.json      # Phase 9 seed queries
+├── pending/
+│   └── job_calibration/     # Phase 9 human-review proposals
 └── docs/
     ├── PRD.md
     └── DP.md
@@ -207,15 +219,21 @@ combined = w_emb · cosine(q, job_text) + w_lex · lexical_overlap(q, job_text)
          + industry_only_boost         (optional, industry-only queries)
 ```
 
-Current code defaults (move to `config.yaml` in Phase 8, HR-3):
+Current defaults live in `config.yaml` → `job_radar.search.*` (HR-3, Phase 8 ✅):
 
-| Constant | Value | Meaning |
-|----------|-------|---------|
-| `w_emb` / `w_lex` | 0.45 / 0.55 | Embedder is `HashingEmbedder` in tests — **not** comparable to OpenAI cosine ~0.7 |
-| `_SIMILARITY_THRESHOLD` | 0.42 | Below → no confident KB match; LLM KB expansion path |
-| `_STRONG_MATCH_THRESHOLD` | 0.55 | Above → strong search hit banner (Phase 8: tier labels 无匹配/弱/强) |
+| Key | Default | Meaning |
+|-----|---------|---------|
+| `embed_weight` / `lex_weight` | 0.45 / 0.55 | Embedder is `RadarHashingEmbedder` (8192-dim) — **not** comparable to OpenAI cosine ~0.7 |
+| `tier_no_match` | 0.42 | Below → no confident KB match; LLM KB expansion path |
+| `tier_weak` | 0.55 | Weak tier ceiling; also `query-agent` `min_sim_after` default |
+| `tier_strong` | 0.65 | Strong search hit banner |
+| `title_aliases` | `{}` + code `_QUERY_TITLE_ALIASES` | `normalize_search_query()` merges file + built-in map |
 
-Multi-word penalty: queries with ≥2 tokens require hits on at least `max(2, ⌈n/2⌉)` tokens or score × 0.45.
+Multi-word penalty: queries with ≥2 tokens require hits on at least `max(2, ⌈n/2⌉)` tokens or score × `multi_word_penalty` (0.45).
+
+**Bilingual retrieval:** `RadarHashingEmbedder` tokenises CJK runs (`[\u4e00-\u9fff]{2,}`) alongside ASCII tokens.
+
+**Hot-role guardrail:** `CORE_HOT_ROLE_QUERIES` in `job_radar.py` — CI + query-agent audit assert each pair hits `expected_id` with `sim ≥ tier_weak`.
 
 **Not a transition recommendation.** A high `combined_similarity` only means text overlap with an occupation profile.
 
@@ -246,9 +264,9 @@ Default weights (`_TRANSITION_WEIGHTS`, override via `config.yaml` → `job_rada
 
 Filters: exclude self; exclude `category == at_risk` targets.
 
-Phase 8 personalization (planned): session profile `{experience_level, max_retrain_months}` adjusts weights and filters candidates whose `retrain_months` exceed the cap; juniors up-weight low skill-gap targets.
+Phase 8 personalization (implemented): session profile `{experience_level, max_retrain_months}` in `ui/sidebar.py` adjusts weights via `personalization_weights()` and filters candidates whose `retrain_months` exceed the cap; juniors up-weight low skill-gap targets.
 
-**UI flow (target):**
+**UI flow (implemented):**
 
 ```
 User query ──► find_best_match() ──► anchor role
@@ -260,23 +278,30 @@ User query ──► find_best_match() ──► anchor role
               transition cards (top_k)
 ```
 
-Search result lists (browse mode) should re-rank by `transition_score` **after** anchor is fixed — not by `combined_similarity` alone.
+Search result lists (browse mode) re-rank by `transition_score` **after** anchor is fixed — not by `combined_similarity` alone.
+
+**Anchored-search at-risk suppression (HR-12 UX, v0.10):**
+
+When `search_query` resolves to a strong anchor (`anchor_job` set), `ui/tabs/radar.py` clears
+`at_risk_list` — weak text scores must not show unrelated at-risk occupations (regression:
+`software engineer` → Logistics Dispatcher at sim≈0.17). User sees
+`radar_matrix_at_risk_anchor_skip` caption and transition paths from the anchor instead.
+
+Test: `tests/test_radar_render.py::test_anchored_search_hides_unrelated_at_risk`
 
 ### 7.4 Field feedback crowd (`JobFeedback`) — HR-13
 
 Separate from prediction crowd (`contribution` table + `services/crowd_service.py`).
 
-| Field | Today | Phase 8 |
-|-------|-------|---------|
-| `job_title` | ✅ KB dropdown → canonical English title | unchanged |
-| `industry`, `status`, `confidence`, `transition_target` | ✅ | unchanged |
-| `experience_level` | ❌ | ✅ `junior` \| `mid` \| `senior` (or years-in-role bucket) |
+| Field | Phase 8 |
+|-------|---------|
+| `job_title` | ✅ KB dropdown → canonical English title |
+| `industry`, `status`, `confidence`, `transition_target` | ✅ |
+| `experience_level` | ✅ `junior` \| `mid` \| `senior` |
 
 Aggregation: `get_empirical_metrics()` → `compute_field_calibration()` in `services/job_market.py`.
 
-Today: group by `job_title` only; `min_responses=5`, shrinkage, `max_delta=0.15`.
-
-Phase 8: prefer `(title, experience_level)` cell when n≥5; else fall back to title-only pool.
+Today: prefer `(title, experience_level)` cell when n≥`min_stratified_responses`; else fall back to title-only pool.
 
 Survey UI: `ui/tabs/radar.py` form — map localized labels back to canonical titles (existing pattern).
 
@@ -286,16 +311,20 @@ Survey UI: `ui/tabs/radar.py` form — map localized labels back to canonical ti
 
 ```
 tests/
-├── test_crowd.py       # gate decisions with behavioural assertions
-├── test_evolution.py   # case library, OOD, PCA determinism
-├── test_registry.py    # dedup, Brier, due(), scoreboard
+├── test_crowd.py           # gate decisions with behavioural assertions
+├── test_evolution.py       # case library, OOD, PCA determinism
+├── test_registry.py        # dedup, Brier, due(), scoreboard
+├── test_job_radar.py       # search tiers, transition paths, CORE hot roles
+├── test_job_query_agent.py # Phase 9 audit / simulate / apply / loop
+├── test_radar_render.py    # Streamlit smoke + anchored at-risk regression
 ├── test_mcp_handlers.py
-└── test_api.py         # REST /v1 via TestClient
+└── test_api.py             # REST /v1 via TestClient
 ```
 
 Run: `python -m pytest tests/ -v` — **no network, no API key**.
 
-CI: `.github/workflows/ci.yml` — Python 3.11 + 3.12 matrix.
+CI: `.github/workflows/ci.yml` — Python 3.11 + 3.12 matrix; post-pytest `query-agent audit`.
+Daily: `.github/workflows/daily-pages.yml` — forecast cycle + `query-agent run` + KB/config commit.
 
 ---
 
@@ -313,6 +342,9 @@ CI: `.github/workflows/ci.yml` — Python 3.11 + 3.12 matrix.
 | Search UI conflated with transition ranking | P1 | ✅ Phase 8 (HR-12) |
 | `JobFeedback` missing experience level | P1 | ✅ Phase 8 (HR-13) |
 | No session user profile for retrain cap | P2 | ✅ Phase 8 |
+| Hot-role search gaps caught only by user reports | P0 | ✅ Phase 9 query-agent |
+| No automated alias calibration loop | P1 | ✅ `query-agent run` + daily cron |
+| Anchored search shows unrelated at-risk roles | P1 | ✅ HR-12 UX fix + render test |
 
 ---
 
@@ -452,7 +484,7 @@ CSV download includes `origin` column on every row.
 | **HR-13** | `schemas.JobFeedback.experience_level`; survey + `get_empirical_metrics()` stratification |
 | **HR-3** | New `config.yaml` keys under `job_radar.search` and `job_radar.personalization` |
 
-### 13.2 Config schema (to add)
+### 13.2 Config schema (implemented)
 
 ```yaml
 job_radar:
@@ -462,9 +494,11 @@ job_radar:
     embed_weight: 0.45
     lex_weight: 0.55
     multi_word_penalty: 0.45
-    tier_no_match: 0.42      # was _SIMILARITY_THRESHOLD
-    tier_weak: 0.55          # was _STRONG_MATCH_THRESHOLD
-    tier_strong: 0.65        # Phase 8 audit target
+    industry_only_boost: 0.08
+    tier_no_match: 0.42
+    tier_weak: 0.55
+    tier_strong: 0.65
+    title_aliases: {}          # merged with _QUERY_TITLE_ALIASES in code
   transition:
     skill: 0.40
     overlap: 0.15
@@ -474,6 +508,7 @@ job_radar:
     junior_retrain_cap_months: 6
     mid_retrain_cap_months: 12
     senior_retrain_cap_months: 24
+    min_stratified_responses: 5
 ```
 
 ### 13.3 Experience level → transition weights (sketch)
@@ -506,11 +541,11 @@ def personalization_weights(
 
 ### 13.5 i18n keys (Phase 8)
 
-Add to `ui/i18n.py`: `radar_fb_experience`, `radar_match_tier_none`, `radar_match_tier_weak`, `radar_match_tier_strong`, `radar_profile_experience`, `radar_profile_retrain_cap`.
+Add to `ui/i18n.py`: `radar_fb_experience`, `radar_match_tier_*`, `radar_profile_*`, `radar_matrix_at_risk_anchor_skip`.
 
 ---
 
-## 14. v0.10 Design additions (Job Query Calibration Agent)
+## 14. v0.10 Design additions (Job Query Calibration Agent — implemented)
 
 ### 14.1 Module layout
 
@@ -519,38 +554,135 @@ services/job_query_agent/
 ├── discover.py    # core_hot, query_seed.json, JobFeedback titles
 ├── evaluate.py    # tier + P0 regression classification (HR-2 pure)
 ├── propose.py     # CalibrationProposal → pending/job_calibration/
-├── traces.py      # JSONL append-only
-└── audit.py       # orchestrates cycle; raises on P0 failure
+├── search_log.py  # record + aggregate Radar/HF search JSONL (P2)
+├── simulate.py    # dry-run alias/title_alias/kb_profile_new before apply
+├── apply.py       # patch KB/config; kb_profile_new via LLM cache; run_apply_pending
+├── loop.py        # multi-round discover → auto-apply → re-check
+├── traces.py      # JSONL append-only (gitignored path)
+└── audit.py       # single-pass audit; raises on P0 failure
 ```
 
-### 14.2 Audit flow
+### 14.2 Evaluation verdicts
+
+`evaluate_query(discovered, jobs)` → `QueryVerdict`:
+
+| `status` | Condition | Agent action |
+|----------|-----------|--------------|
+| `ok` | Match tier acceptable | trace only |
+| `p0_regression` | CORE query: `best_id ≠ expected_id` | **CI fail** |
+| `weak_core` | CORE query: correct id but `sim < tier_weak` | propose `alias_patch`; auto-apply if sim improves |
+| `kb_gap` | Non-core: `sim < tier_no_match` | propose `kb_profile_new` → **always queue** |
+| `weak_match` | Non-core: weak tier | propose `alias_patch` to `best_id` |
+
+### 14.3 Proposal types
+
+| type | payload | persist target | auto-apply |
+|------|---------|----------------|------------|
+| `alias_patch` | `add_aliases: [query]` | `jobs_kb.json` → `search_aliases` | ✅ gated |
+| `title_alias` | `canonical: <KB title>` | `config.yaml` → `job_radar.search.title_aliases` | ✅ gated |
+| `kb_profile_new` | `query`, `nearest_id` | `generate_job_profile_via_llm` → `jobs_kb.json` | ✅ gated (`min_search_log_occurrences`) or `query-agent apply` |
+
+### 14.4 Closed-loop flow (`loop.run_calibration_cycle`)
+
+```
+for round in 1..max_rounds:
+    jobs = load_knowledge_base()
+    for item in discover_queries(cfg):
+        verdict = evaluate_query(item, jobs)
+        append_trace(...)
+        if verdict.ok: continue
+        proposal = propose_from_verdict(verdict)
+        sim_after = simulate(proposal)
+        if can_auto_apply(sim_before, sim_after, expected_id):
+            apply_proposal()          # writes KB or config
+        else:
+            queue_proposal(pending/)  # skipped when --dry-run
+    break if no auto_applies this round
+return final audit summary (no raise; caller may exit 1 on P0)
+```
+
+`can_auto_apply` rules (`apply.py`):
+
+- `auto_apply.enabled` and `proposal.type` ∈ `auto_apply.types`
+- `sim_after ≥ min_sim_after` (default = `tier_weak`)
+- CORE: `best_id_after == expected_id`; `target_id == expected_id`
+- `alias_patch`: `sim_after > sim_before`
+
+### 14.5 Audit flow (CI — read-only)
 
 ```
 discover_queries(cfg)
     → for each query: find_best_match + search_match_tier
     → evaluate_query → append_trace
-    → optional queue_proposal (once subcommand)
-    → fail if p0_regression or weak_core (configurable)
+    → optional queue_proposal (once subcommand only)
+    → raise AssertionError if p0_regression or weak_core
 ```
 
-### 14.3 Proposal types
-
-| type | pending example | apply (P1) |
-|------|-----------------|------------|
-| `alias_patch` | add `search_aliases` | patch `jobs_kb.json` |
-| `kb_profile_new` | unknown hot query | human review + KB append |
-| `title_alias_map` | normalize map entry | `config.yaml` or `job_radar` map |
-
-### 14.4 CLI
+### 14.6 CLI
 
 ```bash
-python run.py query-agent audit   # CI: exit 1 on P0 regression
-python run.py query-agent once    # audit + queue proposals
+python run.py query-agent audit        # CI: exit 1 on P0 / weak-core
+python run.py query-agent once         # audit + queue proposals (no auto-apply)
+python run.py query-agent run          # closed loop: simulate + auto-apply safe fixes
+python run.py query-agent run --dry-run
+python run.py query-agent apply        # apply all pending/job_calibration/*.json
+python run.py query-agent ingest-logs path.jsonl   # merge HF export into search log
 ```
 
-### 14.5 Config (`config.yaml`)
+| Workflow | Step |
+|----------|------|
+| `.github/workflows/ci.yml` | `pytest` → `query-agent audit` |
+| `.github/workflows/daily-pages.yml` | `query-agent run` with `GROQ_API_KEY` → commit `jobs_kb.json` / `config.yaml` / search log |
 
-See `job_query_agent` block: `discover.*`, `evaluate.fail_on_weak_core`, `review.pending_dir`, `traces_path`.
+### 14.7 Config (`config.yaml`)
+
+```yaml
+job_query_agent:
+  enabled: true
+  traces_path: data/query_agent_traces.jsonl   # .gitignore
+  discover:
+    include_core: true
+    include_seed: true
+    seed_path: data/query_seed.json
+    include_feedback_titles: true
+    feedback_min_responses: 1
+    max_queries_per_run: 200
+  evaluate:
+    fail_on_weak_core: true
+  review:
+    require_review: true
+    pending_dir: pending/job_calibration
+  auto_apply:
+    enabled: true
+    types: [alias_patch, title_alias]
+    min_sim_after: 0.55
+    max_rounds: 3
+```
+
+`run.py load_config()` sets `cfg["_config_path"]` so `apply.py` can write title aliases back to the loaded config file.
+
+### 14.8 Test plan (offline, HR-1)
+
+| Test | Asserts |
+|------|---------|
+| `test_run_audit_passes_on_real_kb` | CORE guard green on committed KB |
+| `test_run_audit_fails_on_regression` | P0 poisons CI |
+| `test_simulate_alias_patch_improves_match` | simulate monotonic improvement |
+| `test_can_auto_apply_requires_improvement` | gate blocks no-op patches |
+| `test_run_calibration_cycle_dry_run` | loop completes without writes |
+| `test_anchored_search_hides_unrelated_at_risk` | HR-12 UX regression |
+| `test_discover_from_search_log_weighted` | P2 frequency-weighted discovery |
+| `test_run_apply_pending_kb_profile` | P3 pending → KB append |
+
+### 14.9 Search log ingest (P2)
+
+**Record:** `ui/tabs/radar.py` calls `record_search_log()` on every non-empty search (tier, `best_id`, `sim`).
+
+**Storage:** `data/radar_search_log.jsonl` (append-only JSONL; committed by daily cron when present).
+
+**Discover:** `discover_from_search_log()` — queries with `occurrences ≥ search_log_min_occurrences`, sorted by weight (frequency).
+
+**HF export:** copy Space log file → `python run.py query-agent ingest-logs export.jsonl` merges into the repo log for the next `query-agent run`.
 
 ---
 

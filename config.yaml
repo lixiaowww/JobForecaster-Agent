@@ -49,6 +49,7 @@ job_radar:
     tier_no_match: 0.42    # below → no KB anchor / LLM expansion
     tier_weak: 0.55        # informational mid-band within weak tier
     tier_strong: 0.65      # at/above → strong text match (HR-12)
+    title_aliases: {}
   transition:
     skill: 0.40
     overlap: 0.15
@@ -70,6 +71,10 @@ job_query_agent:
     seed_path: data/query_seed.json
     include_feedback_titles: true
     feedback_min_responses: 1
+    include_search_log: true
+    search_log_path: data/radar_search_log.jsonl
+    search_log_min_occurrences: 2
+    search_log_max_queries: 30
     include_variants: false
     max_queries_per_run: 200
   evaluate:
@@ -77,6 +82,19 @@ job_query_agent:
   review:
     require_review: true
     pending_dir: pending/job_calibration
+  auto_apply:
+    enabled: true
+    types:
+      - alias_patch
+      - title_alias
+      - kb_profile_new
+    min_sim_after: 0.55
+    max_rounds: 3
+    kb_profile_new:
+      enabled: true           # daily cron uses GROQ_API_KEY; CI audit does not run apply
+      min_search_log_occurrences: 3
+      allow_llm_generate: true
+      require_cache_or_llm: true
 
 # ---- job market calibration (BLS to KB displacement risk overlay) ----
 job_market:

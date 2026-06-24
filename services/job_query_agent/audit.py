@@ -49,7 +49,8 @@ def run_audit(
             })
 
         if queue_proposals and not verdict.ok:
-            proposal = propose_from_verdict(verdict)
+            jobs_by_id = {j["id"]: j for j in jobs}
+            proposal = propose_from_verdict(verdict, jobs_by_id)
             if proposal:
                 pending = agent_cfg.get("review", {}).get(
                     "pending_dir", "pending/job_calibration",

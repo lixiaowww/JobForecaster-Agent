@@ -2,5 +2,6 @@
 from __future__ import annotations
 
 from services.job_query_agent.audit import run_audit
+from services.job_query_agent.loop import run_calibration_cycle
 
-__all__ = ["run_audit"]
+__all__ = ["run_audit", "run_calibration_cycle"]

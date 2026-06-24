@@ -30,23 +30,43 @@ def _slug(text: str) -> str:
     return s[:48] or "query"
 
 
-def propose_from_verdict(verdict: QueryVerdict) -> CalibrationProposal | None:
+def propose_from_verdict(
+    verdict: QueryVerdict,
+    jobs_by_id: dict[str, dict] | None = None,
+) -> CalibrationProposal | None:
     """Return a reviewable proposal for non-ok verdicts."""
-    if verdict.ok or verdict.is_regression:
-        if verdict.status == "weak_core" and verdict.expected_id:
-            return CalibrationProposal(
-                proposal_id=f"alias_{_slug(verdict.query)}",
-                type="alias_patch",
-                query=verdict.query,
-                target_id=verdict.expected_id,
-                payload={"add_aliases": [verdict.query]},
-                evidence={
-                    "sim": verdict.sim,
-                    "tier": verdict.tier,
-                    "reason": verdict.message,
-                },
-            )
+    jobs_by_id = jobs_by_id or {}
+
+    if verdict.is_regression and verdict.expected_id:
+        return CalibrationProposal(
+            proposal_id=f"alias_{_slug(verdict.query)}",
+            type="alias_patch",
+            query=verdict.query,
+            target_id=verdict.expected_id,
+            payload={"add_aliases": [verdict.query]},
+            evidence={
+                "sim": verdict.sim,
+                "tier": verdict.tier,
+                "reason": verdict.message,
+            },
+        )
+
+    if verdict.ok:
         return None
+
+    if verdict.status == "weak_core" and verdict.expected_id:
+        return CalibrationProposal(
+            proposal_id=f"alias_{_slug(verdict.query)}",
+            type="alias_patch",
+            query=verdict.query,
+            target_id=verdict.expected_id,
+            payload={"add_aliases": [verdict.query]},
+            evidence={
+                "sim": verdict.sim,
+                "tier": verdict.tier,
+                "reason": verdict.message,
+            },
+        )
 
     if verdict.status == "kb_gap":
         return CalibrationProposal(
@@ -68,7 +88,35 @@ def propose_from_verdict(verdict: QueryVerdict) -> CalibrationProposal | None:
             evidence={"sim": verdict.sim, "tier": verdict.tier, "best_title": verdict.best_title},
         )
 
-    return None
+    return propose_title_alias(verdict, jobs_by_id)
+
+
+def propose_title_alias(
+    verdict: QueryVerdict,
+    jobs_by_id: dict[str, dict],
+) -> CalibrationProposal | None:
+    """Map alternate query phrasing to the canonical KB job title."""
+    target_id = verdict.expected_id or verdict.best_id
+    if not target_id:
+        return None
+    job = jobs_by_id.get(target_id)
+    if not job:
+        return None
+    canonical = str(job.get("title") or "").strip()
+    if not canonical or verdict.query.strip().lower() == canonical.lower():
+        return None
+    return CalibrationProposal(
+        proposal_id=f"title_{_slug(verdict.query)}",
+        type="title_alias",
+        query=verdict.query,
+        target_id=target_id,
+        payload={"canonical": canonical},
+        evidence={
+            "sim": verdict.sim,
+            "tier": verdict.tier,
+            "canonical": canonical,
+        },
+    )
 
 
 def queue_proposal(proposal: CalibrationProposal, pending_dir: str | Path) -> Path:
@@ -80,3 +128,30 @@ def queue_proposal(proposal: CalibrationProposal, pending_dir: str | Path) -> Pa
     body["queued_at"] = datetime.now(timezone.utc).isoformat()
     path.write_text(json.dumps(body, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return path
+
+
+def proposal_from_dict(data: dict) -> CalibrationProposal:
+    return CalibrationProposal(
+        proposal_id=str(data["proposal_id"]),
+        type=str(data["type"]),
+        query=str(data["query"]),
+        target_id=data.get("target_id"),
+        payload=dict(data.get("payload") or {}),
+        evidence=dict(data.get("evidence") or {}),
+        status=str(data.get("status", "pending")),
+    )
+
+
+def load_pending_proposals(pending_dir: str | Path) -> list[tuple[Path, CalibrationProposal]]:
+    """Load all pending calibration JSON files."""
+    root = Path(pending_dir)
+    if not root.is_dir():
+        return []
+    out: list[tuple[Path, CalibrationProposal]] = []
+    for path in sorted(root.glob("*.json")):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            out.append((path, proposal_from_dict(data)))
+        except (json.JSONDecodeError, KeyError, TypeError):
+            continue
+    return out

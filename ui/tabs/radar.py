@@ -144,6 +144,19 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                 search_query, final_jobs, search_cfg=search_cfg,
             )
             tier = job_radar.search_match_tier(best_sim, search_cfg)
+            try:
+                from services.job_query_agent.search_log import record_search_log
+
+                record_search_log(
+                    search_query,
+                    tier=tier,
+                    best_id=best_job.get("id") if best_job else None,
+                    sim=best_sim,
+                    industry=selected_industry if selected_industry != "All" else None,
+                    source="radar",
+                )
+            except Exception:
+                pass
             if tier == "none":
                 with st.spinner(t("radar_llm_spin", q=search_query)):
                     llm_generated_profile = job_radar.generate_job_profile_via_llm(search_query)
@@ -221,16 +234,8 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     job_radar_cfg=job_radar_cfg,
                 )
                 opportunity_list = _merge_transition_rows(transition_paths, job_by_id_all)
-                if anchor_from_llm:
-                    at_risk_list = []
-                else:
-                    at_risk_list.sort(
-                        key=lambda x: (
-                            x.get("combined_similarity", 0.0),
-                            x.get("hybrid_score", 0.0),
-                        ),
-                        reverse=True,
-                    )
+                # HR-12: at-risk sorted by weak text scores misleads (e.g. engineer → logistics).
+                at_risk_list = []
             else:
                 at_risk_list.sort(
                     key=lambda x: (
@@ -261,7 +266,9 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
 
         with col_risk:
             st.markdown(f"#### {t('radar_at_risk')}")
-            if anchor_from_llm and search_query:
+            if anchor_job and search_query:
+                st.caption(t("radar_matrix_at_risk_anchor_skip"))
+            elif anchor_from_llm and search_query:
                 st.caption(t("radar_matrix_at_risk_skipped"))
             elif not at_risk_list:
                 st.write(t("radar_no_at_risk"))

@@ -169,6 +169,18 @@ docker run -p 8501:8501 jobforecaster
 git push origin main   # 若 Space 已连 GitHub，会自动重建
 ```
 
+### Job Radar 搜索日志（Query Agent P2）
+
+Radar 每次搜索会追加一行到 `data/radar_search_log.jsonl`（查询词、tier、最佳匹配 id）。
+
+- **本地 / GitHub**：日更 workflow 会 commit 该文件；`query-agent run` 按搜索频率优先发现 KB 缺口。
+- **HF Space**：容器内日志在重建后会丢失。定期从 Space 文件系统复制 JSONL，在仓库执行：
+
+```bash
+python run.py query-agent ingest-logs /path/to/export.jsonl
+git add data/radar_search_log.jsonl && git commit -m "chore: merge HF search log"
+```
+
 ---
 
 ## 相关

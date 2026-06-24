@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import job_radar
+from services.job_query_agent.search_log import aggregate_search_queries
 
 
 @dataclass(frozen=True)
@@ -14,6 +15,8 @@ class DiscoveredQuery:
     query: str
     source: str
     expected_id: str | None = None
+    weight: float = 1.0
+    occurrences: int | None = None
 
 
 def _variant_queries(query: str) -> list[str]:
@@ -67,6 +70,26 @@ def discover_from_feedback(*, min_count: int = 1) -> list[DiscoveredQuery]:
     return out
 
 
+def discover_from_search_log(
+    log_path: str | Path,
+    *,
+    min_occurrences: int = 2,
+    max_queries: int = 30,
+) -> list[DiscoveredQuery]:
+    """High-traffic Radar/HF searches, sorted by frequency (P2)."""
+    counts = aggregate_search_queries(log_path, min_occurrences=min_occurrences)
+    ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0].lower()))
+    out: list[DiscoveredQuery] = []
+    for query, count in ranked[:max_queries]:
+        out.append(DiscoveredQuery(
+            query,
+            "search_log",
+            weight=float(count),
+            occurrences=count,
+        ))
+    return out
+
+
 def discover_queries(cfg: dict[str, Any]) -> list[DiscoveredQuery]:
     """Merge and dedupe discovery sources per config."""
     agent_cfg = cfg.get("job_query_agent", {})
@@ -91,6 +114,13 @@ def discover_queries(cfg: dict[str, Any]) -> list[DiscoveredQuery]:
         _add(discover_from_feedback(
             min_count=int(discover_cfg.get("feedback_min_responses", 1)),
         ))
+    log_path = discover_cfg.get("search_log_path", "data/radar_search_log.jsonl")
+    if discover_cfg.get("include_search_log", True):
+        _add(discover_from_search_log(
+            log_path,
+            min_occurrences=int(discover_cfg.get("search_log_min_occurrences", 2)),
+            max_queries=int(discover_cfg.get("search_log_max_queries", 30)),
+        ))
     if discover_cfg.get("include_variants", True):
         base = list(merged)
         for item in base:
@@ -99,4 +129,5 @@ def discover_queries(cfg: dict[str, Any]) -> list[DiscoveredQuery]:
                     _add([DiscoveredQuery(variant, "variant", item.expected_id)])
 
     max_q = int(discover_cfg.get("max_queries_per_run", 200))
+    merged.sort(key=lambda d: (-d.weight, d.query.lower()))
     return merged[:max_q]

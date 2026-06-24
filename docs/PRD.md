@@ -1,7 +1,7 @@
 # Product Requirement Document (PRD) — forecaster-agent
 
-**Version:** 0.9 (Personalized Job Radar & Search Quality)  
-**Last updated:** 2026-06-23
+**Version:** 0.10 (Job Query Calibration Agent)  
+**Last updated:** 2026-06-24
 
 An autonomous AI × economy forecasting system that generates, calibrates, and publishes **falsifiable** predictions — with explicit limits on historical extrapolation.
 
@@ -93,6 +93,10 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 | **Search retrieval** (query↔job text: embedding + lexical `combined_similarity`) | ✅ v0.8 hotfix |
 | **Transition recommendation** (`compute_transition_paths`: skill 40% + overlap 15% + risk 25% + demand 20%) | ✅ |
 | Search vs transition paths kept separate (HR-12) | ✅ Phase 8 |
+| Anchored search hides misleading at-risk column (weak text scores) | ✅ Phase 8 / v0.10 |
+| Hot-role KB coverage (`CORE_HOT_ROLE_QUERIES` + `search_aliases`) | ✅ v0.10 |
+| Bilingual search (`RadarHashingEmbedder`, CJK tokens) | ✅ v0.10 |
+| Query title normalization (`normalize_search_query`, `title_aliases`) | ✅ v0.10 |
 | User-facing match tiers (无匹配 / 弱 / 强) | ✅ Phase 8 |
 | Personalized transition weights (experience level, retrain tolerance) | ✅ Phase 8 |
 | Field survey: canonical title + experience level (HR-13) | ✅ Phase 8 |
@@ -107,7 +111,33 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 | **Field feedback** (`JobFeedback`, Radar survey) | Calibrate displacement risk + empirical transition targets | Canonical **job title** + **experience level** (HR-13) |
 | **Prediction crowd** (`contribution`, REST/Telegram) | Anti-anchoring probability submissions | `contributor_id` only; optional expert weighting is out of scope |
 
-### 2.5 Read model / external integration seam (`services/read_model.py`)
+### 2.5 Job Query Calibration Agent (`services/job_query_agent/`, Phase 9)
+
+Continuous **retrieval QA loop** — discovers search queries, evaluates KB match quality, auto-fixes safe alias gaps, and gates risky changes behind human review.
+
+| Capability | Status |
+|------------|--------|
+| Query discovery (CORE hot roles, seed file, `JobFeedback` titles) | ✅ |
+| Per-query verdict (`ok`, `p0_regression`, `weak_core`, `kb_gap`, `weak_match`) | ✅ |
+| Simulate-before-apply (`alias_patch`, `title_alias`) | ✅ |
+| Auto-apply safe fixes (`jobs_kb.json` + `config.yaml` title map) | ✅ gated |
+| CI guard (`query-agent audit` — P0 + weak-core fail build) | ✅ |
+| Daily closed loop (`query-agent run` → commit KB/config) | ✅ |
+| Trace log (`data/query_agent_traces.jsonl`, gitignored) | ✅ |
+| Human review queue (`pending/job_calibration/`) for `kb_profile_new` | ✅ |
+| HF search-log ingest (frequency-weighted gaps) | ✅ P2 |
+
+**Operating modes:**
+
+| Command | When | Behaviour |
+|---------|------|-----------|
+| `query-agent audit` | CI after pytest | Read-only; raises on P0 regression or weak-core |
+| `query-agent once` | Manual triage | Audit + queue non-ok proposals to `pending/` |
+| `query-agent run` | Daily cron | Multi-round discover → simulate → auto-apply → re-check; commits diffs |
+| `query-agent apply` | After human review | Apply all `pending/job_calibration/*.json` (incl. `kb_profile_new`) |
+| `query-agent ingest-logs` | HF export merge | Merge external search JSONL into `data/radar_search_log.jsonl` |
+
+### 2.6 Read model / external integration seam (`services/read_model.py`)
 
 | Capability | Status |
 |------------|--------|
@@ -148,8 +178,9 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 | `evolution.n_bootstrap` | GMM bootstrap iterations (use `10` in tests) |
 | `evolution.scenario` | Optional override of `CURRENT_AI_SCENARIO` |
 | `job_radar.*` | Hybrid RAG weights, KB path, transition weights |
-| `job_radar.search.*` | `combined_no_match`, `combined_weak`, `combined_strong`, embed/lex blend (Phase 8 — move from code constants) |
+| `job_radar.search.*` | Embed/lex blend, tier thresholds (`tier_no_match` / `tier_weak` / `tier_strong`), `title_aliases` map (HR-3) |
 | `job_radar.personalization.*` | Experience-level weight overrides, max retrain months (Phase 8) |
+| `job_query_agent.*` | Discover sources, evaluate gates, `auto_apply` types/limits, traces path (Phase 9) |
 | `crowd.*` | Gate thresholds (for Phase 2 API) |
 | `require_review` | Publishing safety gate |
 
@@ -258,6 +289,7 @@ cost) and field survey lacked tenure.
 - [x] **Stratified field calibration** — `get_empirical_metrics()` groups by `(title, experience_level)` when n≥5; fallback to title-only
 - [x] **Sidebar user profile** (session): experience level + max retrain months → override `_TRANSITION_WEIGHTS` / filter candidates
 - [x] **Strong-match threshold audit** — target ~0.65–0.70 on calibrated combined score (after config move + tier labelling)
+- [x] **Anchored-search UX** — when a strong search anchor is set, hide the at-risk column (weak `combined_similarity` must not surface unrelated roles, e.g. engineer → Logistics Dispatcher)
 
 **Explicitly out of Phase 8:** prediction-crowd contributor job-title collection; Indeed/LinkedIn scraping; real embedding model swap (stays behind `Embedder` Protocol, HR-1).
 
@@ -265,27 +297,49 @@ cost) and field survey lacked tenure.
 
 Problem: hot-role search gaps (e.g. «software developer» ≠ Software Engineer) were caught only
 after user reports. Need a continuous **retrieval QA loop** that discovers queries, evaluates
-KB match quality, traces gaps, and queues calibration proposals under the review gate.
+KB match quality, traces gaps, and **auto-resolves safe calibration** without waiting for
+manual bug reports.
 
 **Design principles:**
 
 1. **Retrieval QA only** — agent calibrates search anchors / aliases / KB coverage, not transition recommendations (HR-12)
-2. **Propose, don't silently mutate** — default `require_review: true` for KB changes (HR-5)
-3. **CORE guard in CI** — P0 regressions fail `run.py query-agent audit`
+2. **Simulate before mutate** — every auto-apply runs `simulate_alias_patch` / `simulate_title_alias` and must beat `sim_before`
+3. **Tiered mutation policy** — `alias_patch` + `title_alias` may auto-apply when gated; `kb_profile_new` always queues to `pending/` (HR-5)
+4. **CORE guard in CI** — P0 regressions fail `run.py query-agent audit`
+
+**Discover sources (`discover_queries`):**
+
+| Source | Config flag | Purpose |
+|--------|-------------|---------|
+| `CORE_HOT_ROLE_QUERIES` | `discover.include_core` | Regression guardrail for high-traffic titles (EN + zh) |
+| `data/query_seed.json` | `discover.include_seed` | Curated long-tail / edge-case queries |
+| `JobFeedback.job_title` | `discover.include_feedback_titles` | Real user search intent from field survey |
+
+**Auto-apply gates (`job_query_agent.auto_apply`):**
+
+- `enabled: true` (daily cron); CI `audit` never mutates
+- Allowed types: `alias_patch` (→ `jobs_kb.json` `search_aliases`), `title_alias` (→ `job_radar.search.title_aliases`)
+- `min_sim_after` ≥ `tier_weak` (default 0.55); CORE queries must resolve to `expected_id`
+- `alias_patch` requires strict improvement over `sim_before`
+- `max_rounds` (default 3) — reload KB between rounds
 
 **P0 delivered:**
 
-- [x] `services/job_query_agent/` — `discover`, `evaluate`, `propose`, `traces`, `audit`
-- [x] `run.py query-agent audit|once` — audit fails on P0/weak-core; `once` queues proposals to `pending/job_calibration/`
-- [x] `config.yaml` → `job_query_agent.*`; seed file `data/query_seed.json`
+- [x] `services/job_query_agent/` — `discover`, `evaluate`, `propose`, `simulate`, `apply`, `traces`, `audit`, `loop`
+- [x] `run.py query-agent audit|once|run|apply|ingest-logs`
+- [x] `config.yaml` → `job_query_agent.*` + `job_radar.search.title_aliases`; seed file `data/query_seed.json`
+- [x] Hot-role KB entries: `tech_product_manager`, `tech_data_scientist`, `tech_project_manager`; expanded `tech_software_eng` aliases
 - [x] CI step: `python run.py query-agent audit` after pytest
-- [x] Traces: `data/query_agent_traces.jsonl`
+- [x] Daily cron: `query-agent run` commits `jobs_kb.json` / `config.yaml` when auto-apply makes changes
+- [x] Traces: `data/query_agent_traces.jsonl` (gitignored)
+- [x] Tests: `tests/test_job_query_agent.py`, `test_anchored_search_hides_unrelated_at_risk` in `tests/test_radar_render.py`
 
 **Phase 9 backlog:**
 
-- [ ] P1: `query-agent apply` — merge approved `alias_patch` into `jobs_kb.json` + config title map
-- [ ] P2: HF search log ingest + frequency-weighted gap detection
-- [ ] P3: approved `kb_profile_new` → KB append workflow
+- [x] P1: `query-agent run` — simulate + auto-apply `alias_patch` / `title_alias` (gated); manual `pending/` for `kb_profile_new`
+- [x] P1: `query-agent apply` — merge human-approved proposals from `pending/job_calibration/`
+- [x] P2: HF/Radar search log ingest (`data/radar_search_log.jsonl`) + frequency-weighted discovery
+- [x] P3: `kb_profile_new` → LLM/cache KB append via `apply` + gated auto in `run`
 
 ---
 
@@ -307,6 +361,8 @@ KB match quality, traces gaps, and queues calibration proposals under the review
 | Field survey includes experience level | HR-13 (Phase 8) |
 | Transition cards respect user retrain cap when profile set | Phase 8 |
 | `query-agent audit` passes in CI (CORE + seed) | Phase 9 |
+| `query-agent run` daily with zero P0 regressions | Phase 9 |
+| Search gaps auto-closed via alias/title_alias (weekly) | Qualitative — trace + commit log |
 | LLM fallback rate on top queries (logged) | Phase 9 P2 |
 
 ---
