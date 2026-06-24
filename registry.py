@@ -131,15 +131,29 @@ class Registry:
         }
 
     def track_record_summary(self, limit: int = 15) -> str:
-        """Compact, model-readable feedback for the next forecasting prompt."""
+        """Compact, model-readable feedback for the next forecasting prompt.
+
+        WRONG entries show more of judged_rationale so ROOT_CAUSE labels and
+        CONTRAST_PAIR cross-references are not truncated — the model needs to see
+        *why* a prediction failed, not just that it failed.
+        """
         sb = self.scoreboard()
         lines = [
             f"Resolved predictions: {sb['resolved']}  |  mean Brier: {sb['mean_brier']} "
             f"(0=perfect, 0.25=coin-flip-at-50%, lower is better)",
+            "LESSON: When a WRONG entry carries ROOT_CAUSE: it means that specific "
+            "failure mode should be avoided in new predictions. CONTRAST_PAIR entries "
+            "show the precise reframing that would have converted a MISS into a HIT.",
         ]
         for p in self.recent_resolved(limit):
-            verdict = "CORRECT" if p.outcome else "WRONG"
+            if p.outcome:
+                verdict = "CORRECT"
+                rationale_limit = 160
+            else:
+                verdict = "WRONG"
+                rationale_limit = 280  # wider so ROOT_CAUSE label is never cut off
             lines.append(
-                f"- [{verdict} @ conf {p.confidence:.2f}] {p.statement}  -> {p.judged_rationale[:160]}"
+                f"- [{verdict} @ conf {p.confidence:.2f}] {p.statement}"
+                f"  -> {p.judged_rationale[:rationale_limit]}"
             )
         return "\n".join(lines)

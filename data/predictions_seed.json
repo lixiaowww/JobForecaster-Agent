@@ -179,8 +179,26 @@
     "created_at": "2024-02-01T12:00:00+00:00",
     "status": "resolved_false",
     "outcome": false,
-    "judged_rationale": "MISS. BLS reported ~1.9M developers/QA/testers in 2024 with a 15% growth projection through 2034. The post-2022 hiring cooldown was driven by interest rates and over-hiring, not AI - software employment did not decline.",
+    "judged_rationale": "ROOT_CAUSE:wrong_granularity. Aggregate BLS employment (~1.9M, +15% outlook) did not decline — wrong metric. The real effect was concentrated in junior/entry-level and large-tech segments, not total headcount. Lesson: predictions about AI displacement must specify segment (junior vs senior, aggregate vs big-tech) and mechanism (layoffs vs hiring freeze), not just direction of total employment.",
     "resolved_at": "2025-09-01T12:00:00+00:00"
+  },
+  {
+    "statement": "Junior software developer hiring at large tech companies (>1000 employees) will fall at least 15% from 2022 peak levels by end of 2025",
+    "rationale": "AI coding tools automate the boilerplate and bug-fix work that was historically the entry point for new-grad engineers; firms that over-hired in 2021-22 are letting junior cohorts shrink rather than backfilling attrition.",
+    "category": "labor",
+    "confidence": 0.65,
+    "horizon": "2025-Q4",
+    "resolution_date": "2025-12-31",
+    "resolution_criteria": "Job-posting trackers (Cadence/BLS) and staffing analyses showing junior SWE openings vs 2022 baseline at large tech employers.",
+    "sources": [
+      "https://cadence.withremote.ai/blog/engineering-hiring-market-2026",
+      "https://blog.vibecoder.me/ai-coding-developer-job-market-2026"
+    ],
+    "created_at": "2024-02-01T12:00:00+00:00",
+    "status": "resolved_true",
+    "outcome": true,
+    "judged_rationale": "CONTRAST_PAIR_FOR:wrong_granularity_miss. Cadence/BLS data: junior SWE postings at large tech down ~22% at companies >1000 employees by 2025, down ~28-40% from 2022 peak overall. The real AI effect was real — but confined to the junior/entry segment, not aggregate headcount. Specifying the correct unit of analysis turns a MISS into a HIT.",
+    "resolved_at": "2026-01-10T12:00:00+00:00"
   },
   {
     "statement": "No major AI lab will publicly declare it has achieved human-level AGI by the end of 2025",
