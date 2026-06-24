@@ -20,15 +20,34 @@ def _brier_str(val) -> str:
 
 
 def _scoreboard_cards(sb: dict, *, prefix: str) -> None:
+    """HTML metric cards — compatible with Streamlit versions that lack st.metric(key=)."""
+    del prefix  # panels are in separate sections; no widget key collision
     c1, c2, c3, c4 = st.columns(4)
     with c1:
-        st.metric(t("acc_total"), sb["total"], key=f"{prefix}_total")
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-value">{sb["total"]}</div>'
+            f'<div class="metric-label">{t("acc_total")}</div></div>',
+            unsafe_allow_html=True,
+        )
     with c2:
-        st.metric(t("acc_open"), sb["open"], key=f"{prefix}_open")
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-value">{sb["open"]}</div>'
+            f'<div class="metric-label">{t("acc_open")}</div></div>',
+            unsafe_allow_html=True,
+        )
     with c3:
-        st.metric(t("acc_resolved"), sb["resolved"], key=f"{prefix}_resolved")
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-value">{sb["resolved"]}</div>'
+            f'<div class="metric-label">{t("acc_resolved")}</div></div>',
+            unsafe_allow_html=True,
+        )
     with c4:
-        st.metric(t("acc_brier"), _brier_str(sb["mean_brier"]), key=f"{prefix}_brier")
+        brier_str = _brier_str(sb["mean_brier"])
+        st.markdown(
+            f'<div class="metric-card"><div class="metric-value">{brier_str}</div>'
+            f'<div class="metric-label">{t("acc_brier")}</div></div>',
+            unsafe_allow_html=True,
+        )
 
 
 def _resolved_table(preds: list[Prediction], origin_label: str) -> None:
