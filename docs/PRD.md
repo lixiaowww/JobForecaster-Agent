@@ -261,6 +261,32 @@ cost) and field survey lacked tenure.
 
 **Explicitly out of Phase 8:** prediction-crowd contributor job-title collection; Indeed/LinkedIn scraping; real embedding model swap (stays behind `Embedder` Protocol, HR-1).
 
+### Phase 9 — Job Query Calibration Agent (v0.10, 2026-06-24)
+
+Problem: hot-role search gaps (e.g. «software developer» ≠ Software Engineer) were caught only
+after user reports. Need a continuous **retrieval QA loop** that discovers queries, evaluates
+KB match quality, traces gaps, and queues calibration proposals under the review gate.
+
+**Design principles:**
+
+1. **Retrieval QA only** — agent calibrates search anchors / aliases / KB coverage, not transition recommendations (HR-12)
+2. **Propose, don't silently mutate** — default `require_review: true` for KB changes (HR-5)
+3. **CORE guard in CI** — P0 regressions fail `run.py query-agent audit`
+
+**P0 delivered:**
+
+- [x] `services/job_query_agent/` — `discover`, `evaluate`, `propose`, `traces`, `audit`
+- [x] `run.py query-agent audit|once` — audit fails on P0/weak-core; `once` queues proposals to `pending/job_calibration/`
+- [x] `config.yaml` → `job_query_agent.*`; seed file `data/query_seed.json`
+- [x] CI step: `python run.py query-agent audit` after pytest
+- [x] Traces: `data/query_agent_traces.jsonl`
+
+**Phase 9 backlog:**
+
+- [ ] P1: `query-agent apply` — merge approved `alias_patch` into `jobs_kb.json` + config title map
+- [ ] P2: HF search log ingest + frequency-weighted gap detection
+- [ ] P3: approved `kb_profile_new` → KB append workflow
+
 ---
 
 ## 6. Success metrics
@@ -280,10 +306,12 @@ cost) and field survey lacked tenure.
 | Search strong-match precision (manual audit, n≥20 queries) | ≥ 80% relevant anchor role (Phase 8) |
 | Field survey includes experience level | HR-13 (Phase 8) |
 | Transition cards respect user retrain cap when profile set | Phase 8 |
+| `query-agent audit` passes in CI (CORE + seed) | Phase 9 |
+| LLM fallback rate on top queries (logged) | Phase 9 P2 |
 
 ---
 
-## 7. Out of scope (v0.9)
+## 7. Out of scope (v0.10)
 
 - Auto-publishing with `require_review: false` as default
 - Financial advice positioning
@@ -291,3 +319,4 @@ cost) and field survey lacked tenure.
 - Commercial API without BUSL commercial license
 - Using raw embedding cosine (~0.7) as user-facing "similarity" without combined score + tier labels
 - Collecting job title / tenure on **prediction** crowd submissions (HR-13 applies to field feedback only)
+- Indeed/LinkedIn job scraping for query-agent discovery (BLS/O*NET + logs + feedback only)

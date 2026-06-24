@@ -60,6 +60,24 @@ job_radar:
     senior_retrain_cap_months: 24
     min_stratified_responses: 5
 
+# ---- job query calibration agent (Phase 9) ----
+job_query_agent:
+  enabled: true
+  traces_path: data/query_agent_traces.jsonl
+  discover:
+    include_core: true
+    include_seed: true
+    seed_path: data/query_seed.json
+    include_feedback_titles: true
+    feedback_min_responses: 1
+    include_variants: false
+    max_queries_per_run: 200
+  evaluate:
+    fail_on_weak_core: true
+  review:
+    require_review: true
+    pending_dir: pending/job_calibration
+
 # ---- job market calibration (BLS to KB displacement risk overlay) ----
 job_market:
   enabled: true

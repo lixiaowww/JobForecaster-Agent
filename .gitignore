@@ -22,6 +22,7 @@ data/bls_cache.json
 data/kb_calibration.json
 data/kb_calibration_log.jsonl
 data/crowd_traces.jsonl
+data/query_agent_traces.jsonl
 data/_bls_fetch_tmp.json
 data/llm_job_cache.json
 pending/

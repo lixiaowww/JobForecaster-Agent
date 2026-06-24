@@ -510,6 +510,50 @@ Add to `ui/i18n.py`: `radar_fb_experience`, `radar_match_tier_none`, `radar_matc
 
 ---
 
+## 14. v0.10 Design additions (Job Query Calibration Agent)
+
+### 14.1 Module layout
+
+```
+services/job_query_agent/
+├── discover.py    # core_hot, query_seed.json, JobFeedback titles
+├── evaluate.py    # tier + P0 regression classification (HR-2 pure)
+├── propose.py     # CalibrationProposal → pending/job_calibration/
+├── traces.py      # JSONL append-only
+└── audit.py       # orchestrates cycle; raises on P0 failure
+```
+
+### 14.2 Audit flow
+
+```
+discover_queries(cfg)
+    → for each query: find_best_match + search_match_tier
+    → evaluate_query → append_trace
+    → optional queue_proposal (once subcommand)
+    → fail if p0_regression or weak_core (configurable)
+```
+
+### 14.3 Proposal types
+
+| type | pending example | apply (P1) |
+|------|-----------------|------------|
+| `alias_patch` | add `search_aliases` | patch `jobs_kb.json` |
+| `kb_profile_new` | unknown hot query | human review + KB append |
+| `title_alias_map` | normalize map entry | `config.yaml` or `job_radar` map |
+
+### 14.4 CLI
+
+```bash
+python run.py query-agent audit   # CI: exit 1 on P0 regression
+python run.py query-agent once    # audit + queue proposals
+```
+
+### 14.5 Config (`config.yaml`)
+
+See `job_query_agent` block: `discover.*`, `evaluate.fail_on_weak_core`, `review.pending_dir`, `traces_path`.
+
+---
+
 ## 11. Security & compliance defaults
 
 - `require_review: true` — never change default in repo

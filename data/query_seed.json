@@ -1,0 +1,7 @@
+[
+  {"query": "software developer", "expected_id": "tech_software_eng", "source": "seed"},
+  {"query": "software product manager", "expected_id": "tech_product_manager", "source": "seed"},
+  {"query": "data scientist", "expected_id": "tech_data_scientist", "source": "seed"},
+  {"query": "financial analyst", "expected_id": "fin_credit_analyst", "source": "seed"},
+  {"query": "nurse", "source": "seed"}
+]

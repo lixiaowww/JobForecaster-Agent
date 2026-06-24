@@ -396,6 +396,16 @@ The agent's goal is to stay well below 0.25 — the "coin-flip" baseline.""",
         "zh": "与「{q}」无可靠匹配（相关度 {sim:.2f}）。"
               "将尝试 AI 生成画像，或浏览下方岗位矩阵。",
     },
+    "radar_llm_anchor_ok": {
+        "en": "No KB match for «{q}» (relevance {sim:.2f}). "
+              "Using AI-estimated anchor role **{title}** — opportunities below are ranked by **transition fit**, not text search.",
+        "zh": "知识库无「{q}」可靠匹配（相关度 {sim:.2f}）。"
+              "已用 AI 估算锚定岗位 **{title}**——下方机会列表按**转型契合度**排序，非文本搜索。",
+    },
+    "radar_matrix_at_risk_skipped": {
+        "en": "At-risk column hidden for AI-estimated roles — KB search relevance would be misleading. See transition paths below.",
+        "zh": "AI 估算岗位不展示高风险列——知识库搜索相关度无意义。请查看下方转型路径。",
+    },
     "radar_match_tier_weak": {
         "en": "Weak text match for «{q}»: **{title}** (relevance {sim:.2f}). "
               "Anchor role set below — career paths ranked by transition fit, not search text.",

@@ -34,3 +34,6 @@ jobs:
       - name: Run offline harness
         run: python -m pytest tests/ -v
         # No API key needed — all tests use deterministic stubs
+
+      - name: Job query agent audit (Phase 9)
+        run: python run.py query-agent audit

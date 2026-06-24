@@ -39,6 +39,18 @@ def _role_status(category: str) -> str:
     return t("status_emerging")
 
 
+def _merge_transition_rows(paths: list[dict], job_by_id: dict[str, dict]) -> list[dict]:
+    """Merge compute_transition_paths output with full KB rows for matrix cards."""
+    merged: list[dict] = []
+    for p in paths:
+        base = job_by_id.get(p["id"], p)
+        row = base.copy()
+        row["transition_score"] = p.get("transition_score", 0.0)
+        row["retrain_months"] = p.get("retrain_months", row.get("retrain_months", 0))
+        merged.append(row)
+    return merged
+
+
 def render(scenario_input: dict, prior, job_radar_cfg: dict):
     st.subheader(t("radar_title"))
     st.markdown(t("radar_intro"))
@@ -125,6 +137,7 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         )
 
         anchor_job = None
+        anchor_from_llm = False
         llm_generated_profile = None
         if search_query:
             best_sim, best_job = job_radar.find_best_match(
@@ -149,14 +162,20 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                         llm_generated_profile["title"] += " 🤖" + t("radar_ai_badge")
                         all_jobs.append(llm_generated_profile)
                         anchor_job = llm_generated_profile
-                        st.info(t("radar_llm_ok", title=job_title(llm_generated_profile)))
+                        anchor_from_llm = True
+                        st.info(t(
+                            "radar_llm_anchor_ok",
+                            title=job_title(llm_generated_profile),
+                            sim=best_sim,
+                            q=search_query,
+                        ))
                     else:
                         st.warning(t("radar_llm_fail"))
-                st.warning(t(
-                    "radar_match_tier_none",
-                    q=search_query,
-                    sim=best_sim,
-                ))
+                        st.warning(t(
+                            "radar_match_tier_none",
+                            q=search_query,
+                            sim=best_sim,
+                        ))
             elif tier == "weak":
                 anchor_job = best_job
                 st.warning(t(
@@ -185,33 +204,46 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
         opportunity_list = [j for j in final_jobs if j.get("category") in ("emerging", "transforming")]
         
         # Sort lists: retrieval for at-risk; transition fit for opportunities when anchored (HR-12)
+        job_by_id_all = {j["id"]: j for j in all_jobs}
+        for j in final_jobs:
+            job_by_id_all[j["id"]] = j
         if search_query:
-            at_risk_list.sort(
-                key=lambda x: (x.get("combined_similarity", 0.0), x.get("hybrid_score", 0.0)),
-                reverse=True,
-            )
             if anchor_job:
                 st.caption(t("radar_search_retrieval_note"))
                 st.caption(t("radar_anchor_auto", title=job_title(anchor_job)))
-                transition_ranked = job_radar.rank_jobs_by_transition_score(
+                transition_paths = job_radar.compute_transition_paths(
                     anchor_job,
-                    opportunity_list,
+                    all_jobs,
                     scenario_input,
+                    top_k=5,
                     experience_level=user_experience,
                     max_retrain_months=user_retrain_cap,
                     job_radar_cfg=job_radar_cfg,
                 )
-                opp_by_id = {j["id"]: j for j in opportunity_list}
-                opportunity_list = []
-                for tr in transition_ranked:
-                    base = opp_by_id.get(tr["id"])
-                    if base:
-                        merged = base.copy()
-                        merged["transition_score"] = tr.get("transition_score", 0.0)
-                        opportunity_list.append(merged)
+                opportunity_list = _merge_transition_rows(transition_paths, job_by_id_all)
+                if anchor_from_llm:
+                    at_risk_list = []
+                else:
+                    at_risk_list.sort(
+                        key=lambda x: (
+                            x.get("combined_similarity", 0.0),
+                            x.get("hybrid_score", 0.0),
+                        ),
+                        reverse=True,
+                    )
             else:
+                at_risk_list.sort(
+                    key=lambda x: (
+                        x.get("combined_similarity", 0.0),
+                        x.get("hybrid_score", 0.0),
+                    ),
+                    reverse=True,
+                )
                 opportunity_list.sort(
-                    key=lambda x: (x.get("combined_similarity", 0.0), x.get("hybrid_score", 0.0)),
+                    key=lambda x: (
+                        x.get("combined_similarity", 0.0),
+                        x.get("hybrid_score", 0.0),
+                    ),
                     reverse=True,
                 )
         else:
@@ -229,7 +261,9 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
 
         with col_risk:
             st.markdown(f"#### {t('radar_at_risk')}")
-            if not at_risk_list:
+            if anchor_from_llm and search_query:
+                st.caption(t("radar_matrix_at_risk_skipped"))
+            elif not at_risk_list:
                 st.write(t("radar_no_at_risk"))
             else:
                 for j in at_risk_list[:5]:

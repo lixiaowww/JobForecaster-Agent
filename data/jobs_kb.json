@@ -381,6 +381,18 @@
     "id": "tech_software_eng",
     "title": "Software Engineer",
     "title_zh": "软件工程师",
+    "search_aliases": [
+      "software developer",
+      "software development",
+      "programmer",
+      "coder",
+      "full stack developer",
+      "backend developer",
+      "frontend developer",
+      "程序员",
+      "软件开发",
+      "开发工程师"
+    ],
     "industry": "Tech",
     "category": "transforming",
     "description": "Creates, tests, and maintains software applications. Transitioning from manual coding to leveraging AI agents for code generation, focusing on architecture and security.",
@@ -437,6 +449,213 @@
         "skill_bridge": "Develop proficiency in Prompt Design Patterns, Vector Database Operations to transition into the Prompt Engineer & LLM Specialist role.",
         "retrain_months": 5,
         "salary_delta": 0.19
+      }
+    ]
+  },
+  {
+    "id": "tech_product_manager",
+    "title": "Software Product Manager",
+    "title_zh": "软件产品经理",
+    "search_aliases": [
+      "product manager",
+      "产品经理",
+      "technical product manager",
+      "PM",
+      "product owner"
+    ],
+    "industry": "Tech",
+    "category": "transforming",
+    "description": "Owns product vision, roadmap, and prioritization; synthesizes user research, market signals, and engineering constraints. AI copilots accelerate specs, analytics, and prototyping, but accountability for trade-offs and cross-functional alignment remains human.",
+    "description_zh": "负责产品愿景、路线图与优先级；综合用户研究、市场信号与工程约束做决策。AI 可加速需求文档、数据分析与原型，但跨团队权衡与最终责任仍依赖人类产品经理。",
+    "sensitivity": {
+      "augmentation_ratio": 0.75,
+      "demand_elasticity": 0.7,
+      "oring_leverage": 0.55,
+      "skill_distance": 0.45,
+      "diffusion_years": -0.3,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.65,
+      "task_frontier_open": 0.75
+    },
+    "base_demand_trend": 0.07,
+    "displacement_risk": 0.22,
+    "required_skills": [
+      "Product Roadmapping",
+      "User Research Synthesis",
+      "Stakeholder Alignment",
+      "AI-Assisted Product Analytics"
+    ],
+    "skill_vector": [
+      0.75,
+      0.55,
+      0.7,
+      0.6,
+      0.5,
+      0.8,
+      0.6,
+      0.55
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Management Occupations — Computer and Information Systems Managers (product-adjacent)",
+      "O*NET 11-3021.00 - Computer and Information Systems Managers",
+      "McKinsey: The future of product management in the age of AI"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "tech_prompt_eng",
+        "skill_bridge": "Develop proficiency in Prompt Design Patterns, RAG Pipeline Configuration to transition into the Prompt Engineer & LLM Specialist role.",
+        "retrain_months": 5,
+        "salary_delta": 0.12
+      },
+      {
+        "target_id": "edu_ai_learning_guide",
+        "skill_bridge": "Develop proficiency in Instructional System Design (ISD), Adaptive Learning Algorithms to transition into the AI Learning Experience Designer role.",
+        "retrain_months": 6,
+        "salary_delta": 0.1
+      },
+      {
+        "target_id": "tech_ai_infra_eng",
+        "skill_bridge": "Develop proficiency in Kubernetes (K8s) Orchestration, GPU Clustering (NCCL) to transition into the AI Infrastructure Architect role.",
+        "retrain_months": 9,
+        "salary_delta": 0.15
+      }
+    ]
+  },
+  {
+    "id": "tech_data_scientist",
+    "title": "Data Scientist",
+    "title_zh": "数据科学家",
+    "search_aliases": [
+      "data science",
+      "machine learning scientist",
+      "数据科学"
+    ],
+    "industry": "Tech",
+    "category": "transforming",
+    "description": "Builds statistical and machine-learning models to extract insight from data; increasingly augmented by AutoML and LLM-assisted feature engineering while human judgment remains critical for problem framing and causal interpretation.",
+    "description_zh": "构建统计与机器学习模型从数据中提取洞察；AutoML 与大模型辅助特征工程日益普及，但问题定义与因果解释仍依赖人类判断。",
+    "sensitivity": {
+      "augmentation_ratio": 0.8,
+      "demand_elasticity": 0.85,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.55,
+      "diffusion_years": -0.4,
+      "absorbing_sector": 0.35,
+      "productivity_capture": 0.75,
+      "task_frontier_open": 0.85
+    },
+    "base_demand_trend": 0.1,
+    "displacement_risk": 0.18,
+    "required_skills": [
+      "Python & ML Frameworks",
+      "Experiment Design",
+      "Causal Inference",
+      "LLM Feature Pipelines"
+    ],
+    "skill_vector": [
+      0.85,
+      0.8,
+      0.65,
+      0.55,
+      0.35,
+      0.45,
+      0.75,
+      0.8
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Data Scientists",
+      "O*NET 15-2051.00 - Data Scientists",
+      "LinkedIn Jobs on the Rise: Data Science roles"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "tech_prompt_eng",
+        "skill_bridge": "Develop proficiency in Prompt Design Patterns, Vector Database Operations to transition into the Prompt Engineer & LLM Specialist role.",
+        "retrain_months": 4,
+        "salary_delta": 0.14
+      },
+      {
+        "target_id": "tech_ai_infra_eng",
+        "skill_bridge": "Develop proficiency in Kubernetes (K8s) Orchestration, Distributed Storage Systems to transition into the AI Infrastructure Architect role.",
+        "retrain_months": 7,
+        "salary_delta": 0.12
+      },
+      {
+        "target_id": "fin_risk_manager",
+        "skill_bridge": "Develop proficiency in VaR Modeling, Stress Testing Frameworks to transition into the Risk Management Specialist role.",
+        "retrain_months": 8,
+        "salary_delta": 0.1
+      }
+    ]
+  },
+  {
+    "id": "tech_project_manager",
+    "title": "Technical Project Manager",
+    "title_zh": "技术项目经理",
+    "search_aliases": [
+      "project manager",
+      "项目经理",
+      "TPM",
+      "program manager"
+    ],
+    "industry": "Tech",
+    "category": "transforming",
+    "description": "Coordinates cross-functional engineering delivery, timelines, and risk; AI scheduling and status summarization tools reduce admin load but stakeholder negotiation and ambiguity resolution stay human-centric.",
+    "description_zh": "协调跨职能研发交付、时间表与风险；AI 排期与状态摘要工具减轻事务性负担，但利益相关方博弈与模糊情境决策仍依赖人类。",
+    "sensitivity": {
+      "augmentation_ratio": 0.65,
+      "demand_elasticity": 0.6,
+      "oring_leverage": 0.5,
+      "skill_distance": 0.4,
+      "diffusion_years": -0.2,
+      "absorbing_sector": 0.45,
+      "productivity_capture": 0.55,
+      "task_frontier_open": 0.6
+    },
+    "base_demand_trend": 0.05,
+    "displacement_risk": 0.28,
+    "required_skills": [
+      "Agile Delivery",
+      "Risk & Dependency Management",
+      "Technical Communication",
+      "AI-Assisted Planning Tools"
+    ],
+    "skill_vector": [
+      0.65,
+      0.5,
+      0.6,
+      0.55,
+      0.55,
+      0.75,
+      0.55,
+      0.5
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS: Project Management Specialists",
+      "O*NET 13-1082.00 - Project Management Specialists",
+      "PMI: Pulse of the Profession"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "tech_product_manager",
+        "skill_bridge": "Develop proficiency in Product Roadmapping, User Research Synthesis to transition into the Software Product Manager role.",
+        "retrain_months": 6,
+        "salary_delta": 0.11
+      },
+      {
+        "target_id": "tech_software_eng",
+        "skill_bridge": "Develop proficiency in System Architecture, API Design to transition into the Software Engineer role.",
+        "retrain_months": 8,
+        "salary_delta": 0.13
+      },
+      {
+        "target_id": "log_supply_chain_analyst",
+        "skill_bridge": "Develop proficiency in Demand Forecasting, Inventory Optimization to transition into the Supply Chain Analyst role.",
+        "retrain_months": 7,
+        "salary_delta": 0.08
       }
     ]
   },

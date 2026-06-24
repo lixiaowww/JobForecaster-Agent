@@ -123,6 +123,30 @@ def test_hybrid_query_adds_similarity():
 # find_best_match (relevance regressions)
 # --------------------------------------------------------------------------- #
 
+def test_core_hot_roles_match_kb():
+    """Popular roles must resolve to curated KB entries, not LLM fallback."""
+    job_radar.assert_core_hot_role_coverage(_kb())
+
+
+def test_software_product_manager_strong_match():
+    sim, best = job_radar.find_best_match("software product manager", _kb())
+    assert best is not None
+    assert best["id"] == "tech_product_manager"
+    assert sim >= job_radar.resolve_search_config()["tier_weak"]
+
+
+def test_software_developer_matches_engineer():
+    sim, best = job_radar.find_best_match("software developer", _kb())
+    assert best is not None
+    assert best["id"] == "tech_software_eng"
+    assert sim >= job_radar.resolve_search_config()["tier_weak"]
+
+
+def test_normalize_search_query_aliases():
+    assert job_radar.normalize_search_query("software developer") == "software engineer"
+    assert job_radar.normalize_search_query("Software Developer") == "software engineer"
+
+
 def test_finance_query_matches_finance_industry():
     _, best = job_radar.find_best_match("finance", _kb())
     assert best is not None and best["industry"] == "Finance"

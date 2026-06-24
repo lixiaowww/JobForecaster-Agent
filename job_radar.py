@@ -1,3 +1,4 @@
+import hashlib
 import json
 import math
 import os
@@ -62,13 +63,67 @@ def filter_by_industry(jobs: list[dict], industry: str) -> list[dict]:
         return jobs
     return [j for j in jobs if j.get("industry") == industry]
 
+# Canonical hot roles that must hit the KB strongly (HR-7 coverage guardrail).
+CORE_HOT_ROLE_QUERIES: tuple[tuple[str, str], ...] = (
+    ("software product manager", "tech_product_manager"),
+    ("product manager", "tech_product_manager"),
+    ("产品经理", "tech_product_manager"),
+    ("software developer", "tech_software_eng"),
+    ("software engineer", "tech_software_eng"),
+    ("程序员", "tech_software_eng"),
+    ("data scientist", "tech_data_scientist"),
+    ("project manager", "tech_project_manager"),
+)
+
+
+def assert_core_hot_role_coverage(
+    jobs: list[dict] | None = None,
+    search_cfg: dict | None = None,
+) -> None:
+    """Raise AssertionError if a core role query misses its expected KB id."""
+    pool = jobs if jobs is not None else load_knowledge_base()
+    cfg = search_cfg or _DEFAULT_SEARCH_CONFIG
+    weak = float(cfg["tier_weak"])
+    for query, expected_id in CORE_HOT_ROLE_QUERIES:
+        sim, best = find_best_match(query, pool, search_cfg=cfg)
+        assert best is not None, f"no match for {query!r}"
+        assert best["id"] == expected_id, (
+            f"{query!r} → {best.get('id')} (expected {expected_id}, sim={sim})"
+        )
+        assert sim >= weak, f"{query!r} sim {sim} < tier_weak {weak}"
+
+
 # Larger hashing dim than the crowd default (256) to avoid bucket collisions that
 # made unrelated jobs spuriously match short queries like "finance".
 _SEARCH_EMBED_DIM = 8192
 
 
 def _default_embedder():
-    return HashingEmbedder(dim=_SEARCH_EMBED_DIM)
+    return RadarHashingEmbedder(dim=_SEARCH_EMBED_DIM)
+
+
+_SEARCH_TOKEN = re.compile(r"[a-z0-9]+|[\u4e00-\u9fff]{2,}")
+
+
+def _l2(vec: list[float]) -> list[float]:
+    norm = math.sqrt(sum(x * x for x in vec)) or 1.0
+    return [x / norm for x in vec]
+
+
+class RadarHashingEmbedder(HashingEmbedder):
+    """Hashing embedder with CJK token support for bilingual job search."""
+
+    def embed(self, texts: list[str]) -> list[list[float]]:
+        out = []
+        for text in texts:
+            v = [0.0] * self.dim
+            for tok in _SEARCH_TOKEN.findall(text.lower()):
+                if tok in _QUERY_STOPWORDS and tok.isascii():
+                    continue
+                bucket = int.from_bytes(hashlib.md5(tok.encode()).digest()[:4], "big")
+                v[bucket % self.dim] += 1.0
+            out.append(_l2(v))
+        return out
 
 
 def _job_embed_text(job: dict) -> str:
@@ -78,9 +133,11 @@ def _job_embed_text(job: dict) -> str:
     roles whose titles don't literally contain the word (e.g. "Credit Analyst").
     """
     skills_str = ", ".join(job.get("required_skills", []))
+    aliases_str = " ".join(job.get("search_aliases", []))
     parts = [
         job.get("title", ""),
         job.get("title_zh", ""),
+        aliases_str,
         job.get("industry", ""),
         job.get("category", ""),
         job.get("description", ""),
@@ -97,9 +154,37 @@ _KNOWN_INDUSTRIES = (
 )
 _QUERY_STOPWORDS = frozenset({"and", "the", "for", "with", "from", "role", "jobs"})
 
+# Normalize common alternate job titles before retrieval (HR-7 hot-role coverage).
+_QUERY_TITLE_ALIASES: dict[str, str] = {
+    "software developer": "software engineer",
+    "software development": "software engineer",
+    "programmer": "software engineer",
+    "coder": "software engineer",
+    "full stack developer": "software engineer",
+    "backend developer": "software engineer",
+    "frontend developer": "software engineer",
+    "dev": "software engineer",
+    "product owner": "product manager",
+    "technical product manager": "product manager",
+    "tpm": "project manager",
+    "program manager": "project manager",
+}
+
+
+def normalize_search_query(query: str) -> str:
+    """Map high-traffic alternate titles to canonical KB search phrases."""
+    q = (query or "").strip()
+    if not q:
+        return q
+    key = q.lower()
+    if key in _QUERY_TITLE_ALIASES:
+        return _QUERY_TITLE_ALIASES[key]
+    return q
+
 
 def _query_tokens(query: str) -> list[str]:
-    tokens = [t for t in re.findall(r"[a-z0-9]+", query.lower()) if len(t) >= 3]
+    tokens = [t for t in _SEARCH_TOKEN.findall(query.lower()) if len(t) >= 2]
+    tokens = [t for t in tokens if not (t.isascii() and len(t) < 3)]
     return [t for t in tokens if t not in _QUERY_STOPWORDS]
 
 
@@ -219,6 +304,7 @@ def _apply_search_scores(
     embedder=None,
     search_cfg: dict | None = None,
 ) -> list[dict]:
+    query = normalize_search_query(query)
     if embedder is None:
         embedder = _default_embedder()
     q_emb = embedder.embed([query])[0]
@@ -646,6 +732,7 @@ def find_best_match(
     if not jobs or not query:
         return 0.0, None
 
+    query = normalize_search_query(query)
     cfg = search_cfg or _DEFAULT_SEARCH_CONFIG
     if embedder is None:
         embedder = _default_embedder()

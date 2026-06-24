@@ -15,6 +15,8 @@
   python run.py verify-export        # assert DB live state == committed JSONL (HR-11)
   python run.py warmup               # import predictions_live.jsonl → DB (cache-miss recovery)
   python run.py warmup --src path.jsonl
+  python run.py query-agent audit    # Phase 9: job search calibration audit (CI)
+  python run.py query-agent once     # audit + JSON summary (non-failing weak gaps)
 """
 from __future__ import annotations
 
@@ -144,6 +146,28 @@ def cmd_verify_export(
     print(f"verify-export OK ({len(db_live)} live prediction(s) in sync)")
 
 
+def cmd_query_agent(cfg, *, subcmd: str = "audit"):
+    from services.job_query_agent.audit import run_audit
+
+    agent_cfg = cfg.setdefault("job_query_agent", {})
+    if subcmd == "audit":
+        summary = run_audit(cfg, write_traces=True, queue_proposals=False)
+        print(json.dumps(summary, indent=2))
+    elif subcmd == "once":
+        # Informational run: still fails on P0 regression, logs gaps without CI noise
+        fail_weak = agent_cfg.get("evaluate", {}).get("fail_on_weak_core", True)
+        agent_cfg.setdefault("evaluate", {})["fail_on_weak_core"] = fail_weak
+        try:
+            summary = run_audit(cfg, write_traces=True, queue_proposals=True)
+        except AssertionError as exc:
+            print(str(exc), file=sys.stderr)
+            sys.exit(1)
+        print(json.dumps(summary, indent=2))
+    else:
+        print(f"unknown query-agent subcommand: {subcmd}", file=sys.stderr)
+        sys.exit(2)
+
+
 def cmd_approve(cfg):
     pending = Path("pending")
     mds = sorted(pending.glob("*.md")) if pending.exists() else []
@@ -221,6 +245,9 @@ def main():
     elif cmd == "warmup":
         src = _extract_opt(args, "--src") or out_path or "data/predictions_live.jsonl"
         cmd_warmup(cfg, src)
+    elif cmd == "query-agent":
+        sub = args[1] if len(args) > 1 else "audit"
+        cmd_query_agent(cfg, subcmd=sub)
     else:
         print(__doc__)
         sys.exit(1)
