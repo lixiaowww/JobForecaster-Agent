@@ -190,6 +190,12 @@ Return ONLY a JSON object of this exact shape, nothing else:
   ]
 }}
 
+Before writing each prediction, scan the WRONG entries above for ROOT_CAUSE: tags
+and apply the failure-mode checklist from your system instructions. If the domain
+you are about to predict in matches a past ROOT_CAUSE (e.g. wrong_granularity on
+developer employment), explicitly state in the rationale which segment/metric/horizon
+you chose and why it avoids that failure mode.
+
 Calibrate honestly: if your past resolved predictions show over-confidence, lower
 your confidence accordingly. If the job-evolution prior shows OUTSIDE HISTORY, widen
 confidence intervals and avoid precise point estimates. Reserve high confidence (>0.8)
