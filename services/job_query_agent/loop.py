@@ -104,11 +104,26 @@ def run_calibration_cycle(
     weak_core = [v for v in final_verdicts if v.status == "weak_core"]
     kb_gaps = [v for v in final_verdicts if v.status == "kb_gap"]
 
+    # Transition evaluation pass: fill empty transition_targets via LLM judge.
+    transition_summary: dict[str, Any] = {}
+    if not dry_run and agent_cfg.get("auto_apply", {}).get("enabled", False):
+        try:
+            from services.transition_evaluator.evaluate import run_evaluation_pass
+            fresh_jobs = job_radar.load_knowledge_base(str(kb_path))
+            transition_summary = run_evaluation_pass(
+                fresh_jobs,
+                kb_path=str(kb_path),
+                max_pairs=int(agent_cfg.get("transition_eval_max_pairs", 40)),
+            )
+        except Exception:
+            pass  # non-fatal; transitions improve incrementally
+
     return {
         "rounds": round_idx + 1 if round_idx >= 0 else 0,
         "auto_applied": sum(1 for a in applied_actions if a.get("auto_applied")),
         "apply_actions": applied_actions,
         "proposals_queued": queued,
+        "transition_eval": transition_summary,
         "final": {
             "queries": len(final_verdicts),
             "ok": sum(1 for v in final_verdicts if v.ok),

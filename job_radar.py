@@ -537,9 +537,40 @@ _TRANSITION_WEIGHTS = dict(_DEFAULT_TRANSITION_CONFIG)
 # Skill vectors live in [0, 1]^8, so the max Euclidean distance is sqrt(8).
 _MAX_SKILL_DIST = math.sqrt(8.0)
 
+# Cache skill semantic similarity by sorted id pair (symmetric).
+_SKILL_SEM_CACHE: dict[tuple[str, str], float] = {}
+
+
+def _skill_semantic_sim(a: dict, b: dict) -> float:
+    """Cosine similarity between the required_skills text of two roles.
+
+    Uses the module-level SentenceEmbedder when available; falls back to 0.0
+    (which is then overridden by domain_proximity in the caller).  Results are
+    cached by sorted (id_a, id_b) pair so each pair is embedded once per process.
+    """
+    id_a, id_b = a.get("id", ""), b.get("id", "")
+    key: tuple[str, str] = (min(id_a, id_b), max(id_a, id_b))
+    if key in _SKILL_SEM_CACHE:
+        return _SKILL_SEM_CACHE[key]
+
+    skills_a = ", ".join(a.get("required_skills") or [])
+    skills_b = ", ".join(b.get("required_skills") or [])
+    if not skills_a or not skills_b or _SENTENCE_EMBEDDER is None:
+        result = 0.0
+    else:
+        try:
+            embs = _SENTENCE_EMBEDDER.embed([skills_a, skills_b])
+            result = float(sum(x * y for x, y in zip(embs[0], embs[1])))
+            result = max(0.0, min(1.0, result))
+        except Exception:
+            result = 0.0
+
+    _SKILL_SEM_CACHE[key] = result
+    return result
+
 
 def _skill_distance(a: dict, b: dict) -> float:
-    """Normalised Euclidean distance between two 8-dim skill vectors → [0, 1]."""
+    """Normalised Euclidean distance between two 8-dim economic sensitivity vectors → [0, 1]."""
     va = a.get("skill_vector") or []
     vb = b.get("skill_vector") or []
     n = min(len(va), len(vb))
@@ -719,17 +750,28 @@ def compute_transition_paths(
         dist = _skill_distance(current_job, tgt)
         proximity = 1.0 - dist
         domain_prox = _domain_proximity(current_job, tgt)
+        # Real skill transferability: semantic cosine of required_skills text.
+        # Weighted with domain_proximity so industry adjacency acts as a floor.
+        skill_sem = _skill_semantic_sim(current_job, tgt)
+        overlap_signal = 0.65 * skill_sem + 0.35 * domain_prox
+
         tgt_risk = float(tgt.get("displacement_risk") or 0.0)
         risk_reduction = max(0.0, cur_risk - tgt_risk)
         demand_raw = impact_by_id.get(tid, 0.0)
         demand_norm = (demand_raw - d_min) / d_span
 
+        # LLM-evaluated transition confidence boosts score when cached.
+        llm_conf = tgt.get("_transition_confidence", {}).get(current_job.get("id", ""), None)
+
         score = (
             w["skill"] * proximity
-            + w["overlap"] * domain_prox   # replaces always-zero jaccard
+            + w["overlap"] * overlap_signal
             + w["risk"] * risk_reduction
             + w["demand"] * demand_norm
         )
+        if llm_conf is not None:
+            # Confidence acts as a multiplicative gate: 0.5 = neutral, <0.5 = penalise
+            score *= (0.5 + llm_conf * 0.5)
         # KB-curated targets bypass the retrain cap and use the KB's time estimate.
         curated_hint = curated_by_id.get(tid, {})
         if is_curated:

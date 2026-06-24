@@ -4606,7 +4606,22 @@
       "BLS",
       "Cybersecurity Ventures"
     ],
-    "transition_targets": []
+    "transition_targets": [
+      {
+        "target_id": "tech_software_eng",
+        "retrain_months": 8,
+        "skill_bridge": "Similar tech domain",
+        "confidence": 0.65,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "tech_project_manager",
+        "retrain_months": 8,
+        "skill_bridge": "Similar domain",
+        "confidence": 0.68,
+        "_source": "llm_eval"
+      }
+    ]
   },
   {
     "id": "devops_engineer",
@@ -4712,7 +4727,71 @@
       "BLS",
       "ABA"
     ],
-    "transition_targets": [],
+    "transition_targets": [
+      {
+        "target_id": "legal_paralegal",
+        "retrain_months": 4,
+        "skill_bridge": "Similar domain",
+        "confidence": 0.85,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "legal_compliance_officer",
+        "retrain_months": 4,
+        "skill_bridge": "Similar domain",
+        "confidence": 0.85,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "legal_contracts_analyst",
+        "retrain_months": 2,
+        "skill_bridge": "Similar domain",
+        "confidence": 0.9,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "legal_ai_forensics",
+        "retrain_months": 10,
+        "skill_bridge": "Related field",
+        "confidence": 0.6,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "legal_corporate_counsel",
+        "retrain_months": 2,
+        "skill_bridge": "Similar domain",
+        "confidence": 0.9,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "gov_policy_analyst",
+        "retrain_months": 8,
+        "skill_bridge": "Similar domains",
+        "confidence": 0.65,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "gov_climate_policy_officer",
+        "retrain_months": 10,
+        "skill_bridge": "Related domain",
+        "confidence": 0.6,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "med_journalist",
+        "retrain_months": 8,
+        "skill_bridge": "Similar skills",
+        "confidence": 0.65,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "sales_representative",
+        "retrain_months": 10,
+        "skill_bridge": "Similar skills",
+        "confidence": 0.6,
+        "_source": "llm_eval"
+      }
+    ],
     "search_aliases": [
       "lawyer",
       "律师"

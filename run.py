@@ -187,6 +187,15 @@ def cmd_query_agent(
         ids = [a for a in extra_args if not a.startswith("-")]
         summary = run_apply_pending(cfg, dry_run=dry_run, proposal_ids=ids or None)
         print(json.dumps(summary, indent=2))
+    elif subcmd == "transition-eval":
+        import job_radar as _jr
+        from services.transition_evaluator.evaluate import run_evaluation_pass
+
+        _kb_path = cfg.get("job_radar", {}).get("kb_path", "data/jobs_kb.json")
+        jobs = _jr.load_knowledge_base(_kb_path)
+        max_pairs = int(extra_args[0]) if extra_args else 40
+        summary = run_evaluation_pass(jobs, max_pairs=max_pairs, kb_path=_kb_path)
+        print(json.dumps(summary, indent=2))
     elif subcmd == "ingest-logs":
         from services.job_query_agent.search_log import merge_search_logs
 
