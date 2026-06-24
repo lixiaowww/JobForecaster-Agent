@@ -12,10 +12,17 @@ WORKDIR /home/user/app
 ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 ENV PYTHONUNBUFFERED=1
 ENV EVOLUTION_N_BOOTSTRAP=15
+ENV JOB_RADAR_EMBEDDER=sentence_transformers
+ENV HF_HOME=/home/user/.cache/huggingface
+ENV SENTENCE_TRANSFORMERS_HOME=/home/user/.cache/sentence_transformers
 ENV PATH="/home/user/.local/bin:${PATH}"
 
 COPY --chown=user:user requirements.txt requirements-dashboard.txt ./
-RUN pip install --user --no-cache-dir -r requirements.txt
+RUN pip install --user --no-cache-dir -r requirements.txt -r requirements-dashboard.txt \
+    && python3 -c "\
+from sentence_transformers import SentenceTransformer; \
+SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2'); \
+print('MiniLM weights cached at build time')"
 
 COPY --chown=user:user . .
 

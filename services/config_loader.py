@@ -1,6 +1,7 @@
 """Load config.yaml from project root (HR-3: thresholds live in config)."""
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -8,6 +9,19 @@ from typing import Any
 import yaml
 
 from paths import PROJECT_ROOT
+
+
+def _apply_runtime_embedder_default(data: dict[str, Any]) -> None:
+    """HF Space / explicit env must use semantic search; CI profile stays hashing."""
+    jr = data.setdefault("job_radar", {})
+    search = jr.setdefault("search", {})
+    if os.getenv("JOB_RADAR_EMBEDDER"):
+        search["embedder"] = os.environ["JOB_RADAR_EMBEDDER"]
+    elif os.getenv("SPACE_ID"):
+        search.setdefault("embedder", "sentence_transformers")
+    cfg_path = os.getenv("FORECASTER_CONFIG", "")
+    if cfg_path.endswith("config.ci.yaml"):
+        search["embedder"] = "hashing"
 
 
 @lru_cache(maxsize=1)
@@ -23,6 +37,7 @@ def load_config(path: str | None = None) -> dict[str, Any]:
         "impact_threshold": 0.15,
         "kb_path": "data/jobs_kb.json",
     })
+    _apply_runtime_embedder_default(data)
     data.setdefault("job_market", {
         "enabled": True,
         "sources": {"bls": {"enabled": True}},

@@ -431,8 +431,12 @@ The agent's goal is to stay well below 0.25 — the "coin-flip" baseline.""",
               "仅为文本检索——转型推荐见下方技能契合度排序。",
     },
     "radar_search_retrieval_note": {
-        "en": "At-risk list sorted by search relevance. Opportunity list sorted by **transition fit** from your anchor role.",
-        "zh": "高风险列表按搜索相关度排序。机会列表按锚定岗位的**转型契合度**排序。",
+        "en": "Opportunity list sorted by **transition fit** from your anchor role.",
+        "zh": "机会列表按锚定岗位的**转型契合度**排序。",
+    },
+    "radar_embedder_fallback": {
+        "en": "Semantic search unavailable ({reason}) — using offline hashing embedder. Relevance scores will be lower (e.g. ~0.71 not ~0.85). Rebuild the Space image or install sentence-transformers.",
+        "zh": "语义搜索不可用（{reason}）——已回退到离线 hashing 嵌入，相关度会偏低（例如 ~0.71 而非 ~0.85）。请重建 Space 镜像或安装 sentence-transformers。",
     },
     "radar_anchor_auto": {
         "en": "Search anchor: **{title}** — change via dropdown in Transition Paths.",

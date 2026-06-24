@@ -68,6 +68,13 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
     # Load and score jobs
     kb_path = job_radar_cfg.get("kb_path", "data/jobs_kb.json")
     search_cfg = job_radar.resolve_search_config(job_radar_cfg)
+    if search_cfg.get("embedder") == "sentence_transformers":
+        active = job_radar.resolve_embedder(search_cfg)
+        if not isinstance(active, job_radar.SentenceEmbedder):
+            st.warning(t(
+                "radar_embedder_fallback",
+                reason=job_radar.embedder_fallback_reason() or "unknown",
+            ))
     user_experience = st.session_state.get("radar_experience_level", "mid")
     user_retrain_cap = st.session_state.get("radar_max_retrain_months")
     all_jobs = job_radar.load_knowledge_base(kb_path)

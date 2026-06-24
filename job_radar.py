@@ -170,17 +170,29 @@ class SentenceEmbedder:
 
 
 _SENTENCE_EMBEDDER: SentenceEmbedder | None = None
+_EMBEDDER_FALLBACK_REASON: str | None = None
+
+
+def embedder_fallback_reason() -> str | None:
+    """Set when ``sentence_transformers`` was requested but hashing is used."""
+    return _EMBEDDER_FALLBACK_REASON
 
 
 def resolve_embedder(search_cfg: dict | None = None) -> Any:
     """Return the configured embedder: ``sentence_transformers`` or ``hashing``."""
-    global _SENTENCE_EMBEDDER
+    global _SENTENCE_EMBEDDER, _EMBEDDER_FALLBACK_REASON
     name = (search_cfg or {}).get("embedder", "hashing")
-    if name == "sentence_transformers":
+    if name != "sentence_transformers":
+        _EMBEDDER_FALLBACK_REASON = None
+        return _default_embedder()
+    try:
         if _SENTENCE_EMBEDDER is None:
             _SENTENCE_EMBEDDER = SentenceEmbedder()
+        _EMBEDDER_FALLBACK_REASON = None
         return _SENTENCE_EMBEDDER
-    return _default_embedder()
+    except Exception as exc:
+        _EMBEDDER_FALLBACK_REASON = str(exc)
+        return _default_embedder()
 
 
 def _job_embed_text(job: dict) -> str:

@@ -1,6 +1,6 @@
 # Product Requirement Document (PRD) — forecaster-agent
 
-**Version:** 0.10 (Job Query Calibration Agent)  
+**Version:** 0.10 (Semantic Job Search + Query Calibration Agent)  
 **Last updated:** 2026-06-24
 
 An autonomous AI × economy forecasting system that generates, calibrates, and publishes **falsifiable** predictions — with explicit limits on historical extrapolation.
@@ -88,14 +88,16 @@ Parallel surface: `dashboard.py` (Streamlit) + `services/read_model.py` (read AP
 
 | Capability | Status |
 |------------|--------|
-| 65 occupation profiles, 13 industries | ✅ |
+| ~80 occupation profiles, 13 industries | ✅ v0.10 |
 | Hybrid RAG (α·structural + β·semantic) | ✅ |
-| **Search retrieval** (query↔job text: embedding + lexical `combined_similarity`) | ✅ v0.8 hotfix |
+| **Search retrieval** (`combined_similarity`: semantic embed + lexical blend) | ✅ v0.10 |
 | **Transition recommendation** (`compute_transition_paths`: skill 40% + overlap 15% + risk 25% + demand 20%) | ✅ |
 | Search vs transition paths kept separate (HR-12) | ✅ Phase 8 |
 | Anchored search hides misleading at-risk column (weak text scores) | ✅ Phase 8 / v0.10 |
 | Hot-role KB coverage (`CORE_HOT_ROLE_QUERIES` + `search_aliases`) | ✅ v0.10 |
-| Bilingual search (`RadarHashingEmbedder`, CJK tokens) | ✅ v0.10 |
+| Semantic job search (`SentenceEmbedder` / MiniLM, title-only vectors) | ✅ v0.10 |
+| Offline CI search (`RadarHashingEmbedder` via `config.ci.yaml`) | ✅ HR-1 |
+| Bilingual + CJK queries (multilingual embed + lexical tokens) | ✅ v0.10 |
 | Query title normalization (`normalize_search_query`, `title_aliases`) | ✅ v0.10 |
 | User-facing match tiers (无匹配 / 弱 / 强) | ✅ Phase 8 |
 | Personalized transition weights (experience level, retrain tolerance) | ✅ Phase 8 |
@@ -165,7 +167,7 @@ Continuous **retrieval QA loop** — discovers search queries, evaluates KB matc
 | **HR-9** | Citation integrity | LLM-generated `sources` URLs pass schema check; arXiv IDs must not reference a future YYMM; `example.com` / placeholder domains rejected at parse time. Enforced in `forecast._sanitize_sources()`. |
 | **HR-10** | Resolved-state durability | `run.py export` serialises `status`, `outcome`, `brier`, `resolved_at`; `ensure_demo_registry` reloads them via `model_validate_json` preserving resolution. Track record must never regress to all-`open` after a cache eviction. |
 | **HR-11** | Origin transparency | Every prediction shown in the Track Record tab carries an explicit `origin` badge (`seed` = curated benchmark, `live` = daily LLM cron). `run.py export` writes **live-only** rows to `predictions_live.jsonl`; `run.py verify-export` fails CI if DB live state diverges from the committed file after a resolve. |
-| **HR-12** | Retrieval ≠ recommendation | Job **search** ranks by `combined_similarity` (query↔occupation text). **Transition fit** ranks by `transition_score` from `compute_transition_paths()` only. UI and API must not present search hits as career recommendations without an anchor role + transition pass. Thresholds in `config.yaml` (HR-3), not raw embedding cosine (~0.7 is wrong scale for `HashingEmbedder`). |
+| **HR-12** | Retrieval ≠ recommendation | Job **search** ranks by `combined_similarity` (semantic + lexical blend). **Transition fit** ranks by `transition_score` from `compute_transition_paths()` only. UI and API must not present search hits as career recommendations without an anchor role + transition pass. Thresholds in `config.yaml` (HR-3); use **tier labels** (`tier_no_match` / `tier_weak` / `tier_strong`), not raw cosine intuition (~0.7). Production embedder: `sentence_transformers`; CI/harness: `hashing`. |
 | **HR-13** | Field feedback profile | Radar career survey collects **canonical `job_title`** (KB dropdown, not free text) plus **`experience_level`** (bucket: junior / mid / senior, or years-in-role bands). Aggregates keyed by title today; stratify by `(title, experience_level)` when n≥5 per cell. Powers personalized retrain tolerance and transition weight overrides. |
 
 ---
@@ -178,7 +180,7 @@ Continuous **retrieval QA loop** — discovers search queries, evaluates KB matc
 | `evolution.n_bootstrap` | GMM bootstrap iterations (use `10` in tests) |
 | `evolution.scenario` | Optional override of `CURRENT_AI_SCENARIO` |
 | `job_radar.*` | Hybrid RAG weights, KB path, transition weights |
-| `job_radar.search.*` | Embed/lex blend, tier thresholds (`tier_no_match` / `tier_weak` / `tier_strong`), `title_aliases` map (HR-3) |
+| `job_radar.search.*` | `embedder` (`sentence_transformers` \| `hashing`), embed/lex blend, tier thresholds, `title_aliases` (HR-3) |
 | `job_radar.personalization.*` | Experience-level weight overrides, max retrain months (Phase 8) |
 | `job_query_agent.*` | Discover sources, evaluate gates, `auto_apply` types/limits, traces path (Phase 9) |
 | `crowd.*` | Gate thresholds (for Phase 2 API) |
@@ -263,10 +265,9 @@ performance.
 ### Phase 8 — Personalized Job Radar & Search Quality (v0.9, 2026-06-23)
 
 Problem: search retrieval and career recommendation were conflated — e.g. a finance
-process-improvement query surfacing an unrelated AI trading role. Raw embedding cosine
-(~0.15 legacy threshold, or user-intuitive ~0.7) is the wrong scale for
-`HashingEmbedder`; recommendations also ignored user seniority (novice vs senior retrain
-cost) and field survey lacked tenure.
+process-improvement query surfacing an unrelated AI trading role. Legacy hashing-only
+embeddings and description-diluted vectors produced weak bilingual matches; recommendations
+also ignored user seniority (novice vs senior retrain cost) and field survey lacked tenure.
 
 **Design principles (ranking priorities for transition paths):**
 
@@ -291,7 +292,7 @@ cost) and field survey lacked tenure.
 - [x] **Strong-match threshold audit** — target ~0.65–0.70 on calibrated combined score (after config move + tier labelling)
 - [x] **Anchored-search UX** — when a strong search anchor is set, hide the at-risk column (weak `combined_similarity` must not surface unrelated roles, e.g. engineer → Logistics Dispatcher)
 
-**Explicitly out of Phase 8:** prediction-crowd contributor job-title collection; Indeed/LinkedIn scraping; real embedding model swap (stays behind `Embedder` Protocol, HR-1).
+**Explicitly out of Phase 8:** prediction-crowd contributor job-title collection; Indeed/LinkedIn scraping. *(Embedding model swap delivered in v0.10 — see RELEASE_v0.10.md; stays behind `resolve_embedder()` + HR-1 dual config.)*
 
 ### Phase 9 — Job Query Calibration Agent (v0.10, 2026-06-24)
 
@@ -340,6 +341,18 @@ manual bug reports.
 - [x] P1: `query-agent apply` — merge human-approved proposals from `pending/job_calibration/`
 - [x] P2: HF/Radar search log ingest (`data/radar_search_log.jsonl`) + frequency-weighted discovery
 - [x] P3: `kb_profile_new` → LLM/cache KB append via `apply` + gated auto in `run`
+
+### Phase 9b — Semantic job search (v0.10, 2026-06-24)
+
+Production search upgraded from hashing-only to **multilingual sentence embeddings** while CI remains offline.
+
+- [x] `SentenceEmbedder` — `paraphrase-multilingual-MiniLM-L12-v2`; `_job_embed_title()` (title + aliases only)
+- [x] `resolve_embedder(search_cfg)` — `config.yaml` → `sentence_transformers`; `config.ci.yaml` → `hashing`
+- [x] Lexical fix: preserve 2-char abbreviations (`ml`, `hr`, `qa`, `gp`)
+- [x] KB alias corrections + seed tuning; **114–115/115 queries OK**, 0 P0
+- [x] Dockerfile pre-downloads MiniLM for HF Space
+
+See [RELEASE_v0.10.md](./RELEASE_v0.10.md) for score lift table and commit list.
 
 ---
 
