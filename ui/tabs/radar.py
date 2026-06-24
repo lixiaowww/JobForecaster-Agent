@@ -134,6 +134,13 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                         st.info(t("radar_llm_ok", title=job_title(llm_generated_profile)))
                     else:
                         st.warning(t("radar_llm_fail"))
+            elif best_sim < job_radar._STRONG_MATCH_THRESHOLD:
+                st.warning(t(
+                    "radar_search_weak",
+                    title=job_title(best_job),
+                    sim=best_sim,
+                    q=search_query,
+                ))
             else:
                 st.success(t(
                     "radar_search_hit",
@@ -141,16 +148,27 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     sim=best_sim,
                     q=search_query,
                 ))
-            final_jobs.sort(key=lambda x: x.get("hybrid_score", 0.0), reverse=True)
+            final_jobs.sort(
+                key=lambda x: (
+                    x.get("combined_similarity", 0.0),
+                    x.get("hybrid_score", 0.0),
+                ),
+                reverse=True,
+            )
         # 1. Split into At-Risk and Emerging Opportunities
         at_risk_list = [j for j in final_jobs if j.get("category") == "at_risk"]
         opportunity_list = [j for j in final_jobs if j.get("category") in ("emerging", "transforming")]
         
         # Sort lists properly based on whether a search query is active
         if search_query:
-            # Keep sorted by semantic similarity (hybrid_score)
-            at_risk_list.sort(key=lambda x: x.get("hybrid_score", 0.0), reverse=True)
-            opportunity_list.sort(key=lambda x: x.get("hybrid_score", 0.0), reverse=True)
+            at_risk_list.sort(
+                key=lambda x: (x.get("combined_similarity", 0.0), x.get("hybrid_score", 0.0)),
+                reverse=True,
+            )
+            opportunity_list.sort(
+                key=lambda x: (x.get("combined_similarity", 0.0), x.get("hybrid_score", 0.0)),
+                reverse=True,
+            )
         else:
             # Sort by absolute impact severity
             at_risk_list.sort(key=lambda x: x.get("impact_score", 0.0)) # most negative first

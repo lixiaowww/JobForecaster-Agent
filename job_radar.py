@@ -90,35 +90,96 @@ def _job_embed_text(job: dict) -> str:
     return " ".join(p for p in parts if p)
 
 
+_KNOWN_INDUSTRIES = (
+    "Agriculture", "Construction", "Education", "Finance", "Government",
+    "Healthcare", "Hospitality", "Legal", "Logistics", "Manufacturing",
+    "Media", "Retail", "Tech",
+)
+_QUERY_STOPWORDS = frozenset({"and", "the", "for", "with", "from", "role", "jobs"})
+
+
+def _query_tokens(query: str) -> list[str]:
+    tokens = [t for t in re.findall(r"[a-z0-9]+", query.lower()) if len(t) >= 3]
+    return [t for t in tokens if t not in _QUERY_STOPWORDS]
+
+
+def _lexical_overlap(query: str, text: str) -> float:
+    tokens = _query_tokens(query)
+    if not tokens:
+        return 0.0
+    text_l = text.lower()
+    return sum(1 for t in tokens if t in text_l) / len(tokens)
+
+
+def _industry_only_query(query: str) -> str | None:
+    q = query.strip().lower()
+    for ind in _KNOWN_INDUSTRIES:
+        if q == ind.lower():
+            return ind
+    return None
+
+
+def _score_job_match(query: str, job: dict, q_emb: list[float], j_emb: list[float]) -> dict:
+    """Blend embedding + lexical overlap; penalise multi-word queries that only hit one token."""
+    emb_sim = sum(a * b for a, b in zip(q_emb, j_emb))
+    text = _job_embed_text(job)
+    lex = _lexical_overlap(query, text)
+    combined = 0.45 * emb_sim + 0.55 * lex
+
+    tokens = _query_tokens(query)
+    if len(tokens) >= 2:
+        hits = sum(1 for t in tokens if t in text.lower())
+        min_hits = max(2, (len(tokens) + 1) // 2)
+        if hits < min_hits:
+            combined *= 0.45
+
+    if _industry_only_query(query) and not is_ai_role(job):
+        combined = min(1.0, combined + 0.08)
+
+    return {
+        "semantic_similarity": round(emb_sim, 3),
+        "lexical_overlap": round(lex, 3),
+        "combined_similarity": round(combined, 3),
+    }
+
+
+def _apply_search_scores(jobs: list[dict], query: str, embedder=None) -> list[dict]:
+    if embedder is None:
+        embedder = _default_embedder()
+    q_emb = embedder.embed([query])[0]
+    texts = [_job_embed_text(j) for j in jobs]
+    j_embs = embedder.embed(texts)
+    for idx, j in enumerate(jobs):
+        scores = _score_job_match(query, j, q_emb, j_embs[idx])
+        j.update(scores)
+    return jobs
+
+
 def get_hybrid_scores(jobs: list[dict], query: str, alpha: float, beta: float, embedder=None) -> list[dict]:
     """
-    Calculates hybrid score: alpha * impact_score + beta * semantic_similarity.
-    If query is empty, semantic similarity is set to 0.0 and hybrid score is alpha * impact_score.
+    Calculates hybrid score: alpha * impact_score + beta * search relevance.
+    When a query is present, relevance uses combined embedding + lexical overlap
+    (not embedding alone), and results should be sorted by hybrid_score with
+    search-weighted coefficients so impact_score does not dominate.
     """
     if not query:
         for j in jobs:
             j["semantic_similarity"] = 0.0
+            j["lexical_overlap"] = 0.0
+            j["combined_similarity"] = 0.0
             j["hybrid_score"] = round(alpha * j.get("impact_score", 0.0), 3)
         return jobs
-        
-    if embedder is None:
-        embedder = _default_embedder()
 
-    # Embed the query
-    q_emb = embedder.embed([query])[0]
-    
-    # Pre-embed jobs
-    texts = [_job_embed_text(j) for j in jobs]
-    j_embs = embedder.embed(texts)
-    
-    # Calculate cosine similarity
-    for idx, j in enumerate(jobs):
-        emb = j_embs[idx]
-        # Dot product since HashingEmbedder outputs L2 normalised vectors
-        similarity = sum(q * val for q, val in zip(q_emb, emb))
-        j["semantic_similarity"] = round(similarity, 3)
-        j["hybrid_score"] = round(alpha * j.get("impact_score", 0.0) + beta * similarity, 3)
-        
+    _apply_search_scores(jobs, query, embedder)
+    # When searching, weight relevance heavily so impact_score does not dominate ordering.
+    search_alpha, search_beta = 0.05, 0.95
+    for j in jobs:
+        rel = j.get("combined_similarity", j.get("semantic_similarity", 0.0))
+        j["hybrid_score"] = round(
+            search_alpha * j.get("impact_score", 0.0) + search_beta * rel,
+            3,
+        )
+
     return jobs
 
 def _normalize_transition_target(target) -> dict | None:
@@ -421,31 +482,28 @@ def get_empirical_metrics() -> dict:
 # Dynamic KB expansion via LLM (when search query has no close match)
 # ---------------------------------------------------------------------------
 
-_SIMILARITY_THRESHOLD = 0.15  # below this, we consider "not in KB"
+_SIMILARITY_THRESHOLD = 0.42   # below → no confident KB match (LLM expansion)
+_STRONG_MATCH_THRESHOLD = 0.55  # above → green "search hit" banner
 
 
 def find_best_match(query: str, jobs: list[dict], embedder=None) -> tuple[float, dict | None]:
-    """Return (max_similarity, best_job) for the query against the KB.
-    If KB is empty, returns (0.0, None).
-    """
+    """Return (combined_similarity, best_job) for the query against the KB."""
     if not jobs or not query:
         return 0.0, None
 
     if embedder is None:
         embedder = _default_embedder()
 
-    q_emb = embedder.embed([query])[0]
-    texts = [_job_embed_text(j) for j in jobs]
-    j_embs = embedder.embed(texts)
-    best_sim = 0.0
-    best_job = None
-    for idx, j in enumerate(jobs):
-        sim = sum(q * val for q, val in zip(q_emb, j_embs[idx]))
-        if sim > best_sim:
-            best_sim = sim
-            best_job = j
+    pool = jobs
+    ind = _industry_only_query(query)
+    if ind:
+        subset = [j for j in jobs if j.get("industry") == ind]
+        if subset:
+            pool = subset
 
-    return best_sim, best_job
+    _apply_search_scores(pool, query, embedder)
+    best = max(pool, key=lambda j: j.get("combined_similarity", 0.0))
+    return best.get("combined_similarity", 0.0), best
 
 
 # --------------------------------------------------------------------------- #

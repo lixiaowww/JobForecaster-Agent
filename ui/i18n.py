@@ -366,10 +366,16 @@ The agent's goal is to stay well below 0.25 — the "coin-flip" baseline.""",
         "zh": "无法生成画像，请配置 `GROQ_API_KEY` 或 `ANTHROPIC_API_KEY`。",
     },
     "radar_search_hit": {
-        "en": "Most relevant role for «{q}»: **{title}** (search relevance {sim:.2f}). "
-              "This is a text-search match, not a career recommendation.",
-        "zh": "与「{q}」最相关的岗位：**{title}**（检索相关度 {sim:.2f}）。"
-              "这是文本检索匹配，并非职业推荐。",
+        "en": "Strong match for «{q}»: **{title}** (relevance {sim:.2f}). "
+              "Text-search match only — not a career recommendation.",
+        "zh": "与「{q}」高度匹配：**{title}**（相关度 {sim:.2f}）。"
+              "仅为文本检索匹配，并非职业推荐。",
+    },
+    "radar_search_weak": {
+        "en": "Weak match for «{q}» (relevance {sim:.2f} → **{title}**). "
+              "Only part of your query matched the knowledge base — results below are approximate.",
+        "zh": "与「{q}」弱匹配（相关度 {sim:.2f} → **{title}**）。"
+              "查询仅部分命中知识库——下方结果为近似排序。",
     },
     "badge_ai": {"en": "AI-native", "zh": "AI 原生"},
     "badge_non_ai": {"en": "Non-AI", "zh": "非 AI"},

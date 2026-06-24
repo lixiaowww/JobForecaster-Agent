@@ -107,6 +107,7 @@ def test_hybrid_empty_query_uses_impact_only():
     out = job_radar.get_hybrid_scores(jobs, "", 0.6, 0.4)
     for j in out:
         assert j["semantic_similarity"] == 0.0
+        assert j["combined_similarity"] == 0.0
         assert j["hybrid_score"] == round(0.6 * j["impact_score"], 3)
 
 
@@ -114,7 +115,8 @@ def test_hybrid_query_adds_similarity():
     jobs = job_radar.compute_impact_scores(_kb(), {})
     out = job_radar.get_hybrid_scores(jobs, "machine learning engineer", 0.6, 0.4)
     assert all("semantic_similarity" in j for j in out)
-    assert any(j["semantic_similarity"] > 0 for j in out)
+    assert all("combined_similarity" in j for j in out)
+    assert any(j["combined_similarity"] > 0 for j in out)
 
 
 # --------------------------------------------------------------------------- #
@@ -124,6 +126,22 @@ def test_hybrid_query_adds_similarity():
 def test_finance_query_matches_finance_industry():
     _, best = job_radar.find_best_match("finance", _kb())
     assert best is not None and best["industry"] == "Finance"
+    assert not job_radar.is_ai_role(best)
+
+
+def test_finance_process_improvement_below_confidence_threshold():
+    sim, best = job_radar.find_best_match("finance process improvement", _kb())
+    assert sim < job_radar._SIMILARITY_THRESHOLD
+    if best is not None:
+        assert best["title"] != "Algorithmic AI Trading Specialist"
+
+
+def test_finance_process_improvement_not_sorted_by_ai_trading_impact():
+    import evolution as ev
+    jobs = job_radar.compute_impact_scores(_kb(), dict(ev.CURRENT_AI_SCENARIO))
+    hybrid = job_radar.get_hybrid_scores(jobs, "finance process improvement", 0.6, 0.4)
+    top = max(hybrid, key=lambda j: j.get("hybrid_score", 0))
+    assert top["title"] != "Algorithmic AI Trading Specialist"
 
 
 def test_find_best_match_empty_inputs():
