@@ -4452,16 +4452,12 @@
     ],
     "search_aliases": [
       "会计",
-      "accounts receivable manager",
       "accounts payable manager",
       "bookkeeper",
       "controller",
       "cpa",
-      "ar manager",
-      "a/r manager",
       "ap manager",
       "a/p manager",
-      "accounts receivable",
       "accounts payable"
     ]
   },
@@ -5672,5 +5668,85 @@
       "Restaurant Industry Job Descriptions"
     ],
     "transition_targets": []
+  },
+  {
+    "id": "accounts_receivable_manager",
+    "title": "Accounts Receivable Manager",
+    "title_zh": "应收账款经理",
+    "industry": "Finance",
+    "category": "at_risk",
+    "description": "Manages the full accounts receivable cycle: credit assessment, invoicing, collections, and cash application. AI is automating invoice processing, payment matching, and collections prioritization at high speed — making manual AR clerks at risk while managers who can oversee AI-driven workflows remain relevant.",
+    "description_zh": "管理完整的应收账款周期：信用评估、开票、催款和现金核销。AI正在自动化发票处理和收款优先排序，手动AR岗位面临替代风险。",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": 0.2,
+      "oring_leverage": -0.3,
+      "skill_distance": 0.5,
+      "diffusion_years": 0.6,
+      "absorbing_sector": -0.2,
+      "productivity_capture": 0.8,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": -0.1,
+    "displacement_risk": 0.7,
+    "required_skills": [
+      "accounts receivable",
+      "credit analysis",
+      "collections management",
+      "invoice processing",
+      "cash application",
+      "ERP systems",
+      "financial reconciliation",
+      "aging reports",
+      "dispute resolution"
+    ],
+    "skill_vector": [
+      0.8,
+      0.6,
+      0.7,
+      0.4,
+      0.3,
+      0.2,
+      0.1,
+      0.5
+    ],
+    "emergence_year": null,
+    "sources": [
+      "Monster.com",
+      "SCALE Portal"
+    ],
+    "transition_targets": [
+      {
+        "target_id": "fin_credit_analyst",
+        "retrain_months": 6,
+        "skill_bridge": "Credit analysis skills transfer directly; add financial modeling and risk frameworks"
+      },
+      {
+        "target_id": "accountant",
+        "retrain_months": 8,
+        "skill_bridge": "Broaden from AR cycle to full financial reporting and general ledger"
+      },
+      {
+        "target_id": "fin_risk_manager",
+        "retrain_months": 18,
+        "skill_bridge": "Collections risk experience is a foundation; add quantitative modeling and regulatory knowledge"
+      },
+      {
+        "target_id": "fin_ai_compliance",
+        "retrain_months": 14,
+        "skill_bridge": "Finance process expertise + learn AI audit frameworks for automated AR/AP systems"
+      }
+    ],
+    "search_aliases": [
+      "accounts receivable manager",
+      "ar manager",
+      "a/r manager",
+      "accounts receivable specialist",
+      "ar specialist",
+      "collections manager",
+      "billing manager",
+      "credit and collections manager",
+      "应收账款经理"
+    ]
   }
 ]

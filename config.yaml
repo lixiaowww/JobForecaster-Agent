@@ -51,11 +51,13 @@ job_radar:
     tier_weak: 0.55        # informational mid-band within weak tier
     tier_strong: 0.65      # at/above → strong text match (HR-12)
     title_aliases:
-      ar manager: Accountant
-      a/r manager: Accountant
+      ar manager: Accounts Receivable Manager
+      a/r manager: Accounts Receivable Manager
+      accounts receivable manager: Accounts Receivable Manager
+      accounts receivable: Accounts Receivable Manager
+      collections manager: Accounts Receivable Manager
       ap manager: Accountant
       a/p manager: Accountant
-      accounts receivable: Accountant
       accounts payable: Accountant
   transition:
     skill: 0.40

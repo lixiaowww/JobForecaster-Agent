@@ -531,11 +531,11 @@
   },
   {
     "query": "ar manager",
-    "expected_id": "accountant"
+    "expected_id": "accounts_receivable_manager"
   },
   {
     "query": "a/r manager",
-    "expected_id": "accountant"
+    "expected_id": "accounts_receivable_manager"
   },
   {
     "query": "ap manager",
@@ -543,7 +543,7 @@
   },
   {
     "query": "accounts receivable",
-    "expected_id": "accountant"
+    "expected_id": "accounts_receivable_manager"
   },
   {
     "query": "accounts payable",
@@ -564,5 +564,13 @@
   {
     "query": "人力资源经理",
     "expected_id": "hr_manager"
+  },
+  {
+    "query": "collections manager",
+    "expected_id": "accounts_receivable_manager"
+  },
+  {
+    "query": "应收账款经理",
+    "expected_id": "accounts_receivable_manager"
   }
 ]
