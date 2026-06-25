@@ -3170,12 +3170,6 @@
         "salary_delta": 0.0
       },
       {
-        "target_id": "log_customs_broker",
-        "skill_bridge": "Develop proficiency in HTS Tariff Classification, Import/Export Regulations to transition into the Customs Broker role.",
-        "retrain_months": 3,
-        "salary_delta": 0.0
-      },
-      {
         "target_id": "ret_store_manager",
         "skill_bridge": "Develop proficiency in Team Leadership, Inventory Management to transition into the Retail Store Manager role.",
         "retrain_months": 3,
@@ -4442,14 +4436,7 @@
       "BLS",
       "Gartner"
     ],
-    "transition_targets": [
-      {
-        "target_id": "fin_credit_analyst",
-        "skill_bridge": null,
-        "retrain_months": null,
-        "salary_delta": null
-      }
-    ],
+    "transition_targets": [],
     "search_aliases": [
       "会计",
       "accounts payable manager",
@@ -4731,24 +4718,10 @@
     ],
     "transition_targets": [
       {
-        "target_id": "legal_paralegal",
-        "retrain_months": 4,
-        "skill_bridge": "Similar domain",
-        "confidence": 0.85,
-        "_source": "llm_eval"
-      },
-      {
         "target_id": "legal_compliance_officer",
         "retrain_months": 4,
         "skill_bridge": "Similar domain",
         "confidence": 0.85,
-        "_source": "llm_eval"
-      },
-      {
-        "target_id": "legal_contracts_analyst",
-        "retrain_months": 2,
-        "skill_bridge": "Similar domain",
-        "confidence": 0.9,
         "_source": "llm_eval"
       },
       {
@@ -4787,11 +4760,19 @@
         "_source": "llm_eval"
       },
       {
-        "target_id": "sales_representative",
-        "retrain_months": 10,
-        "skill_bridge": "Similar skills",
-        "confidence": 0.6,
-        "_source": "llm_eval"
+        "target_id": "legal_corporate_counsel",
+        "retrain_months": 6,
+        "skill_bridge": "Specialization shift from litigation/general to corporate advisory; same legal reasoning, narrower scope"
+      },
+      {
+        "target_id": "legal_ai_forensics",
+        "retrain_months": 18,
+        "skill_bridge": "Legal analysis + learn AI audit methods; niche but rapidly growing as AI regulation expands"
+      },
+      {
+        "target_id": "gov_policy_analyst",
+        "retrain_months": 12,
+        "skill_bridge": "Regulatory drafting and policy interpretation overlap directly with legal research skills"
       }
     ],
     "search_aliases": [
@@ -5044,13 +5025,6 @@
         "retrain_months": 8,
         "skill_bridge": "Similar domain",
         "confidence": 0.65,
-        "_source": "llm_eval"
-      },
-      {
-        "target_id": "tech_data_annotator",
-        "retrain_months": 10,
-        "skill_bridge": "Related tech domain",
-        "confidence": 0.6,
         "_source": "llm_eval"
       },
       {

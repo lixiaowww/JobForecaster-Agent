@@ -494,26 +494,26 @@ def render(scenario_input: dict, prior, job_radar_cfg: dict):
                     bridge_html = ", ".join(bridge_skills) if bridge_skills else "—"
                     match_pct = tr.get("transition_score", 0.0) * 100
 
+                    risk_arrow = f"{cur_risk:.0f}% → {tgt_risk:.0f}%"
+                    risk_arrow_color = "#3fb950" if tgt_risk < cur_risk else "#ffaa55"
                     st.markdown(f"""
                     <div class="metric-card" style="text-align: left; height: 100%; border-color: #30363d;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
                             <span style="font-size: 0.75rem; background: #1f2328; padding: 2px 6px; border-radius: 4px; color: #8b949e !important;">{cat_badge} · {industry_label(tr["industry"])}</span>
                             <span style="font-size: 0.85rem; font-weight: bold; color: #58a6ff !important;">{t("lbl_match_score")}: {match_pct:.0f}%</span>
                         </div>
-                        <div style="margin-bottom: 0.4rem;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
                             <span style="font-size: 0.7rem; background: rgba(255,255,255,0.05); border: 1px solid {ai_color}; color: {ai_color} !important; padding: 1px 6px; border-radius: 10px;">{ai_badge}</span>
+                            <span style="font-size: 0.78rem; color: {risk_arrow_color} !important; font-weight: 600;">⚡ {t("lbl_displacement")}: {risk_arrow}</span>
+                            <span style="font-size: 0.78rem; color: #bc8cff !important;">⏱ {tr["retrain_months"]} {t("lbl_months")}</span>
                         </div>
                         <h4 style="margin-top: 0; color: #58a6ff !important; font-size: 1.1rem;">{tr_title}</h4>
-                        <p style="font-size: 0.85rem; color: #c9d1d9 !important; line-height: 1.4; min-height: 50px;">{tr_desc}</p>
-                        <div style="background: rgba(63, 185, 80, 0.06); border-left: 2px solid #3fb950; padding: 6px 10px; margin-bottom: 0.6rem; font-size: 0.78rem; color: #f0f6fc !important;">
-                            <strong>{t("lbl_rationale")}:</strong> {rationale_html}
-                        </div>
-                        <div style="background: rgba(88, 166, 255, 0.05); border-left: 2px solid #58a6ff; padding: 6px 10px; margin-bottom: 0.8rem; font-size: 0.8rem; color: #f0f6fc !important;">
+                        <p style="font-size: 0.85rem; color: #c9d1d9 !important; line-height: 1.4; min-height: 40px;">{tr_desc}</p>
+                        <div style="background: rgba(88, 166, 255, 0.05); border-left: 3px solid #58a6ff; padding: 8px 10px; margin-bottom: 0.6rem; font-size: 0.82rem; color: #f0f6fc !important; line-height: 1.5;">
                             <strong>{t("lbl_skill_bridge")}:</strong> {bridge_html}
                         </div>
-                        <div style="font-size: 0.8rem; color: #8b949e !important; border-top: 1px solid #21262d; padding-top: 0.5rem; display: flex; justify-content: space-between;">
+                        <div style="font-size: 0.78rem; color: #8b949e !important; border-top: 1px solid #21262d; padding-top: 0.4rem;">
                             <span>{t("lbl_demand_outlook")}: <strong style="color: {demand_color};">{demand:+.2f}</strong></span>
-                            <span>{t("lbl_retrain")}: <strong style="color: #bc8cff;">{tr["retrain_months"]} {t("lbl_months")}</strong></span>
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
