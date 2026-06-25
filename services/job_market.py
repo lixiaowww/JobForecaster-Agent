@@ -256,12 +256,17 @@ def _fetch_bls_live(series_ids: list[str], start_year: str, end_year: str) -> di
     try:
         import requests
 
-        payload = {
+        payload: dict[str, Any] = {
             "seriesid": series_ids,
             "startyear": start_year,
             "endyear": end_year,
             "catalog": False,
         }
+        # API key raises rate limit: 500 series/query vs 25 without key
+        bls_key = os.environ.get("BLS_API_KEY", "")
+        if bls_key:
+            payload["registrationkey"] = bls_key
+
         resp = requests.post(_BLS_API_URL, json=payload, timeout=10)
         resp.raise_for_status()
         data = resp.json()

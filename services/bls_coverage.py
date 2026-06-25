@@ -8,7 +8,11 @@ Credit budget: Tavily advanced search, 1 credit per role.
 Config: job_query_agent.coverage_enrichment.tavily_daily_budget (default 20)
 
 Offline-safe: hardcoded 2023 BLS OES data is the baseline.
-BLS API refresh: optional, requires BLS_API_KEY env var; runs monthly.
+Employment refresh: annual OES flat file download from BLS (no API key needed).
+  URL: https://www.bls.gov/oes/special.requests/oesm{YY}nat.zip
+  BLS_API_KEY env var: used for CES monthly data in job_market.py (higher rate limits).
+  Note: BLS time series API (v2) does NOT support OES — OES is distributed
+        as annual Excel flat files only.
 """
 from __future__ import annotations
 
@@ -107,12 +111,15 @@ def coverage_gaps(
     search_cfg: dict,
     *,
     sim_threshold: float | None = None,
+    use_live_employment: bool = False,
 ) -> list[dict]:
     """Return HIGH_COVERAGE_OCCUPATIONS entries not adequately covered in KB.
 
     'Adequately covered' = find_best_match returns sim >= sim_threshold.
     Default threshold: search_cfg tier_weak (0.55).
     Returns list sorted by employment size (largest gap first).
+
+    use_live_employment=True: pull cached OES data to override hardcoded emp_k.
     """
     import copy
     try:
@@ -123,8 +130,22 @@ def coverage_gaps(
     threshold = sim_threshold if sim_threshold is not None else float(
         search_cfg.get("tier_weak", 0.55)
     )
+
+    # Optionally override with live OES employment numbers (from cache)
+    live_emp: dict[str, int] = {}
+    if use_live_employment:
+        cached = _load_emp_cache(_CACHE_PATH)
+        live_emp = {k: v for k, v in cached.items() if not k.startswith("_")}
+
+    occupations = HIGH_COVERAGE_OCCUPATIONS
+    if live_emp:
+        occupations = sorted(
+            [{**o, "emp_k": live_emp.get(o["soc"], o["emp_k"] * 1000) // 1000} for o in occupations],
+            key=lambda x: x["emp_k"], reverse=True,
+        )
+
     gaps: list[dict] = []
-    for occ in HIGH_COVERAGE_OCCUPATIONS:
+    for occ in occupations:
         _, best = job_radar.find_best_match(
             occ["query"], [copy.deepcopy(j) for j in jobs], search_cfg=search_cfg
         )
@@ -204,79 +225,100 @@ def run_coverage_enrichment(
 
 
 # ---------------------------------------------------------------------------
-# Optional BLS API refresh (monthly cadence — requires BLS_API_KEY)
+# Annual OES flat file refresh (no API key needed — BLS publishes publicly)
+# URL pattern: https://www.bls.gov/oes/special.requests/oesm{YY}nat.zip
+# Released each May; contains national_M{YEAR}_dl.xlsx with TOT_EMP by SOC.
 # ---------------------------------------------------------------------------
-_BLS_API_URL = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
-
-# Map SOC code → BLS OES national employment series ID
-# Format: OEUN + 0000000 (national) + 000000 (all industries) + soc_nodash(6) + 01
-def _soc_to_series(soc: str) -> str:
-    code = soc.replace("-", "")
-    return f"OEUN0000000000000{code}01"
-
 
 def refresh_employment_from_bls(
     *,
-    api_key: str | None = None,
+    year: int | None = None,
     cache_path: str = _CACHE_PATH,
-    max_series: int = 50,
 ) -> dict[str, int]:
-    """Fetch latest employment levels from BLS OES API.
+    """Download BLS OES national flat file and extract employment by SOC code.
 
-    Returns {soc_code: employment_thousands}. Falls back to hardcoded if API fails.
-    Results cached for 30 days to avoid redundant calls.
+    Returns {soc_code: employment} (actual count, not thousands).
+    Results cached for ~365 days. Falls back to {} on any failure.
+
+    Note: BLS time series API v2 does NOT support OES occupational series.
+    OES is annual and distributed as Excel flat files only.
+    BLS_API_KEY is used for CES monthly data (job_market.py), not here.
     """
-    key = api_key or os.environ.get("BLS_API_KEY", "")
     cache = _load_emp_cache(cache_path)
-
-    # Cache is fresh (within 30 days) → return it
     cached_date = cache.get("_fetched_at", "")
     if cached_date:
-        from datetime import date as _date
         try:
-            age_days = (_date.today() - _date.fromisoformat(cached_date)).days
-            if age_days < 30:
+            age_days = (date.today() - date.fromisoformat(cached_date)).days
+            if age_days < 340:  # refresh annually
                 return {k: v for k, v in cache.items() if not k.startswith("_")}
         except Exception:
             pass
 
-    batch = HIGH_COVERAGE_OCCUPATIONS[:max_series]
-    series_ids = [_soc_to_series(occ["soc"]) for occ in batch]
-    soc_by_series = {_soc_to_series(occ["soc"]): occ["soc"] for occ in batch}
+    if year is None:
+        # Use previous year (OES released in May; current year not yet available before May)
+        y = date.today().year
+        year = y - 1 if date.today().month < 6 else y
+
+    yy = str(year)[2:]  # "2023" → "23"
+    url = f"https://www.bls.gov/oes/special.requests/oesm{yy}nat.zip"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
+        "Referer": "https://www.bls.gov/oes/",
+    }
 
     try:
+        import io
         import requests
-        payload: dict[str, Any] = {
-            "seriesid": series_ids,
-            "startyear": "2023",
-            "endyear": "2024",
-        }
-        if key:
-            payload["registrationkey"] = key
+        import zipfile
 
-        resp = requests.post(_BLS_API_URL, json=payload, timeout=15)
+        resp = requests.get(url, headers=headers, timeout=60)
         resp.raise_for_status()
-        data = resp.json()
+        if resp.content[:2] != b"PK":
+            return {}  # not a ZIP (got HTML redirect)
 
-        if data.get("status") != "REQUEST_SUCCEEDED":
+        z = zipfile.ZipFile(io.BytesIO(resp.content))
+        xlsx_name = next((n for n in z.namelist() if n.endswith(".xlsx")), None)
+        if not xlsx_name:
             return {}
 
+        try:
+            import openpyxl
+        except ImportError:
+            return {}  # openpyxl optional
+
+        wb = openpyxl.load_workbook(z.open(xlsx_name), read_only=True, data_only=True)
+        ws = wb.active
+        rows = ws.iter_rows(values_only=True)
+        col_headers = [str(c).strip() if c else "" for c in next(rows)]
+
+        occ_idx = col_headers.index("OCC_CODE")
+        emp_idx = col_headers.index("TOT_EMP")
+        naics_idx = col_headers.index("NAICS") if "NAICS" in col_headers else None
+
+        # Filter: national cross-industry rows (NAICS = "000000" or "Cross-industry")
+        soc_set = {occ["soc"] for occ in HIGH_COVERAGE_OCCUPATIONS}
         result: dict[str, int] = {}
-        for series in data.get("Results", {}).get("series", []):
-            sid = series["seriesID"]
-            vals = series.get("data", [])
-            if vals:
-                try:
-                    emp = int(vals[0]["value"].replace(",", ""))
-                    soc = soc_by_series.get(sid, sid)
+        for row in rows:
+            soc = str(row[occ_idx]).strip() if row[occ_idx] else ""
+            if soc not in soc_set:
+                continue
+            # Use cross-industry row (NAICS = 000000)
+            naics = str(row[naics_idx]).strip() if naics_idx is not None else "000000"
+            if naics not in ("000000", "Cross-industry"):
+                continue
+            raw = row[emp_idx]
+            try:
+                emp = int(str(raw).replace(",", ""))
+                if soc not in result:  # take first (cross-industry) match
                     result[soc] = emp
-                except Exception:
-                    pass
+            except (TypeError, ValueError):
+                pass
 
         if result:
             result["_fetched_at"] = date.today().isoformat()
+            result["_oes_year"] = year
             _save_emp_cache(cache_path, result)
-        return result
+        return {k: v for k, v in result.items() if not k.startswith("_")}
 
     except Exception:
         return {}
