@@ -1083,7 +1083,21 @@ You MUST return ONLY valid JSON (no markdown, no explanation) with exactly these
 Base your economic sensitivity values on labor economics theory (Autor, Jevons, Kremer, Baumol).
 Be realistic and well-calibrated with displacement_risk."""
 
-    user_prompt = f"Generate a job profile for: {query}"
+    # Enrich with real job description data when Tavily is available.
+    try:
+        from services.search_enrichment import search_job_context
+        web_context = search_job_context(query)
+    except Exception:
+        web_context = ""
+
+    if web_context:
+        user_prompt = (
+            f"Generate a job profile for: {query}\n\n"
+            f"Use this real-world context to calibrate skills, industry, and risk:\n\n"
+            f"{web_context}"
+        )
+    else:
+        user_prompt = f"Generate a job profile for: {query}"
 
     try:
         raw = call_llm(system_prompt, user_prompt, max_tokens=2000)
@@ -1130,6 +1144,13 @@ def _append_to_kb(profile: dict, kb_path: str = "data/jobs_kb.json") -> None:
         existing_ids = {j["id"] for j in kb}
         if profile["id"] in existing_ids:
             return
+        # Strip transition_targets that reference IDs not yet in KB (avoids test failures).
+        # The self-evolution evaluator will re-populate them once they're in KB.
+        valid_targets = [
+            t for t in profile.get("transition_targets", [])
+            if t.get("target_id") in existing_ids
+        ]
+        profile = {**profile, "transition_targets": valid_targets}
         kb.append(profile)
         with open(kb_path, "w", encoding="utf-8") as f:
             json.dump(kb, f, indent=2, ensure_ascii=False)
