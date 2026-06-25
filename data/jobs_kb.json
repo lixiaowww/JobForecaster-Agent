@@ -5230,5 +5230,447 @@
       "UX Researcher Guide"
     ],
     "transition_targets": []
+  },
+  {
+    "id": "retail_salesperson",
+    "title": "Retail Salesperson",
+    "title_zh": "零售销售员",
+    "industry": "Retail",
+    "category": "at_risk",
+    "description": "A retail salesperson engages customers, recommends products, and drives sales while maintaining store organization and inventory. However, with the rise of e-commerce and AI-powered chatbots, some tasks such as customer service and product recommendations may be automated. Nonetheless, human salespersons will still be needed to provide personalized experiences and handle complex customer inquiries.",
+    "description_zh": "零售销售员负责接待顾客，推荐产品，并推动销售，同时保持店铺组织和库存管理。然而，随着电子商务和人工智能聊天机器人的兴起，一些任务，如客户服务和产品推荐，可能会被自动化。然而，人类销售员仍将需要提供个性化的体验和处理复杂的客户询问。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": -0.3,
+      "oring_leverage": 0.1,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.6,
+      "absorbing_sector": 0.2,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": -0.2,
+    "displacement_risk": 0.6,
+    "required_skills": [
+      "customer_service",
+      "product_knowledge",
+      "teamwork",
+      "communication",
+      "problem_solving"
+    ],
+    "skill_vector": [
+      0.7,
+      0.5,
+      0.8,
+      0.6,
+      0.4,
+      0.3,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "Retail Salesperson Job Description + Template 2025",
+      "Retail Salesperson | Social Sciences and Humanities | Research Starters | EBSCO Research",
+      "Retail Sales Associate Job Description Template | Monster.com"
+    ],
+    "transition_targets": []
+  },
+  {
+    "id": "fast_food_worker",
+    "title": "Fast Food Worker",
+    "title_zh": "快餐馆工作人员",
+    "industry": "Retail",
+    "category": "at_risk",
+    "description": "A fast food worker's main responsibilities include taking orders, preparing food, handling transactions, and maintaining cleanliness. They must provide friendly and quick service to customers while following food safety standards and using point-of-sale systems accurately. However, with the increasing use of automation and self-service kiosks, the role is at risk of being displaced by AI and machines.",
+    "description_zh": "快餐工作人员的主要职责包括接单、准备食物、处理交易和维护清洁度。他们必须为客户提供友好和快速的服务，同时遵循食品安全标准和准确使用销售点系统。然而，随着自动化和自助服务亭的使用增加，该职位有被AI和机器取代的风险。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": -0.4,
+      "oring_leverage": 0.1,
+      "skill_distance": -0.3,
+      "diffusion_years": 0.5,
+      "absorbing_sector": -0.2,
+      "productivity_capture": 0.6,
+      "task_frontier_open": -0.4
+    },
+    "base_demand_trend": -0.2,
+    "displacement_risk": 0.7,
+    "required_skills": [
+      "communication",
+      "organization",
+      "customer_service",
+      "attention_to_detail"
+    ],
+    "skill_vector": [
+      0.8,
+      0.6,
+      0.9,
+      0.7,
+      0.4,
+      0.3,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "O*NET"
+    ],
+    "transition_targets": []
+  },
+  {
+    "id": "office_clerk",
+    "title": "Office Clerk",
+    "title_zh": "辦公室文員",
+    "industry": "Finance",
+    "category": "at_risk",
+    "description": "An office clerk handles clerical tasks like filing, data entry, and answering phones, ensuring smooth office operations and effective communication. However, many of these tasks can be automated, making this role vulnerable to AI displacement. With the rise of automated phone systems and digital filing, the need for human office clerks may decrease.",
+    "description_zh": "辦公室文員負責文職任務，如檔案管理、數據錄入和接聽電話，以確保辦公室運作順暢和有效溝通。然而，許多這些任務可以被自動化，使得這個角色容易受到AI的影響。隨著自動化電話系統和電子檔案的出現，對於人工辦公室文員的需求可能會減少。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": -0.3,
+      "oring_leverage": 0.1,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.6,
+      "absorbing_sector": 0.2,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": -0.2,
+    "displacement_risk": 0.7,
+    "required_skills": [
+      "attention_to_detail",
+      "organizational_skills",
+      "basic_computer_applications",
+      "customer_service",
+      "time_management"
+    ],
+    "skill_vector": [
+      0.6,
+      0.7,
+      0.8,
+      0.4,
+      0.5,
+      0.3,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "Monster.com",
+      "Truity",
+      "BLS"
+    ],
+    "transition_targets": []
+  },
+  {
+    "id": "home_health_aide",
+    "title": "Home Health Aide",
+    "title_zh": "家庭健康助理",
+    "industry": "Healthcare",
+    "category": "at_risk",
+    "description": "A Home Health Aide assists clients with daily personal tasks, light housekeeping, and reports on patient health, following infection control policies and maintaining client confidentiality. However, AI-powered home care systems and telehealth services may augment or replace some tasks. The role requires empathy, physical stamina, and basic medical knowledge.",
+    "description_zh": "家庭健康助理帮助客户完成日常个人任务、轻度家务，并向护士报告患者的健康状况，同时遵循感染控制政策和维护客户隐私。然而，AI驱动的家庭护理系统和远程医疗服务可能会增强或取代一些任务。这个角色需要同理心、身体耐力和基本的医学知识。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": -0.3,
+      "oring_leverage": 0.1,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.6,
+      "absorbing_sector": 0.8,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": 0.2,
+    "displacement_risk": 0.4,
+    "required_skills": [
+      "Empathy",
+      "Basic Medical Knowledge",
+      "Physical Stamina",
+      "Communication"
+    ],
+    "skill_vector": [
+      0.8,
+      0.4,
+      0.6,
+      0.7,
+      0.3,
+      0.2,
+      0.1,
+      0.5
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "WHO"
+    ],
+    "transition_targets": []
+  },
+  {
+    "id": "janitor",
+    "title": "Janitor",
+    "title_zh": "看护工",
+    "industry": "Construction",
+    "category": "at_risk",
+    "description": "A janitor's key responsibilities include cleaning and maintaining buildings, handling trash removal, and ensuring restrooms are stocked and sanitized. Janitors play a crucial role in maintaining a clean and safe environment. However, automation and robotics may displace some janitorial tasks, particularly those involving repetitive cleaning duties.",
+    "description_zh": "看护工的主要职责包括清洁和维护建筑物、处理垃圾、以及确保卫生间得到清洁和维护。看护工在保持清洁和安全环境方面发挥着至关重要的作用。然而，自动化和机器人可能会取代一些清洁工作，特别是涉及重复性清洁任务的工作。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": -0.3,
+      "oring_leverage": 0.1,
+      "skill_distance": 0.5,
+      "diffusion_years": 0.8,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.6,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": -0.1,
+    "displacement_risk": 0.7,
+    "required_skills": [
+      "Time management",
+      "Attention to detail",
+      "Physical stamina",
+      "Basic maintenance"
+    ],
+    "skill_vector": [
+      0.4,
+      0.6,
+      0.8,
+      0.2,
+      0.1,
+      0.3,
+      0.5,
+      0.7
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "O*NET",
+      "Job Description Samples"
+    ],
+    "transition_targets": []
+  },
+  {
+    "id": "waiter",
+    "title": "Waiter",
+    "title_zh": "",
+    "industry": "Hospitality",
+    "category": "at_risk",
+    "description": "A waiter's key skills include communication, multitasking, and customer service, with responsibilities involving greeting guests, taking orders, and ensuring satisfaction. However, AI-powered ordering systems and automated payment processing may displace some tasks. The role still requires human interaction and emotional intelligence, making it less susceptible to full automation.",
+    "description_zh": "",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": -0.3,
+      "oring_leverage": 0.1,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.5,
+      "absorbing_sector": 0.2,
+      "productivity_capture": 0.1,
+      "task_frontier_open": 0.3
+    },
+    "base_demand_trend": -0.1,
+    "displacement_risk": 0.6,
+    "required_skills": [
+      "communication",
+      "multitasking",
+      "customer_service",
+      "problem_solving"
+    ],
+    "skill_vector": [
+      0.7,
+      0.5,
+      0.8,
+      0.4,
+      0.2,
+      0.1,
+      0.3,
+      0.6
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "Indeed",
+      "Glassdoor"
+    ],
+    "transition_targets": []
+  },
+  {
+    "id": "administrative_assistant",
+    "title": "Administrative Assistant",
+    "title_zh": "行政助理",
+    "industry": "Education",
+    "category": "at_risk",
+    "description": "An Administrative Assistant handles clerical tasks, schedules events, and supports management, with key skills including proficiency in Microsoft Office and strong communication. Responsibilities include managing office supplies and maintaining records. However, automation and AI-powered tools may displace some administrative tasks, putting the role at risk.",
+    "description_zh": "行政助理负责处理文职任务、安排活动和支持管理，关键技能包括Microsoft Office的熟练度和良好的沟通能力。职责包括管理办公用品和维护记录。然而，自动化和AI驱动的工具可能会取代一些行政任务，使得此职位面临风险。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": -0.3,
+      "oring_leverage": 0.1,
+      "skill_distance": -0.4,
+      "diffusion_years": 0.5,
+      "absorbing_sector": -0.2,
+      "productivity_capture": 0.3,
+      "task_frontier_open": -0.1
+    },
+    "base_demand_trend": -0.2,
+    "displacement_risk": 0.6,
+    "required_skills": [
+      "Microsoft Office",
+      "Communication",
+      "Time Management",
+      "Organization"
+    ],
+    "skill_vector": [
+      0.8,
+      0.7,
+      0.6,
+      0.5,
+      0.4,
+      0.3,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "ADMINISTRATIVE ASSISTANT JOB DESCRIPTION",
+      "Hays",
+      "Monster.com"
+    ],
+    "transition_targets": []
+  },
+  {
+    "id": "construction_laborer",
+    "title": "Construction Laborer",
+    "title_zh": "建筑劳工",
+    "industry": "Construction",
+    "category": "at_risk",
+    "description": "Construction laborers perform physical tasks at construction sites, including cleaning, loading/unloading materials, and operating tools. They also assist with tasks like setting up scaffolding and maintaining safety. However, tasks like material handling and site cleanup are at risk of being automated.",
+    "description_zh": "建筑劳工在建设工地执行物理任务，包括清洁、装卸材料和操作工具。他们还协助设置脚手架和维护安全。然而，像材料搬运和工地清洁这样的任务有可能被自动化。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": -0.3,
+      "oring_leverage": 0.1,
+      "skill_distance": -0.4,
+      "diffusion_years": 0.6,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.3,
+      "task_frontier_open": -0.2
+    },
+    "base_demand_trend": 0.1,
+    "displacement_risk": 0.7,
+    "required_skills": [
+      "physical_strength",
+      "basic_carpentry",
+      "safety_procedures",
+      "manual_dexterity"
+    ],
+    "skill_vector": [
+      0.8,
+      0.6,
+      0.4,
+      0.7,
+      0.3,
+      0.2,
+      0.1,
+      0.5
+    ],
+    "emergence_year": null,
+    "sources": [
+      "BLS",
+      "ONET",
+      "Merrill Construction Group"
+    ],
+    "transition_targets": []
+  },
+  {
+    "id": "elementary_school_teacher",
+    "title": "Elementary School Teacher",
+    "title_zh": "小学教师",
+    "industry": "Education",
+    "category": "transforming",
+    "description": "An elementary school teacher instructs students in core subjects, manages classroom behavior, and assesses student progress. They create lesson plans, foster a safe learning environment, and promote social and emotional development. While AI can support educational tools and resources, human interaction and empathy are crucial in this role.",
+    "description_zh": "小学教师负责教导学生基础科目，管理课堂行为，评估学生进步。他们创造教学计划，营造安全的学习环境，促进社会和情感发展。虽然AI可以支持教育工具和资源，但人类互动和同理心在这个角色中至关重要。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": -0.3,
+      "oring_leverage": 0.1,
+      "skill_distance": 0.5,
+      "diffusion_years": 0.6,
+      "absorbing_sector": 0.4,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.2
+    },
+    "base_demand_trend": 0.1,
+    "displacement_risk": 0.23,
+    "required_skills": [
+      "instructional planning",
+      "cultural competency",
+      "classroom management",
+      "communication",
+      "emotional intelligence"
+    ],
+    "skill_vector": [
+      0.8,
+      0.7,
+      0.6,
+      0.9,
+      0.8,
+      0.5,
+      0.4,
+      0.3
+    ],
+    "emergence_year": null,
+    "sources": [
+      "Bureau of Labor Statistics",
+      "Teachers Of Tomorrow",
+      "University of Phoenix"
+    ],
+    "transition_targets": []
+  },
+  {
+    "id": "restaurant_cook",
+    "title": "Restaurant Cook",
+    "title_zh": "餐厅厨师",
+    "industry": "Hospitality",
+    "category": "at_risk",
+    "description": "A restaurant cook prepares meals, ensures ingredient freshness, and maintains kitchen cleanliness. They supervise kitchen staff and adhere to quality standards, utilizing culinary techniques and sanitation standards. However, AI-powered kitchen automation and meal preparation systems may displace some cooking tasks.",
+    "description_zh": "餐厅厨师负责准备餐点，确保食材新鲜，并保持厨房清洁。他们监督厨房员工，并遵守质量标准，使用烹饪技术和卫生标准。但是，AI驱动的厨房自动化和餐点准备系统可能会取代一些烹饪任务。",
+    "sensitivity": {
+      "augmentation_ratio": 0.2,
+      "demand_elasticity": -0.3,
+      "oring_leverage": 0.1,
+      "skill_distance": 0.4,
+      "diffusion_years": 0.5,
+      "absorbing_sector": -0.2,
+      "productivity_capture": 0.3,
+      "task_frontier_open": 0.1
+    },
+    "base_demand_trend": 0.1,
+    "displacement_risk": 0.6,
+    "required_skills": [
+      "culinary_techniques",
+      "sanitation_standards",
+      "kitchen_management",
+      "team_supervision",
+      "quality_control"
+    ],
+    "skill_vector": [
+      0.8,
+      0.7,
+      0.6,
+      0.5,
+      0.4,
+      0.3,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "Tavern On The Point",
+      "Workstream ATS",
+      "Restaurant Industry Job Descriptions"
+    ],
+    "transition_targets": []
   }
 ]

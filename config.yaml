@@ -89,6 +89,11 @@ job_query_agent:
   review:
     require_review: true
     pending_dir: pending/job_calibration
+  coverage_enrichment:
+    enabled: true
+    tavily_daily_budget: 20      # Tavily credits per day (1 credit = 1 role generated)
+    # Budget math: 20/day × 30 days = 600/month; 400 remaining for reactive kb_gap fills
+    # BLS_API_KEY env var: optional, enables monthly employment-level refresh from BLS API
   auto_apply:
     enabled: true
     types:

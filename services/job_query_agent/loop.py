@@ -104,6 +104,17 @@ def run_calibration_cycle(
     weak_core = [v for v in final_verdicts if v.status == "weak_core"]
     kb_gaps = [v for v in final_verdicts if v.status == "kb_gap"]
 
+    # Coverage enrichment pass: proactively fill KB for high-employment roles.
+    coverage_summary: dict[str, Any] = {}
+    enrich_cfg = agent_cfg.get("coverage_enrichment", {})
+    if not dry_run and enrich_cfg.get("enabled", False):
+        try:
+            from services.bls_coverage import run_coverage_enrichment
+            daily_budget = int(enrich_cfg.get("tavily_daily_budget", 20))
+            coverage_summary = run_coverage_enrichment(cfg, daily_budget=daily_budget)
+        except Exception:
+            pass  # non-fatal
+
     # Transition evaluation pass: fill empty transition_targets via LLM judge.
     transition_summary: dict[str, Any] = {}
     if not dry_run and agent_cfg.get("auto_apply", {}).get("enabled", False):
@@ -123,6 +134,7 @@ def run_calibration_cycle(
         "auto_applied": sum(1 for a in applied_actions if a.get("auto_applied")),
         "apply_actions": applied_actions,
         "proposals_queued": queued,
+        "coverage_enrichment": coverage_summary,
         "transition_eval": transition_summary,
         "final": {
             "queries": len(final_verdicts),

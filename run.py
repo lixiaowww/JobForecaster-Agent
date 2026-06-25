@@ -187,6 +187,23 @@ def cmd_query_agent(
         ids = [a for a in extra_args if not a.startswith("-")]
         summary = run_apply_pending(cfg, dry_run=dry_run, proposal_ids=ids or None)
         print(json.dumps(summary, indent=2))
+    elif subcmd == "coverage":
+        from services.bls_coverage import coverage_gaps, run_coverage_enrichment
+        import job_radar as _jr
+        _jr_cfg = cfg.get("job_radar", {})
+        _search_cfg = _jr.resolve_search_config(_jr_cfg)
+        _jobs = _jr.load_knowledge_base(_jr_cfg.get("kb_path", "data/jobs_kb.json"))
+        if extra_args and extra_args[0] == "gaps":
+            gaps = coverage_gaps(_jobs, _search_cfg)
+            print(json.dumps([
+                {"rank": i+1, "title": g["title"], "emp_k": g["emp_k"],
+                 "sim": g["_current_sim"], "industry": g["industry"]}
+                for i, g in enumerate(gaps)
+            ], indent=2))
+        else:
+            budget = int(extra_args[0]) if extra_args else 5
+            summary = run_coverage_enrichment(cfg, daily_budget=budget, dry_run=dry_run)
+            print(json.dumps(summary, indent=2))
     elif subcmd == "transition-eval":
         import job_radar as _jr
         from services.transition_evaluator.evaluate import run_evaluation_pass
