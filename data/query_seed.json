@@ -548,5 +548,21 @@
   {
     "query": "accounts payable",
     "expected_id": "accountant"
+  },
+  {
+    "query": "human resources manager",
+    "expected_id": "hr_manager"
+  },
+  {
+    "query": "hrbp",
+    "expected_id": "hr_manager"
+  },
+  {
+    "query": "people operations manager",
+    "expected_id": "hr_manager"
+  },
+  {
+    "query": "人力资源经理",
+    "expected_id": "hr_manager"
   }
 ]

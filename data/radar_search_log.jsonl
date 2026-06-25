@@ -1,0 +1,46 @@
+{"ts": "2026-06-24T14:41:30.997959+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.676, "industry": null}
+{"ts": "2026-06-24T14:41:31.628224+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.714, "industry": null}
+{"ts": "2026-06-24T14:49:52.330877+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.676, "industry": null}
+{"ts": "2026-06-24T14:49:52.938115+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.714, "industry": null}
+{"ts": "2026-06-24T14:50:29.807323+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.714, "industry": null}
+{"ts": "2026-06-24T14:55:42.985591+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.676, "industry": null}
+{"ts": "2026-06-24T14:55:43.640673+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.714, "industry": null}
+{"ts": "2026-06-24T15:05:28.794213+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.676, "industry": null}
+{"ts": "2026-06-24T15:05:29.651691+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.714, "industry": null}
+{"ts": "2026-06-24T15:26:12.811745+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.676, "industry": null}
+{"ts": "2026-06-24T15:26:13.496218+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.714, "industry": null}
+{"ts": "2026-06-24T15:39:58.051667+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.713, "industry": null}
+{"ts": "2026-06-24T15:39:58.545318+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-24T15:58:59.887697+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.713, "industry": null}
+{"ts": "2026-06-24T15:59:00.404356+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-24T16:01:07.125898+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.713, "industry": null}
+{"ts": "2026-06-24T16:01:07.676597+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-24T16:07:57.227616+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.713, "industry": null}
+{"ts": "2026-06-24T16:07:57.974090+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-24T16:29:26.620122+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-24T16:29:27.186405+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-24T16:31:38.285205+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-24T16:31:38.804596+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-24T16:43:33.005293+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-24T16:43:33.705374+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-24T17:17:58.633891+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-24T17:17:59.290514+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-24T22:26:44.297230+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-24T22:26:44.860734+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-24T22:29:33.459251+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-24T22:29:34.040558+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-24T22:37:19.610874+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-24T22:37:20.473288+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-24T23:00:59.539798+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-24T23:01:00.106136+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-25T00:49:41.399131+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-25T00:49:43.121302+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-25T01:09:57.587350+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-25T01:09:58.258445+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-25T01:11:02.111732+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-25T01:11:02.819246+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"query": "supply chain analyst", "tier": "no_match", "best_id": null, "sim": 0.0}
+{"query": "supply chain analyst", "tier": "no_match", "best_id": null, "sim": 0.0}
+{"query": "supply chain analyst", "tier": "no_match", "best_id": null, "sim": 0.0}
+{"ts": "2026-06-25T12:15:16.218083+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-25T12:15:16.863214+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}

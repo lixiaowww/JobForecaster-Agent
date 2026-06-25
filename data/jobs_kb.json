@@ -5063,5 +5063,64 @@
     "search_aliases": [
       "数据工程师"
     ]
+  },
+  {
+    "id": "hr_manager",
+    "title": "Human Resources Manager",
+    "title_zh": "人力资源经理",
+    "industry": "Government",
+    "category": "transforming",
+    "description": "Manages the full employee lifecycle: recruitment, onboarding, performance, compensation, and compliance. AI is automating screening and analytics but human judgement remains central to culture, conflict resolution, and strategic workforce planning.",
+    "description_zh": "人力资源经理负责确定员工需求，制定招聘流程，并确保遵守就业法规，同时培养积极的工作场所文化。人工智能可以增强人力资源任务，例如招聘和员工数据管理，但复杂决策仍需要人为判断。因此，该职位正转变为承担更多战略和创造性责任。",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": 0.2,
+      "oring_leverage": 0.1,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.5,
+      "absorbing_sector": 0.6,
+      "productivity_capture": 0.4,
+      "task_frontier_open": 0.7
+    },
+    "base_demand_trend": 0.2,
+    "displacement_risk": 0.35,
+    "required_skills": [
+      "talent acquisition",
+      "performance management",
+      "employment law",
+      "compensation & benefits",
+      "HR information systems",
+      "conflict resolution",
+      "organizational development",
+      "data analysis"
+    ],
+    "skill_vector": [
+      0.8,
+      0.7,
+      0.9,
+      0.6,
+      0.4,
+      0.3,
+      0.2,
+      0.1
+    ],
+    "emergence_year": null,
+    "sources": [
+      "HR Manager Job Description (Updated 2026 With Examples) | ACBSP",
+      "HUMAN RESOURCES MANAGER JOB DESCRIPTION"
+    ],
+    "transition_targets": [],
+    "search_aliases": [
+      "hr manager",
+      "human resources manager",
+      "people manager",
+      "hr director",
+      "people operations manager",
+      "talent manager",
+      "hr business partner",
+      "hrbp",
+      "人力资源经理",
+      "人事经理"
+    ]
   }
 ]
