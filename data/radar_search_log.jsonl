@@ -44,3 +44,8 @@
 {"query": "supply chain analyst", "tier": "no_match", "best_id": null, "sim": 0.0}
 {"ts": "2026-06-25T12:15:16.218083+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
 {"ts": "2026-06-25T12:15:16.863214+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"query": "ux researcher", "tier": "no_match", "best_id": null, "sim": 0.0}
+{"query": "ux researcher", "tier": "no_match", "best_id": null, "sim": 0.0}
+{"query": "ux researcher", "tier": "no_match", "best_id": null, "sim": 0.0}
+{"ts": "2026-06-25T12:20:52.250291+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-25T12:20:52.801808+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}

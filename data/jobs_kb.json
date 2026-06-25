@@ -5000,7 +5000,71 @@
       "BLS",
       "Gartner"
     ],
-    "transition_targets": [],
+    "transition_targets": [
+      {
+        "target_id": "fin_algo_trader",
+        "retrain_months": 9,
+        "skill_bridge": "Related tech skills",
+        "confidence": 0.64,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "tech_software_eng",
+        "retrain_months": 4,
+        "skill_bridge": "Similar tech domain",
+        "confidence": 0.83,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "tech_product_manager",
+        "retrain_months": 9,
+        "skill_bridge": "Some skill overlap",
+        "confidence": 0.62,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "tech_data_scientist",
+        "retrain_months": 4,
+        "skill_bridge": "Similar skills",
+        "confidence": 0.85,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "tech_project_manager",
+        "retrain_months": 8,
+        "skill_bridge": "Related domain",
+        "confidence": 0.65,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "tech_prompt_eng",
+        "retrain_months": 4,
+        "skill_bridge": "Related domain",
+        "confidence": 0.84,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "tech_ai_infra_eng",
+        "retrain_months": 8,
+        "skill_bridge": "Similar domain",
+        "confidence": 0.65,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "tech_data_annotator",
+        "retrain_months": 10,
+        "skill_bridge": "Related tech domain",
+        "confidence": 0.6,
+        "_source": "llm_eval"
+      },
+      {
+        "target_id": "tech_agent_fleet_mgr",
+        "retrain_months": 9,
+        "skill_bridge": "Similar tech domain",
+        "confidence": 0.64,
+        "_source": "llm_eval"
+      }
+    ],
     "search_aliases": [
       "人工智能工程师"
     ]
@@ -5122,5 +5186,49 @@
       "人力资源经理",
       "人事经理"
     ]
+  },
+  {
+    "id": "ux_researcher",
+    "title": "UX Researcher",
+    "title_zh": "用户体验研究员",
+    "industry": "Tech",
+    "category": "transforming",
+    "description": "A UX researcher conducts user research, analyzes data, and communicates insights to improve product design, utilizing skills like empathy, active listening, and data analysis to drive product development.",
+    "description_zh": "用户体验研究员进行用户研究、数据分析，并传达见解以改进产品设计，利用同理心、主动倾听和数据分析等技能来驱动产品开发。",
+    "sensitivity": {
+      "augmentation_ratio": 0.4,
+      "demand_elasticity": 0.2,
+      "oring_leverage": 0.6,
+      "skill_distance": 0.3,
+      "diffusion_years": 0.5,
+      "absorbing_sector": 0.7,
+      "productivity_capture": 0.8,
+      "task_frontier_open": 0.9
+    },
+    "base_demand_trend": 0.3,
+    "displacement_risk": 0.2,
+    "required_skills": [
+      "empathy",
+      "active listening",
+      "data analysis",
+      "qualitative interviewing",
+      "user advocacy"
+    ],
+    "skill_vector": [
+      0.8,
+      0.7,
+      0.9,
+      0.6,
+      0.5,
+      0.4,
+      0.3,
+      0.2
+    ],
+    "emergence_year": null,
+    "sources": [
+      "Toptal",
+      "UX Researcher Guide"
+    ],
+    "transition_targets": []
   }
 ]
