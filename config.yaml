@@ -50,7 +50,13 @@ job_radar:
     tier_no_match: 0.42    # below → no KB anchor / LLM expansion
     tier_weak: 0.55        # informational mid-band within weak tier
     tier_strong: 0.65      # at/above → strong text match (HR-12)
-    title_aliases: {}
+    title_aliases:
+      ar manager: Accountant
+      a/r manager: Accountant
+      ap manager: Accountant
+      a/p manager: Accountant
+      accounts receivable: Accountant
+      accounts payable: Accountant
   transition:
     skill: 0.40
     overlap: 0.15

@@ -1,112 +1,552 @@
 [
-  {"query": "software developer",        "expected_id": "tech_software_eng",           "source": "seed"},
-  {"query": "developer",                 "expected_id": "tech_software_eng",           "source": "seed"},
-  {"query": "web developer",             "expected_id": "tech_software_eng",           "source": "seed"},
-  {"query": "software product manager",  "expected_id": "tech_product_manager",        "source": "seed"},
-  {"query": "data scientist",            "expected_id": "tech_data_scientist",         "source": "seed"},
-  {"query": "machine learning engineer", "expected_id": "tech_data_scientist",         "source": "seed"},
-  {"query": "ml engineer",               "expected_id": "tech_ai_infra_eng",           "source": "seed"},
-  {"query": "financial analyst",         "expected_id": "fin_credit_analyst",          "source": "seed"},
-  {"query": "credit analyst",            "expected_id": "fin_credit_analyst",          "source": "seed"},
-  {"query": "loan analyst",              "expected_id": "fin_credit_analyst",          "source": "seed"},
-  {"query": "wealth manager",            "expected_id": "fin_wealth_manager",          "source": "seed"},
-  {"query": "financial advisor",         "expected_id": "fin_wealth_manager",          "source": "seed"},
-  {"query": "investment advisor",        "expected_id": "fin_wealth_manager",          "source": "seed"},
-  {"query": "risk manager",              "expected_id": "fin_risk_manager",            "source": "seed"},
-  {"query": "risk analyst",              "expected_id": "fin_risk_manager",            "source": "seed"},
-  {"query": "quant trader",              "expected_id": "fin_algo_trader",             "source": "seed"},
-  {"query": "algorithmic trader",        "expected_id": "fin_algo_trader",             "source": "seed"},
-  {"query": "ai compliance officer",      "expected_id": "legal_compliance_officer",    "source": "seed"},
-  {"query": "insurance underwriter",     "expected_id": "fin_underwriter",             "source": "seed"},
-  {"query": "underwriter",               "expected_id": "fin_underwriter",             "source": "seed"},
-  {"query": "prompt engineer",           "expected_id": "tech_prompt_eng",             "source": "seed"},
-  {"query": "llm engineer",              "expected_id": "tech_prompt_eng",             "source": "seed"},
-  {"query": "qa engineer",               "expected_id": "tech_qa_tester",              "source": "seed"},
-  {"query": "software tester",           "expected_id": "tech_qa_tester",              "source": "seed"},
-  {"query": "quality assurance",         "expected_id": "tech_qa_tester",              "source": "seed"},
-  {"query": "mlops engineer",            "expected_id": "tech_ai_infra_eng",           "source": "seed"},
-  {"query": "data labeler",              "expected_id": "tech_data_annotator",         "source": "seed"},
-  {"query": "data annotator",            "expected_id": "tech_data_annotator",         "source": "seed"},
-  {"query": "assembly worker",           "expected_id": "mfg_assembly_worker",         "source": "seed"},
-  {"query": "factory worker",            "expected_id": "mfg_assembly_worker",         "source": "seed"},
-  {"query": "quality inspector",         "expected_id": "mfg_quality_inspector",       "source": "seed"},
-  {"query": "robotics engineer",         "expected_id": "mfg_roboticist",              "source": "seed"},
-  {"query": "cobot integrator",          "expected_id": "mfg_roboticist",              "source": "seed"},
-  {"query": "maintenance technician",    "expected_id": "mfg_maintenance_tech",        "source": "seed"},
-  {"query": "predictive maintenance",    "expected_id": "mfg_maintenance_tech",        "source": "seed"},
-  {"query": "digital twin engineer",     "expected_id": "mfg_digital_twin_eng",        "source": "seed"},
-  {"query": "cnc operator",              "expected_id": "mfg_machinist",               "source": "seed"},
-  {"query": "machinist",                 "expected_id": "mfg_machinist",               "source": "seed"},
-  {"query": "welder",                    "expected_id": "mfg_industrial_welder",       "source": "seed"},
-  {"query": "nurse",                     "expected_id": "hc_palliative_care_nurse",    "source": "seed"},
-  {"query": "registered nurse",          "expected_id": "hc_palliative_care_nurse",    "source": "seed"},
-  {"query": "radiologist",               "expected_id": "hc_radiologist",              "source": "seed"},
-  {"query": "care coordinator",          "expected_id": "hc_care_coordinator",         "source": "seed"},
-  {"query": "medical transcriptionist",  "expected_id": "hc_medical_transcriptionist", "source": "seed"},
-  {"query": "medical coder",             "expected_id": "hc_clinical_coder",           "source": "seed"},
-  {"query": "doctor",                    "expected_id": "hc_general_practitioner",     "source": "seed"},
-  {"query": "physician",                 "expected_id": "hc_general_practitioner",     "source": "seed"},
-  {"query": "general practitioner",      "expected_id": "hc_general_practitioner",     "source": "seed"},
-  {"query": "mental health counselor",   "expected_id": "hc_mental_health_counsellor", "source": "seed"},
-  {"query": "therapist",                 "expected_id": "hc_mental_health_counsellor", "source": "seed"},
-  {"query": "palliative care nurse",     "expected_id": "hc_palliative_care_nurse",    "source": "seed"},
-  {"query": "tutor",                     "expected_id": "edu_tutor",                   "source": "seed"},
-  {"query": "private tutor",             "expected_id": "edu_tutor",                   "source": "seed"},
-  {"query": "curriculum designer",       "expected_id": "edu_curriculum_designer",     "source": "seed"},
-  {"query": "instructional designer",    "expected_id": "edu_curriculum_designer",     "source": "seed"},
-  {"query": "ai learning designer",      "expected_id": "edu_ai_learning_guide",       "source": "seed"},
-  {"query": "corporate trainer",         "expected_id": "edu_corporate_trainer",       "source": "seed"},
-  {"query": "special needs teacher",     "expected_id": "edu_special_needs_teacher",   "source": "seed"},
-  {"query": "paralegal",                 "expected_id": "legal_paralegal",             "source": "seed"},
-  {"query": "legal assistant",           "expected_id": "legal_paralegal",             "source": "seed"},
-  {"query": "compliance officer",        "expected_id": "legal_compliance_officer",    "source": "seed"},
-  {"query": "contract analyst",          "expected_id": "legal_contracts_analyst",     "source": "seed"},
-  {"query": "corporate counsel",         "expected_id": "legal_corporate_counsel",     "source": "seed"},
-  {"query": "attorney",                  "expected_id": "legal_corporate_counsel",     "source": "seed"},
-  {"query": "warehouse picker",          "expected_id": "log_warehouse_picker",        "source": "seed"},
-  {"query": "warehouse worker",          "expected_id": "log_warehouse_picker",        "source": "seed"},
-  {"query": "dispatcher",                "expected_id": "log_dispatcher",              "source": "seed"},
-  {"query": "logistics coordinator",     "expected_id": "log_dispatcher",              "source": "seed"},
-  {"query": "supply chain analyst",      "expected_id": "log_supply_chain_analyst",    "source": "seed"},
-  {"query": "delivery driver",           "expected_id": "log_last_mile_delivery",      "source": "seed"},
-  {"query": "truck driver",              "expected_id": "log_last_mile_delivery",      "source": "seed"},
-  {"query": "customs broker",            "expected_id": "log_customs_broker",          "source": "seed"},
-  {"query": "store manager",             "expected_id": "ret_store_manager",           "source": "seed"},
-  {"query": "retail manager",            "expected_id": "ret_store_manager",           "source": "seed"},
-  {"query": "buyer",                     "expected_id": "ret_buyer_merchandiser",      "source": "seed"},
-  {"query": "merchandiser",              "expected_id": "ret_buyer_merchandiser",      "source": "seed"},
-  {"query": "cashier",                   "expected_id": "ret_cashier",                 "source": "seed"},
-  {"query": "personal stylist",          "expected_id": "ret_personal_stylist",        "source": "seed"},
-  {"query": "farmer",                    "expected_id": "agr_farmer",                  "source": "seed"},
-  {"query": "agronomist",                "expected_id": "agr_agronomist",              "source": "seed"},
-  {"query": "site foreman",              "expected_id": "con_site_foreman",            "source": "seed"},
-  {"query": "construction manager",      "expected_id": "con_site_foreman",            "source": "seed"},
-  {"query": "electrician",               "expected_id": "con_electrician",             "source": "seed"},
-  {"query": "chef",                      "expected_id": "hos_chef",                    "source": "seed"},
-  {"query": "hotel manager",             "expected_id": "hos_hotel_manager",           "source": "seed"},
-  {"query": "social worker",             "expected_id": "gov_social_worker",           "source": "seed"},
-  {"query": "policy analyst",            "expected_id": "gov_policy_analyst",          "source": "seed"},
-  {"query": "tax inspector",             "expected_id": "gov_tax_inspector",           "source": "seed"},
-  {"query": "journalist",                "expected_id": "med_journalist",              "source": "seed"},
-  {"query": "film director",             "expected_id": "med_film_director",           "source": "seed"},
-  {"query": "lawyer",                    "source": "seed"},
-  {"query": "teacher",                   "source": "seed"},
-  {"query": "accountant",                "source": "seed"},
-  {"query": "hr manager",                "source": "seed"},
-  {"query": "marketing manager",         "source": "seed"},
-  {"query": "sales representative",      "source": "seed"},
-  {"query": "ux designer",               "source": "seed"},
-  {"query": "cybersecurity analyst",     "source": "seed"},
-  {"query": "cloud architect",           "source": "seed"},
-  {"query": "devops engineer",           "source": "seed"},
-  {"query": "data engineer",             "source": "seed"},
-  {"query": "civil engineer",            "source": "seed"},
-  {"query": "mechanical engineer",       "source": "seed"},
-  {"query": "人工智能工程师",                "source": "seed"},
-  {"query": "数据工程师",                   "source": "seed"},
-  {"query": "护士",                        "source": "seed"},
-  {"query": "医生",                        "source": "seed"},
-  {"query": "会计",                        "source": "seed"},
-  {"query": "教师",                        "source": "seed"},
-  {"query": "律师",                        "source": "seed"}
+  {
+    "query": "software developer",
+    "expected_id": "tech_software_eng",
+    "source": "seed"
+  },
+  {
+    "query": "developer",
+    "expected_id": "tech_software_eng",
+    "source": "seed"
+  },
+  {
+    "query": "web developer",
+    "expected_id": "tech_software_eng",
+    "source": "seed"
+  },
+  {
+    "query": "software product manager",
+    "expected_id": "tech_product_manager",
+    "source": "seed"
+  },
+  {
+    "query": "data scientist",
+    "expected_id": "tech_data_scientist",
+    "source": "seed"
+  },
+  {
+    "query": "machine learning engineer",
+    "expected_id": "tech_data_scientist",
+    "source": "seed"
+  },
+  {
+    "query": "ml engineer",
+    "expected_id": "tech_ai_infra_eng",
+    "source": "seed"
+  },
+  {
+    "query": "financial analyst",
+    "expected_id": "fin_credit_analyst",
+    "source": "seed"
+  },
+  {
+    "query": "credit analyst",
+    "expected_id": "fin_credit_analyst",
+    "source": "seed"
+  },
+  {
+    "query": "loan analyst",
+    "expected_id": "fin_credit_analyst",
+    "source": "seed"
+  },
+  {
+    "query": "wealth manager",
+    "expected_id": "fin_wealth_manager",
+    "source": "seed"
+  },
+  {
+    "query": "financial advisor",
+    "expected_id": "fin_wealth_manager",
+    "source": "seed"
+  },
+  {
+    "query": "investment advisor",
+    "expected_id": "fin_wealth_manager",
+    "source": "seed"
+  },
+  {
+    "query": "risk manager",
+    "expected_id": "fin_risk_manager",
+    "source": "seed"
+  },
+  {
+    "query": "risk analyst",
+    "expected_id": "fin_risk_manager",
+    "source": "seed"
+  },
+  {
+    "query": "quant trader",
+    "expected_id": "fin_algo_trader",
+    "source": "seed"
+  },
+  {
+    "query": "algorithmic trader",
+    "expected_id": "fin_algo_trader",
+    "source": "seed"
+  },
+  {
+    "query": "ai compliance officer",
+    "expected_id": "legal_compliance_officer",
+    "source": "seed"
+  },
+  {
+    "query": "insurance underwriter",
+    "expected_id": "fin_underwriter",
+    "source": "seed"
+  },
+  {
+    "query": "underwriter",
+    "expected_id": "fin_underwriter",
+    "source": "seed"
+  },
+  {
+    "query": "prompt engineer",
+    "expected_id": "tech_prompt_eng",
+    "source": "seed"
+  },
+  {
+    "query": "llm engineer",
+    "expected_id": "tech_prompt_eng",
+    "source": "seed"
+  },
+  {
+    "query": "qa engineer",
+    "expected_id": "tech_qa_tester",
+    "source": "seed"
+  },
+  {
+    "query": "software tester",
+    "expected_id": "tech_qa_tester",
+    "source": "seed"
+  },
+  {
+    "query": "quality assurance",
+    "expected_id": "tech_qa_tester",
+    "source": "seed"
+  },
+  {
+    "query": "mlops engineer",
+    "expected_id": "tech_ai_infra_eng",
+    "source": "seed"
+  },
+  {
+    "query": "data labeler",
+    "expected_id": "tech_data_annotator",
+    "source": "seed"
+  },
+  {
+    "query": "data annotator",
+    "expected_id": "tech_data_annotator",
+    "source": "seed"
+  },
+  {
+    "query": "assembly worker",
+    "expected_id": "mfg_assembly_worker",
+    "source": "seed"
+  },
+  {
+    "query": "factory worker",
+    "expected_id": "mfg_assembly_worker",
+    "source": "seed"
+  },
+  {
+    "query": "quality inspector",
+    "expected_id": "mfg_quality_inspector",
+    "source": "seed"
+  },
+  {
+    "query": "robotics engineer",
+    "expected_id": "mfg_roboticist",
+    "source": "seed"
+  },
+  {
+    "query": "cobot integrator",
+    "expected_id": "mfg_roboticist",
+    "source": "seed"
+  },
+  {
+    "query": "maintenance technician",
+    "expected_id": "mfg_maintenance_tech",
+    "source": "seed"
+  },
+  {
+    "query": "predictive maintenance",
+    "expected_id": "mfg_maintenance_tech",
+    "source": "seed"
+  },
+  {
+    "query": "digital twin engineer",
+    "expected_id": "mfg_digital_twin_eng",
+    "source": "seed"
+  },
+  {
+    "query": "cnc operator",
+    "expected_id": "mfg_machinist",
+    "source": "seed"
+  },
+  {
+    "query": "machinist",
+    "expected_id": "mfg_machinist",
+    "source": "seed"
+  },
+  {
+    "query": "welder",
+    "expected_id": "mfg_industrial_welder",
+    "source": "seed"
+  },
+  {
+    "query": "nurse",
+    "expected_id": "hc_palliative_care_nurse",
+    "source": "seed"
+  },
+  {
+    "query": "registered nurse",
+    "expected_id": "hc_palliative_care_nurse",
+    "source": "seed"
+  },
+  {
+    "query": "radiologist",
+    "expected_id": "hc_radiologist",
+    "source": "seed"
+  },
+  {
+    "query": "care coordinator",
+    "expected_id": "hc_care_coordinator",
+    "source": "seed"
+  },
+  {
+    "query": "medical transcriptionist",
+    "expected_id": "hc_medical_transcriptionist",
+    "source": "seed"
+  },
+  {
+    "query": "medical coder",
+    "expected_id": "hc_clinical_coder",
+    "source": "seed"
+  },
+  {
+    "query": "doctor",
+    "expected_id": "hc_general_practitioner",
+    "source": "seed"
+  },
+  {
+    "query": "physician",
+    "expected_id": "hc_general_practitioner",
+    "source": "seed"
+  },
+  {
+    "query": "general practitioner",
+    "expected_id": "hc_general_practitioner",
+    "source": "seed"
+  },
+  {
+    "query": "mental health counselor",
+    "expected_id": "hc_mental_health_counsellor",
+    "source": "seed"
+  },
+  {
+    "query": "therapist",
+    "expected_id": "hc_mental_health_counsellor",
+    "source": "seed"
+  },
+  {
+    "query": "palliative care nurse",
+    "expected_id": "hc_palliative_care_nurse",
+    "source": "seed"
+  },
+  {
+    "query": "tutor",
+    "expected_id": "edu_tutor",
+    "source": "seed"
+  },
+  {
+    "query": "private tutor",
+    "expected_id": "edu_tutor",
+    "source": "seed"
+  },
+  {
+    "query": "curriculum designer",
+    "expected_id": "edu_curriculum_designer",
+    "source": "seed"
+  },
+  {
+    "query": "instructional designer",
+    "expected_id": "edu_curriculum_designer",
+    "source": "seed"
+  },
+  {
+    "query": "ai learning designer",
+    "expected_id": "edu_ai_learning_guide",
+    "source": "seed"
+  },
+  {
+    "query": "corporate trainer",
+    "expected_id": "edu_corporate_trainer",
+    "source": "seed"
+  },
+  {
+    "query": "special needs teacher",
+    "expected_id": "edu_special_needs_teacher",
+    "source": "seed"
+  },
+  {
+    "query": "paralegal",
+    "expected_id": "legal_paralegal",
+    "source": "seed"
+  },
+  {
+    "query": "legal assistant",
+    "expected_id": "legal_paralegal",
+    "source": "seed"
+  },
+  {
+    "query": "compliance officer",
+    "expected_id": "legal_compliance_officer",
+    "source": "seed"
+  },
+  {
+    "query": "contract analyst",
+    "expected_id": "legal_contracts_analyst",
+    "source": "seed"
+  },
+  {
+    "query": "corporate counsel",
+    "expected_id": "legal_corporate_counsel",
+    "source": "seed"
+  },
+  {
+    "query": "attorney",
+    "expected_id": "legal_corporate_counsel",
+    "source": "seed"
+  },
+  {
+    "query": "warehouse picker",
+    "expected_id": "log_warehouse_picker",
+    "source": "seed"
+  },
+  {
+    "query": "warehouse worker",
+    "expected_id": "log_warehouse_picker",
+    "source": "seed"
+  },
+  {
+    "query": "dispatcher",
+    "expected_id": "log_dispatcher",
+    "source": "seed"
+  },
+  {
+    "query": "logistics coordinator",
+    "expected_id": "log_dispatcher",
+    "source": "seed"
+  },
+  {
+    "query": "supply chain analyst",
+    "expected_id": "log_supply_chain_analyst",
+    "source": "seed"
+  },
+  {
+    "query": "delivery driver",
+    "expected_id": "log_last_mile_delivery",
+    "source": "seed"
+  },
+  {
+    "query": "truck driver",
+    "expected_id": "log_last_mile_delivery",
+    "source": "seed"
+  },
+  {
+    "query": "customs broker",
+    "expected_id": "log_customs_broker",
+    "source": "seed"
+  },
+  {
+    "query": "store manager",
+    "expected_id": "ret_store_manager",
+    "source": "seed"
+  },
+  {
+    "query": "retail manager",
+    "expected_id": "ret_store_manager",
+    "source": "seed"
+  },
+  {
+    "query": "buyer",
+    "expected_id": "ret_buyer_merchandiser",
+    "source": "seed"
+  },
+  {
+    "query": "merchandiser",
+    "expected_id": "ret_buyer_merchandiser",
+    "source": "seed"
+  },
+  {
+    "query": "cashier",
+    "expected_id": "ret_cashier",
+    "source": "seed"
+  },
+  {
+    "query": "personal stylist",
+    "expected_id": "ret_personal_stylist",
+    "source": "seed"
+  },
+  {
+    "query": "farmer",
+    "expected_id": "agr_farmer",
+    "source": "seed"
+  },
+  {
+    "query": "agronomist",
+    "expected_id": "agr_agronomist",
+    "source": "seed"
+  },
+  {
+    "query": "site foreman",
+    "expected_id": "con_site_foreman",
+    "source": "seed"
+  },
+  {
+    "query": "construction manager",
+    "expected_id": "con_site_foreman",
+    "source": "seed"
+  },
+  {
+    "query": "electrician",
+    "expected_id": "con_electrician",
+    "source": "seed"
+  },
+  {
+    "query": "chef",
+    "expected_id": "hos_chef",
+    "source": "seed"
+  },
+  {
+    "query": "hotel manager",
+    "expected_id": "hos_hotel_manager",
+    "source": "seed"
+  },
+  {
+    "query": "social worker",
+    "expected_id": "gov_social_worker",
+    "source": "seed"
+  },
+  {
+    "query": "policy analyst",
+    "expected_id": "gov_policy_analyst",
+    "source": "seed"
+  },
+  {
+    "query": "tax inspector",
+    "expected_id": "gov_tax_inspector",
+    "source": "seed"
+  },
+  {
+    "query": "journalist",
+    "expected_id": "med_journalist",
+    "source": "seed"
+  },
+  {
+    "query": "film director",
+    "expected_id": "med_film_director",
+    "source": "seed"
+  },
+  {
+    "query": "lawyer",
+    "source": "seed"
+  },
+  {
+    "query": "teacher",
+    "source": "seed"
+  },
+  {
+    "query": "accountant",
+    "source": "seed"
+  },
+  {
+    "query": "hr manager",
+    "source": "seed"
+  },
+  {
+    "query": "marketing manager",
+    "source": "seed"
+  },
+  {
+    "query": "sales representative",
+    "source": "seed"
+  },
+  {
+    "query": "ux designer",
+    "source": "seed"
+  },
+  {
+    "query": "cybersecurity analyst",
+    "source": "seed"
+  },
+  {
+    "query": "cloud architect",
+    "source": "seed"
+  },
+  {
+    "query": "devops engineer",
+    "source": "seed"
+  },
+  {
+    "query": "data engineer",
+    "source": "seed"
+  },
+  {
+    "query": "civil engineer",
+    "source": "seed"
+  },
+  {
+    "query": "mechanical engineer",
+    "source": "seed"
+  },
+  {
+    "query": "人工智能工程师",
+    "source": "seed"
+  },
+  {
+    "query": "数据工程师",
+    "source": "seed"
+  },
+  {
+    "query": "护士",
+    "source": "seed"
+  },
+  {
+    "query": "医生",
+    "source": "seed"
+  },
+  {
+    "query": "会计",
+    "source": "seed"
+  },
+  {
+    "query": "教师",
+    "source": "seed"
+  },
+  {
+    "query": "律师",
+    "source": "seed"
+  },
+  {
+    "query": "ar manager",
+    "expected_id": "accountant"
+  },
+  {
+    "query": "a/r manager",
+    "expected_id": "accountant"
+  },
+  {
+    "query": "ap manager",
+    "expected_id": "accountant"
+  },
+  {
+    "query": "accounts receivable",
+    "expected_id": "accountant"
+  },
+  {
+    "query": "accounts payable",
+    "expected_id": "accountant"
+  }
 ]
