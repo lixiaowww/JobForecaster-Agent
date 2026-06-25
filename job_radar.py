@@ -1144,11 +1144,13 @@ def _append_to_kb(profile: dict, kb_path: str = "data/jobs_kb.json") -> None:
         existing_ids = {j["id"] for j in kb}
         if profile["id"] in existing_ids:
             return
-        # Strip transition_targets that reference IDs not yet in KB (avoids test failures).
-        # The self-evolution evaluator will re-populate them once they're in KB.
+        # Strip transition_targets that reference IDs not yet in KB, or that are at_risk
+        # (recommending a dying role as a transition destination is misleading).
+        kb_by_id = {j["id"]: j for j in kb}
         valid_targets = [
             t for t in profile.get("transition_targets", [])
             if t.get("target_id") in existing_ids
+            and kb_by_id[t["target_id"]].get("category") != "at_risk"
         ]
         profile = {**profile, "transition_targets": valid_targets}
         kb.append(profile)

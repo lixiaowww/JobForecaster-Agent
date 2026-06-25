@@ -5717,24 +5717,24 @@
     ],
     "transition_targets": [
       {
-        "target_id": "fin_credit_analyst",
-        "retrain_months": 6,
-        "skill_bridge": "Credit analysis skills transfer directly; add financial modeling and risk frameworks"
-      },
-      {
-        "target_id": "accountant",
-        "retrain_months": 8,
-        "skill_bridge": "Broaden from AR cycle to full financial reporting and general ledger"
-      },
-      {
         "target_id": "fin_risk_manager",
         "retrain_months": 18,
-        "skill_bridge": "Collections risk experience is a foundation; add quantitative modeling and regulatory knowledge"
+        "skill_bridge": "Credit analysis and collections risk experience map directly to quantitative risk assessment; add regulatory compliance and stress testing frameworks"
       },
       {
         "target_id": "fin_ai_compliance",
         "retrain_months": 14,
-        "skill_bridge": "Finance process expertise + learn AI audit frameworks for automated AR/AP systems"
+        "skill_bridge": "Deep knowledge of financial reconciliation workflows is a strong base for auditing AI-automated AR/AP systems; learn XAI and model audit frameworks"
+      },
+      {
+        "target_id": "fin_wealth_manager",
+        "retrain_months": 12,
+        "skill_bridge": "Client dispute resolution and financial reporting skills transfer; shift from institutional to personal finance with licensing"
+      },
+      {
+        "target_id": "legal_corporate_counsel",
+        "retrain_months": 24,
+        "skill_bridge": "Contract enforcement and collections dispute experience is a foundation; requires law degree or paralegal certification pathway"
       }
     ],
     "search_aliases": [
