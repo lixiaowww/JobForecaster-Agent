@@ -18,7 +18,12 @@ ENV SENTENCE_TRANSFORMERS_HOME=/home/user/.cache/sentence_transformers
 ENV PATH="/home/user/.local/bin:${PATH}"
 
 COPY --chown=user:user requirements.txt requirements-dashboard.txt ./
-RUN pip install --user --no-cache-dir -r requirements.txt -r requirements-dashboard.txt \
+# sentence-transformers pulls in torch with no pin, so pip defaults to the CUDA-enabled
+# wheel (~2GB+). On HF Spaces free/CPU-basic hardware that inflates the build, the image
+# pull, and cold start enough to blow the 30-min "workload not healthy" health-check
+# window. Install the CPU-only wheel first so the later resolve is a no-op.
+RUN pip install --user --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu \
+    && pip install --user --no-cache-dir -r requirements.txt -r requirements-dashboard.txt \
     && python3 -c "\
 from sentence_transformers import SentenceTransformer; \
 SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2'); \
