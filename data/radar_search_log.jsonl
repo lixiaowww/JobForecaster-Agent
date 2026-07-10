@@ -49,3 +49,13 @@
 {"query": "ux researcher", "tier": "no_match", "best_id": null, "sim": 0.0}
 {"ts": "2026-06-25T12:20:52.250291+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
 {"ts": "2026-06-25T12:20:52.801808+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-25T12:37:26.211611+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-25T12:37:26.776558+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-25T14:03:21.982281+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-25T14:03:22.608575+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-25T18:25:39.856646+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-25T18:25:40.454735+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-25T18:32:10.017218+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-25T18:32:11.072612+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}
+{"ts": "2026-06-25T18:37:37.934013+00:00", "query": "financial analyst", "source": "radar", "tier": "strong", "best_id": "fin_credit_analyst", "sim": 0.777, "industry": null}
+{"ts": "2026-06-25T18:37:38.829656+00:00", "query": "software engineer", "source": "radar", "tier": "strong", "best_id": "tech_software_eng", "sim": 0.706, "industry": null}

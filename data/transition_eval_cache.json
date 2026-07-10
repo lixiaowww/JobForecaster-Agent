@@ -588,5 +588,405 @@
     "feasibility": 0.1,
     "reasoning": "Major skills gap",
     "evaluated_at": "2026-06-24"
+  },
+  "ai_engineer→fin_credit_analyst": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→fin_wealth_manager": {
+    "feasibility": 0.1,
+    "reasoning": "Major skill mismatch",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→fin_risk_manager": {
+    "feasibility": 0.2,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→fin_algo_trader": {
+    "feasibility": 0.64,
+    "reasoning": "Related tech skills",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→fin_ai_compliance": {
+    "feasibility": 0.35,
+    "reasoning": "Similar tech",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→fin_underwriter": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→tech_software_eng": {
+    "feasibility": 0.83,
+    "reasoning": "Similar tech domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→tech_product_manager": {
+    "feasibility": 0.62,
+    "reasoning": "Some skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→tech_data_scientist": {
+    "feasibility": 0.85,
+    "reasoning": "Similar skills",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→tech_project_manager": {
+    "feasibility": 0.65,
+    "reasoning": "Related domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→tech_prompt_eng": {
+    "feasibility": 0.84,
+    "reasoning": "Related domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→tech_qa_tester": {
+    "feasibility": 0.2,
+    "reasoning": "Different skills required",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→tech_ai_infra_eng": {
+    "feasibility": 0.65,
+    "reasoning": "Similar domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→tech_data_annotator": {
+    "feasibility": 0.6,
+    "reasoning": "Related tech domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→tech_agent_fleet_mgr": {
+    "feasibility": 0.64,
+    "reasoning": "Similar tech domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→mfg_assembly_worker": {
+    "feasibility": 0.05,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→mfg_quality_inspector": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→mfg_roboticist": {
+    "feasibility": 0.2,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→mfg_maintenance_tech": {
+    "feasibility": 0.32,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→mfg_digital_twin_eng": {
+    "feasibility": 0.2,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→mfg_machinist": {
+    "feasibility": 0.05,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→hc_radiologist": {
+    "feasibility": 0.1,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→hc_care_coordinator": {
+    "feasibility": 0.2,
+    "reasoning": "Major domain shift",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→hc_medical_transcriptionist": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→hc_surgical_roboticist": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→hc_clinical_coder": {
+    "feasibility": 0.05,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→hc_general_practitioner": {
+    "feasibility": 0.01,
+    "reasoning": "Extreme domain shift",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→edu_tutor": {
+    "feasibility": 0.1,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→edu_curriculum_designer": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→edu_grading_assistant": {
+    "feasibility": 0.1,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→edu_ai_learning_guide": {
+    "feasibility": 0.32,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→edu_corporate_trainer": {
+    "feasibility": 0.2,
+    "reasoning": "Major skill mismatch",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→legal_paralegal": {
+    "feasibility": 0.05,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→legal_compliance_officer": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated fields",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→legal_contracts_analyst": {
+    "feasibility": 0.05,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→legal_ai_forensics": {
+    "feasibility": 0.2,
+    "reasoning": "Large skill gap",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→legal_corporate_counsel": {
+    "feasibility": 0.05,
+    "reasoning": "Major skill mismatch",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→log_warehouse_picker": {
+    "feasibility": 0.05,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→log_dispatcher": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "ai_engineer→log_supply_chain_analyst": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated skills",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→fin_credit_analyst": {
+    "feasibility": 0.1,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→fin_wealth_manager": {
+    "feasibility": 0.1,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→fin_risk_manager": {
+    "feasibility": 0.25,
+    "reasoning": "Little skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→fin_algo_trader": {
+    "feasibility": 0.05,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→fin_ai_compliance": {
+    "feasibility": 0.1,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→fin_underwriter": {
+    "feasibility": 0.1,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→tech_software_eng": {
+    "feasibility": 0.05,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→tech_product_manager": {
+    "feasibility": 0.1,
+    "reasoning": "Limited skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→tech_data_scientist": {
+    "feasibility": 0.2,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→tech_project_manager": {
+    "feasibility": 0.1,
+    "reasoning": "Limited skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→tech_prompt_eng": {
+    "feasibility": 0.05,
+    "reasoning": "Major skill mismatch",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→tech_qa_tester": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→tech_ai_infra_eng": {
+    "feasibility": 0.05,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→tech_data_annotator": {
+    "feasibility": 0.11,
+    "reasoning": "Skills don't overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→tech_agent_fleet_mgr": {
+    "feasibility": 0.09,
+    "reasoning": "Very different skills",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→mfg_assembly_worker": {
+    "feasibility": 0.05,
+    "reasoning": "Unrelated skills",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→mfg_quality_inspector": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→mfg_roboticist": {
+    "feasibility": 0.05,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→mfg_maintenance_tech": {
+    "feasibility": 0.05,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→mfg_digital_twin_eng": {
+    "feasibility": 0.05,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→mfg_machinist": {
+    "feasibility": 0.05,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→hc_radiologist": {
+    "feasibility": 0.01,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→hc_care_coordinator": {
+    "feasibility": 0.2,
+    "reasoning": "Low skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→hc_medical_transcriptionist": {
+    "feasibility": 0.09,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→hc_surgical_roboticist": {
+    "feasibility": 0.05,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→hc_clinical_coder": {
+    "feasibility": 0.05,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→hc_general_practitioner": {
+    "feasibility": 0.01,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→edu_tutor": {
+    "feasibility": 0.2,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→edu_curriculum_designer": {
+    "feasibility": 0.1,
+    "reasoning": "Unrelated domains",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→edu_grading_assistant": {
+    "feasibility": 0.2,
+    "reasoning": "Limited skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→edu_ai_learning_guide": {
+    "feasibility": 0.2,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→edu_corporate_trainer": {
+    "feasibility": 0.35,
+    "reasoning": "Some skills overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→legal_paralegal": {
+    "feasibility": 0.23,
+    "reasoning": "Some law knowledge",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→legal_compliance_officer": {
+    "feasibility": 0.25,
+    "reasoning": "Limited skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→legal_contracts_analyst": {
+    "feasibility": 0.34,
+    "reasoning": "Some skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→legal_ai_forensics": {
+    "feasibility": 0.1,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→legal_corporate_counsel": {
+    "feasibility": 0.1,
+    "reasoning": "Different domain",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→log_warehouse_picker": {
+    "feasibility": 0.05,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→log_dispatcher": {
+    "feasibility": 0.1,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
+  },
+  "hr_manager→log_supply_chain_analyst": {
+    "feasibility": 0.1,
+    "reasoning": "No skill overlap",
+    "evaluated_at": "2026-06-25"
   }
 }
