@@ -21,6 +21,10 @@
   python run.py query-agent run --dry-run
   python run.py query-agent apply    # merge approved pending/job_calibration/*.json
   python run.py query-agent ingest-logs path.jsonl  # merge HF/Radar search export
+  python run.py query-agent rollback-check           # re-check active auto-applied
+                                                       # patches, revert regressions
+  python run.py query-agent rollback-check --dry-run  # report only, exit 1 if any found
+  python run.py query-agent ledger [n]                # print last n provenance events
 """
 from __future__ import annotations
 
@@ -213,6 +217,28 @@ def cmd_query_agent(
         max_pairs = int(extra_args[0]) if extra_args else 40
         summary = run_evaluation_pass(jobs, max_pairs=max_pairs, kb_path=_kb_path)
         print(json.dumps(summary, indent=2))
+    elif subcmd == "rollback-check":
+        from services import provenance
+        from services.job_query_agent.monitor import check_active_patches
+
+        job_radar_cfg = cfg.get("job_radar", {})
+        kb_path = job_radar_cfg.get("kb_path", "data/jobs_kb.json")
+        config_path = cfg.get("_config_path", "config.yaml")
+        ledger_path = agent_cfg.get("provenance_path", provenance.DEFAULT_LEDGER_PATH)
+        summary = check_active_patches(
+            cfg, kb_path=kb_path, config_path=config_path,
+            ledger_path=ledger_path, dry_run=dry_run,
+        )
+        print(json.dumps(summary, indent=2))
+        if summary["reverted"] > 0 and dry_run:
+            sys.exit(1)  # CI: fail the check so a human notices before rounds re-run
+    elif subcmd == "ledger":
+        from services import provenance
+
+        ledger_path = agent_cfg.get("provenance_path", provenance.DEFAULT_LEDGER_PATH)
+        limit = int(extra_args[0]) if extra_args else 20
+        events = provenance.load_events(ledger_path)[-limit:]
+        print(json.dumps(events, indent=2, ensure_ascii=False))
     elif subcmd == "ingest-logs":
         from services.job_query_agent.search_log import merge_search_logs
 

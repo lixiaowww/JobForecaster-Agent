@@ -6,11 +6,15 @@ from pathlib import Path
 
 import job_radar
 import pytest
+import yaml
+from services import provenance
 from services.job_query_agent.audit import run_audit
 from services.job_query_agent.apply import (
     apply_alias_patch_file,
     apply_kb_profile_new,
+    apply_proposal,
     can_auto_apply,
+    rollback_patch,
     run_apply_pending,
     try_auto_apply_proposal,
 )
@@ -22,6 +26,7 @@ from services.job_query_agent.discover import (
 )
 from services.job_query_agent.evaluate import evaluate_query
 from services.job_query_agent.loop import run_calibration_cycle
+from services.job_query_agent.monitor import check_active_patches
 from services.job_query_agent.propose import CalibrationProposal, propose_from_verdict, queue_proposal
 from services.job_query_agent.search_log import merge_search_logs, record_search_log
 from services.job_query_agent.simulate import simulate_alias_patch, simulate_kb_profile_new
@@ -179,6 +184,7 @@ def test_run_calibration_cycle_dry_run(cfg, tmp_path):
     cfg["job_query_agent"] = {
         **cfg["job_query_agent"],
         "traces_path": str(tmp_path / "traces.jsonl"),
+        "provenance_path": str(tmp_path / "provenance.jsonl"),
         "auto_apply": {"enabled": True, "max_rounds": 1},
     }
     summary = run_calibration_cycle(cfg, write_traces=False, dry_run=True)
@@ -209,6 +215,7 @@ def test_try_auto_apply_on_real_weak_alias(tmp_path):
         agent_cfg={"auto_apply": {"enabled": True, "types": ["alias_patch"], "min_sim_after": 0.55}},
         expected_id=None,
         sim_before=verdict.sim,
+        ledger_path=tmp_path / "provenance.jsonl",
     )
     assert action is not None
     if action.get("auto_applied"):
@@ -290,10 +297,203 @@ def test_simulate_and_apply_kb_profile_from_cache(tmp_path, monkeypatch):
     assert sim_after >= job_radar.resolve_search_config()["tier_weak"]
     assert best_id == profile["id"]
 
-    result = apply_kb_profile_new(query, kb_path=kb_path, allow_llm=False)
+    result = apply_kb_profile_new(
+        query, kb_path=kb_path, allow_llm=False,
+        ledger_path=tmp_path / "provenance.jsonl",
+    )
     assert result["applied"]
     saved = json.loads(kb_path.read_text(encoding="utf-8"))
     assert any(j["id"] == profile["id"] for j in saved)
+
+
+def test_apply_proposal_alias_patch_ledgers_and_rolls_back(tmp_path):
+    kb_path = tmp_path / "jobs_kb.json"
+    ledger_path = tmp_path / "ledger.jsonl"
+    kb_path.write_text(json.dumps([_mini_eng_job()]), encoding="utf-8")
+    proposal = CalibrationProposal(
+        proposal_id="alias_swe",
+        type="alias_patch",
+        query="swe ic",
+        target_id="tech_software_eng",
+        payload={"add_aliases": ["swe ic"]},
+        evidence={},
+    )
+    result = apply_proposal(
+        proposal, kb_path=kb_path, config_path=tmp_path / "config.yaml",
+        ledger_path=ledger_path,
+    )
+    assert result["applied"]
+    patch_id = result["patch_id"]
+    assert patch_id is not None
+
+    saved = json.loads(kb_path.read_text(encoding="utf-8"))
+    assert "swe ic" in saved[0]["search_aliases"]
+    active = provenance.active_patches(ledger_path)
+    assert len(active) == 1 and active[0]["patch_id"] == patch_id
+
+    rb = rollback_patch(
+        patch_id, kb_path=kb_path, config_path=tmp_path / "config.yaml",
+        ledger_path=ledger_path,
+    )
+    assert rb["reverted"]
+    restored = json.loads(kb_path.read_text(encoding="utf-8"))
+    assert restored[0]["search_aliases"] == []
+    assert provenance.active_patches(ledger_path) == []
+    assert provenance.is_reverted(patch_id, path=ledger_path)
+
+    # Rolling back twice is a no-op, not an error.
+    rb2 = rollback_patch(
+        patch_id, kb_path=kb_path, config_path=tmp_path / "config.yaml",
+        ledger_path=ledger_path,
+    )
+    assert not rb2["reverted"]
+    assert rb2["reason"] == "already reverted"
+
+
+def test_apply_proposal_title_alias_ledgers_and_rolls_back(tmp_path):
+    kb_path = tmp_path / "jobs_kb.json"
+    config_path = tmp_path / "config.yaml"
+    ledger_path = tmp_path / "ledger.jsonl"
+    kb_path.write_text(json.dumps([_mini_eng_job()]), encoding="utf-8")
+    config_path.write_text("job_radar:\n  search: {}\n", encoding="utf-8")
+
+    proposal = CalibrationProposal(
+        proposal_id="title_swe",
+        type="title_alias",
+        query="swe",
+        target_id="tech_software_eng",
+        payload={"canonical": "Software Engineer"},
+        evidence={},
+    )
+    result = apply_proposal(
+        proposal, kb_path=kb_path, config_path=config_path, ledger_path=ledger_path,
+    )
+    assert result["applied"]
+    patch_id = result["patch_id"]
+    cfg_after = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    assert cfg_after["job_radar"]["search"]["title_aliases"]["swe"] == "Software Engineer"
+
+    rb = rollback_patch(patch_id, kb_path=kb_path, config_path=config_path, ledger_path=ledger_path)
+    assert rb["reverted"]
+    cfg_restored = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    # Key never existed before the patch, so rollback removes it entirely.
+    assert "swe" not in cfg_restored.get("job_radar", {}).get("search", {}).get("title_aliases", {})
+
+
+def test_apply_kb_profile_new_ledgers_and_rolls_back(tmp_path, monkeypatch):
+    kb_path = tmp_path / "jobs_kb.json"
+    ledger_path = tmp_path / "ledger.jsonl"
+    kb_path.write_text(json.dumps([_mini_eng_job()]), encoding="utf-8")
+    cache_file = str(tmp_path / "llm_cache.json")
+    monkeypatch.setattr(job_radar, "_LLM_CACHE_PATH", cache_file)
+    query = "cloud architect"
+    profile = _cached_kb_profile(query)
+    job_radar._save_llm_cache({job_radar._query_signature(query): profile})
+
+    result = apply_kb_profile_new(
+        query, kb_path=kb_path, allow_llm=False, ledger_path=ledger_path,
+    )
+    assert result["applied"]
+    patch_id = result["patch_id"]
+    assert patch_id is not None
+    saved = json.loads(kb_path.read_text(encoding="utf-8"))
+    assert any(j["id"] == profile["id"] for j in saved)
+
+    rb = rollback_patch(patch_id, kb_path=kb_path, config_path=tmp_path / "config.yaml", ledger_path=ledger_path)
+    assert rb["reverted"]
+    restored = json.loads(kb_path.read_text(encoding="utf-8"))
+    assert not any(j["id"] == profile["id"] for j in restored)
+
+
+def test_apply_kb_profile_new_cache_replay_does_not_duplicate_patch(tmp_path, monkeypatch):
+    """_append_to_kb is idempotent by id — a second call for the same query
+    (e.g. a re-run after the profile is already in the KB) must not ledger a
+    second, empty patch that a monitor would have nothing real to revert."""
+    kb_path = tmp_path / "jobs_kb.json"
+    ledger_path = tmp_path / "ledger.jsonl"
+    kb_path.write_text(json.dumps([_mini_eng_job()]), encoding="utf-8")
+    cache_file = str(tmp_path / "llm_cache.json")
+    monkeypatch.setattr(job_radar, "_LLM_CACHE_PATH", cache_file)
+    query = "cloud architect"
+    profile = _cached_kb_profile(query)
+    job_radar._save_llm_cache({job_radar._query_signature(query): profile})
+
+    first = apply_kb_profile_new(query, kb_path=kb_path, allow_llm=False, ledger_path=ledger_path)
+    second = apply_kb_profile_new(query, kb_path=kb_path, allow_llm=False, ledger_path=ledger_path)
+    assert first["patch_id"] is not None
+    assert second["patch_id"] is None
+    assert len(provenance.active_patches(ledger_path)) == 1
+
+
+def test_check_active_patches_reverts_decayed_alias(tmp_path):
+    """A patch's ledger says an alias was added, but the KB no longer carries
+    it (e.g. a later hand-edit or a different patch clobbered the field).
+    The monitor should detect the query no longer clears the gate that
+    justified the patch and revert it."""
+    kb_path = tmp_path / "jobs_kb.json"
+    config_path = tmp_path / "config.yaml"
+    ledger_path = tmp_path / "ledger.jsonl"
+    kb_path.write_text(json.dumps([_mini_eng_job()]), encoding="utf-8")
+
+    patch_id = provenance.record_patch(
+        subsystem="job_query_agent",
+        patch_type="alias_patch",
+        reason="test setup: pretend this landed earlier",
+        before={"search_aliases": []},
+        after={"search_aliases": ["swe ic"]},
+        target_id="tech_software_eng",
+        query="swe ic",
+        path=ledger_path,
+    )
+
+    cfg = {"job_radar": {"kb_path": str(kb_path)}}
+    summary = check_active_patches(
+        cfg, kb_path=kb_path, config_path=config_path, ledger_path=ledger_path,
+    )
+    assert summary["checked"] == 1
+    assert summary["reverted"] == 1
+    assert provenance.is_reverted(patch_id, path=ledger_path)
+
+
+def test_check_active_patches_dry_run_does_not_mutate(tmp_path):
+    kb_path = tmp_path / "jobs_kb.json"
+    config_path = tmp_path / "config.yaml"
+    ledger_path = tmp_path / "ledger.jsonl"
+    kb_path.write_text(json.dumps([_mini_eng_job()]), encoding="utf-8")
+
+    provenance.record_patch(
+        subsystem="job_query_agent", patch_type="alias_patch", reason="test",
+        before={"search_aliases": []}, after={"search_aliases": ["swe ic"]},
+        target_id="tech_software_eng", query="swe ic", path=ledger_path,
+    )
+    summary = check_active_patches(
+        {"job_radar": {"kb_path": str(kb_path)}},
+        kb_path=kb_path, config_path=config_path, ledger_path=ledger_path,
+        dry_run=True,
+    )
+    assert summary["reverted"] == 1
+    assert summary["dry_run"]
+    # Nothing actually reverted in the ledger — dry_run only reports.
+    assert provenance.active_patches(ledger_path) != []
+
+
+def test_check_active_patches_leaves_healthy_patches_alone(tmp_path):
+    """Sanity check against the real KB: a patch whose query genuinely
+    resolves cleanly should never be touched by the monitor."""
+    kb_path = "data/jobs_kb.json"
+    ledger_path = tmp_path / "ledger.jsonl"
+    provenance.record_patch(
+        subsystem="job_query_agent", patch_type="alias_patch", reason="test",
+        before={"search_aliases": []}, after={"search_aliases": ["software developer"]},
+        target_id="tech_software_eng", query="software developer", path=ledger_path,
+    )
+    summary = check_active_patches(
+        {"job_radar": {"kb_path": kb_path}},
+        kb_path=kb_path, config_path=tmp_path / "config.yaml",
+        ledger_path=ledger_path,
+    )
+    assert summary["reverted"] == 0
+    assert provenance.active_patches(ledger_path) != []
 
 
 def test_run_apply_pending_kb_profile(tmp_path, monkeypatch):
@@ -321,6 +521,7 @@ def test_run_apply_pending_kb_profile(tmp_path, monkeypatch):
         "job_radar": {"kb_path": str(kb_path)},
         "job_query_agent": {
             "review": {"pending_dir": str(pending)},
+            "provenance_path": str(tmp_path / "provenance.jsonl"),
         },
         "_config_path": str(tmp_path / "config.yaml"),
     }

@@ -18,11 +18,13 @@ venv/
 
 # Runtime / generated (CI rebuilds these)
 data/forecaster.db
+data/forecaster.db-journal
 data/bls_cache.json
 data/kb_calibration.json
 data/kb_calibration_log.jsonl
 data/crowd_traces.jsonl
 data/query_agent_traces.jsonl
+data/provenance_log.jsonl
 data/_bls_fetch_tmp.json
 data/llm_job_cache.json
 pending/

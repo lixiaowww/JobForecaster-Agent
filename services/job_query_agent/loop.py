@@ -5,9 +5,11 @@ from pathlib import Path
 from typing import Any
 
 import job_radar
+from services import provenance
 from services.job_query_agent.apply import try_auto_apply_proposal
 from services.job_query_agent.discover import discover_queries
 from services.job_query_agent.evaluate import QueryVerdict, evaluate_query
+from services.job_query_agent.monitor import check_active_patches
 from services.job_query_agent.propose import propose_from_verdict, queue_proposal
 from services.job_query_agent.traces import append_trace
 
@@ -32,6 +34,7 @@ def run_calibration_cycle(
         "pending_dir", "pending/job_calibration",
     )
     traces_path = agent_cfg.get("traces_path", "data/query_agent_traces.jsonl")
+    ledger_path = agent_cfg.get("provenance_path", provenance.DEFAULT_LEDGER_PATH)
 
     applied_actions: list[dict] = []
     queued = 0
@@ -79,6 +82,7 @@ def run_calibration_cycle(
                     agent_cfg=ctx_agent,
                     expected_id=verdict.expected_id,
                     sim_before=verdict.sim,
+                    ledger_path=ledger_path,
                 )
                 if action:
                     applied_actions.append(action)
@@ -92,6 +96,24 @@ def run_calibration_cycle(
 
         if round_applied == 0:
             break
+
+    # Post-apply regression sweep: re-check every previously auto-applied,
+    # still-active patch against the KB as it stands *now* (including
+    # whatever this cycle's own rounds just changed) and auto-revert any
+    # that regressed. Pre-apply gating above only proves a patch looked safe
+    # the moment it landed; this is what keeps it honest afterwards.
+    regression_monitor: dict[str, Any] = {}
+    if agent_cfg.get("auto_apply", {}).get("enabled", False):
+        try:
+            regression_monitor = check_active_patches(
+                cfg,
+                kb_path=kb_path,
+                config_path=config_path,
+                ledger_path=ledger_path,
+                dry_run=dry_run,
+            )
+        except Exception:
+            pass  # non-fatal; a monitor bug should never block the cycle
 
     # Final audit pass (raises only on P0 if called from strict mode elsewhere)
     jobs = job_radar.load_knowledge_base(str(kb_path))
@@ -136,6 +158,7 @@ def run_calibration_cycle(
         "proposals_queued": queued,
         "coverage_enrichment": coverage_summary,
         "transition_eval": transition_summary,
+        "regression_monitor": regression_monitor,
         "final": {
             "queries": len(final_verdicts),
             "ok": sum(1 for v in final_verdicts if v.ok),

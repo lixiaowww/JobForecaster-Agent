@@ -74,6 +74,7 @@ job_radar:
 job_query_agent:
   enabled: true
   traces_path: data/query_agent_traces.jsonl
+  provenance_path: data/provenance_log.jsonl  # self-mutation ledger (record_patch/rollback_patch)
   discover:
     include_core: true
     include_seed: true
