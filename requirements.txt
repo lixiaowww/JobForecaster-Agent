@@ -1,3 +1,10 @@
+# CPU-only torch: sentence-transformers below has no torch pin, so pip would
+# otherwise resolve the default CUDA-enabled wheel (2GB+). On Streamlit
+# Community Cloud (no Dockerfile — this file drives the build directly, and
+# the free tier is capped at 1GB RAM) that's the same slow-build/bloat trap
+# that broke the HF Spaces deploy. Same fix here: pin CPU-only first.
+--extra-index-url https://download.pytorch.org/whl/cpu
+
 # LLM backends (at least one API key required for live cycles)
 # Option A (FREE): set GROQ_API_KEY — https://console.groq.com
 groq>=0.9

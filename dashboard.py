@@ -34,8 +34,14 @@ init_language()
 
 
 def _space_bootstrap_iters() -> int | None:
-    """Use fewer GMM iterations on HF Spaces (slow free CPU)."""
-    if os.getenv("SPACE_ID"):
+    """Use fewer GMM iterations on constrained free hosting (slow/low-RAM CPU).
+
+    ``SPACE_ID`` is set automatically on Hugging Face Spaces. Other hosts
+    (e.g. Streamlit Community Cloud, which has no equivalent env var and
+    caps free apps at 1GB RAM) opt in explicitly by setting
+    ``EVOLUTION_N_BOOTSTRAP`` themselves.
+    """
+    if os.getenv("SPACE_ID") or os.getenv("EVOLUTION_N_BOOTSTRAP"):
         return int(os.getenv("EVOLUTION_N_BOOTSTRAP", "15"))
     return None
 
