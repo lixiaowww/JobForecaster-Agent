@@ -1,0 +1,40 @@
+name: Keep HF Space Awake
+
+# HF Spaces on free cpu-basic hardware auto-pause after 48h with no visitors
+# (https://huggingface.co/docs/hub/en/spaces-overview). Ping the app's own
+# domain (not the huggingface.co wrapper page, which can iframe the real app
+# on a different origin) once a day to keep the 48h inactivity clock reset.
+#
+# This does NOT push any code and never touches the HF repo, so it is
+# unaffected by the repos/create 402 (PRO-required) issue blocking
+# sync-hf-space.yml — pinging a running Space's URL is a normal visitor
+# request, not a repo write.
+#
+# NOTE: this only keeps an already-*running* Space from pausing. If the
+# Space is ever in a failed/"Runtime error" build state, pinging it will
+# not fix that — see sync-hf-space.yml for the actual deploy path.
+
+on:
+  schedule:
+    - cron: "0 18 * * *"   # 18:00 UTC daily -- 24h cadence, offset from the
+                             # 06:00 (daily-pages) / 06:30 (sync-hf-space) jobs
+  workflow_dispatch:
+
+concurrency:
+  group: keep-hf-space-awake
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping HF Space
+        run: |
+          set -e
+          URL="https://lixiaowww-jobforecaster-agent.hf.space/"
+          echo "Pinging $URL"
+          status=$(curl -s -o /tmp/resp.html -w "%{http_code}" --max-time 60 --retry 2 --retry-delay 10 "$URL" || echo "000")
+          echo "HTTP status: $status"
+          if [ "$status" != "200" ]; then
+            echo "::warning::HF Space ping returned HTTP $status (expected 200). It may be asleep, mid-rebuild, or down -- check https://huggingface.co/spaces/lixiaowww/JobForecaster-Agent"
+          fi
