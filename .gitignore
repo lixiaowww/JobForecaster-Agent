@@ -42,3 +42,4 @@ CACHEDIR.TAG
 # OS
 .DS_Store
 Thumbs.db
+data/jolts_cache.json

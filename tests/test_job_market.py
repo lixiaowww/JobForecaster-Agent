@@ -16,9 +16,13 @@ BLS_FIXTURE = {
 
 
 def _sample_jobs():
+    # Ids must match data/jobs_kb.json. This fixture used to say
+    # "tech_software_engineer", mirroring a typo in BLS_SERIES_MAP, so the test
+    # passed while the real KB row received no calibration at all. See
+    # tests/test_labor_tightness.py::test_bls_series_map_only_names_kb_rows_that_exist
     return [
         {"id": "fin_credit_analyst", "displacement_risk": 0.85},
-        {"id": "tech_software_engineer", "displacement_risk": 0.75},
+        {"id": "tech_software_eng", "displacement_risk": 0.75},
         {"id": "ret_cashier", "displacement_risk": 0.9},
         {"id": "fin_wealth_manager", "displacement_risk": 0.4},
     ]
@@ -54,7 +58,7 @@ def test_compare_observations_to_kb():
     obs = source.fetch([j["id"] for j in jobs], fixture=BLS_FIXTURE)
     comparisons = jm.compare_observations_to_kb(jobs, obs)
     assert comparisons["fin_credit_analyst"].agreement == "divergent"
-    assert comparisons["tech_software_engineer"].agreement == "confirmed"
+    assert comparisons["tech_software_eng"].agreement == "confirmed"
 
 
 def test_merge_calibration_into_jobs():

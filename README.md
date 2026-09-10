@@ -19,7 +19,7 @@ of historical extrapolation.
 [![CI](https://github.com/your-org/forecaster-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/forecaster-agent/actions)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![License](https://img.shields.io/badge/license-BUSL--1.1-green)
-![Tests](https://img.shields.io/badge/tests-244%20offline-brightgreen)
+![Tests](https://img.shields.io/badge/tests-260%20offline-brightgreen)
 
 ---
 
@@ -122,6 +122,47 @@ at all" is precisely the claim — and is recorded as context only for `alias_pa
 `title_alias`, whose claim is about the mapping.  Otherwise any alias pointing at a
 BLS-stamped row would be trivially true.
 
+### Red ocean or blue ocean — is the job *gettable*?
+
+Everything above measures a stock: how many people hold an occupation, and
+whether that number is falling.  That answers "is this job dying".  It cannot
+answer "is this job hard to get", which is a property of the **matching
+market** — openings versus the people chasing them.
+
+That ratio has a name and a theory.  Market tightness θ = V/U is the central
+object of Diamond–Mortensen–Pissarides search-and-matching (2010 Nobel), and
+unlike employment it is a **leading** indicator: firms post before they hire.
+`services/labor_tightness.py` pulls JOLTS openings, hires, quits and layoffs
+monthly and reports, per industry:
+
+| Signal | What it says |
+|---|---|
+| openings rate | how much unmet demand there is |
+| quits rate | revealed worker confidence — people quit when they can replace the job |
+| openings per hire | postings burned per actual hire; high means employers cannot fill roles |
+| layoffs rate | risk of being on the other side of the transaction |
+| 6-month openings momentum | direction, on the series that leads employment |
+
+```bash
+python run.py tightness           # readable table
+python run.py tightness --json    # machine-readable
+python run.py tightness --refresh # force a live BLS pull (BLS_API_KEY)
+```
+
+**The limitation, stated in the payload itself:** JOLTS publishes vacancies by
+industry only — there is no occupational vacancy series in the US.  So this is
+the tide, not the boat; Tech and Legal both map to Professional and business
+services and get identical readings.  Every record carries
+`granularity: "industry"` so no consumer can quietly forget that.  JOLTS is
+also nonfarm by construction, so Agriculture is reported `not_covered` rather
+than approximated with a neighbour.
+
+`worker_leverage` combines the measured components with weights that were
+chosen rather than derived, and says so in the payload
+(`worker_leverage_weights_are_a_prior`).  The components are the evidence; the
+composite is a prior, written down so a track record can eventually say it was
+wrong — the same discipline the patch-claim stakes follow.
+
 ### Where the external ground truth comes from
 
 `query-agent bls-backfill` stamps `soc_code` / `bls_employment` onto KB rows, which is
@@ -197,7 +238,7 @@ cp .env.example .env          # GROQ_API_KEY (free) or ANTHROPIC_API_KEY
 
 **Run the offline test suite first (no API key needed):**
 ```bash
-python -m pytest tests/       # 244 tests, ~26s, zero network
+python -m pytest tests/       # 260 tests, ~25s, zero network
 ```
 
 Then run a single cycle:

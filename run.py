@@ -31,6 +31,9 @@
                                                        # evidence (--dry-run to preview)
   python run.py query-agent claims list [n]           # last n staked claims
   python run.py query-agent bls-backfill              # stamp SOC ground truth onto
+  python run.py tightness            # JOLTS labour-market tightness (red/blue ocean)
+  python run.py tightness --refresh  # force a live BLS pull (needs BLS_API_KEY)
+  python run.py tightness --json     # machine-readable
   python run.py query-agent bls-backfill --dry-run    # KB rows (--refresh to pull
                                                        # the annual OES flat file;
                                                        # --no-citations for title
@@ -163,6 +166,46 @@ def cmd_verify_export(
             print(f"  - {err}", file=sys.stderr)
         sys.exit(1)
     print(f"verify-export OK ({len(db_live)} live prediction(s) in sync)")
+
+
+def cmd_tightness(cfg, *, refresh: bool = False, as_json: bool = False):
+    """Labour-market tightness: how hard each industry's jobs are to *get*."""
+    import job_radar as _jr
+    from services import labor_tightness as lt
+
+    if refresh:
+        Path(lt._CACHE_PATH).unlink(missing_ok=True)
+    kb_path = cfg.get("job_radar", {}).get("kb_path", "data/jobs_kb.json")
+    jobs = _jr.load_knowledge_base(kb_path)
+    report = lt.tightness_report(jobs)
+
+    if as_json:
+        print(json.dumps(report, indent=2, ensure_ascii=False))
+        return
+
+    m = report["market"]
+    theta = m["theta"]
+    print(f"Market tightness  theta = V/U = {theta if theta else 'n/a'}")
+    if theta:
+        print(f"  {m['openings_thousands']:,.0f}k openings ({m['openings_as_of']})"
+              f"  /  {m['unemployed_thousands']:,.0f}k unemployed ({m['unemployment_as_of']})")
+        print(f"  {m['interpretation']}")
+    print(f"\n{report['caveat']}")
+    if report["uncovered"]:
+        print(f"Not covered by JOLTS: {', '.join(report['uncovered'])}")
+
+    def col(v, w=7, d=2):
+        return f"{v:>{w}.{d}f}" if isinstance(v, (int, float)) else f"{'-':>{w}}"
+
+    print(f"\n{'industry':<15}{'leverage':>9}{'open%':>7}{'quit%':>7}{'layoff%':>8}"
+          f"{'open/hire':>10}{'6m mom':>8}  verdict")
+    for t in report["industries"]:
+        print(f"{t['kb_industry']:<15}{col(t['worker_leverage'], 9, 3)}"
+              f"{col(t['openings_rate'])}{col(t['quits_rate'])}{col(t['layoffs_rate'], 8)}"
+              f"{col(t['openings_per_hire'], 10)}{col(t['openings_momentum_6m'], 8, 3)}"
+              f"  {t['verdict']}")
+    print("\nworker_leverage combines measured components with chosen weights; "
+          "the components are the evidence, the composite is a prior.")
 
 
 def cmd_query_agent(
@@ -392,6 +435,9 @@ def main():
     elif cmd == "warmup":
         src = _extract_opt(args, "--src") or out_path or "data/predictions_live.jsonl"
         cmd_warmup(cfg, src)
+    elif cmd == "tightness":
+        cmd_tightness(cfg, refresh="--refresh" in sys.argv,
+                      as_json="--json" in sys.argv)
     elif cmd == "query-agent":
         sub = args[1] if len(args) > 1 else "audit"
         extra = args[2:] if len(args) > 2 else []

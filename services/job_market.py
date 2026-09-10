@@ -15,15 +15,33 @@ from typing import Any, Optional, Protocol
 
 from paths import PROJECT_ROOT
 
-# BLS OES national employment level series → KB job IDs
+# BLS OES national employment level series → KB job IDs.
+#
+# Two corrections were needed here, and the second one matters more than it
+# looks:
+#
+# 1. Five of the seven values named KB ids that do not exist
+#    (``tech_software_engineer`` for ``tech_software_eng``, ``hlt_radiologist``
+#    for ``hc_radiologist``, and so on), so those rows silently received no
+#    calibration at all. ``tests/test_labor_tightness.py`` now asserts every
+#    value resolves, so this cannot rot again unnoticed.
+#
+# 2. None of these series exist on the BLS API — it answers "Series does not
+#    exist" for all seven. That is not a typo to fix: the timeseries API does
+#    not carry OES/OEWS occupational data at all, as
+#    ``services/bls_coverage.py`` documents. OEWS ships as an annual flat file.
+#    So this path has always been served from ``data/bls_market_seed.json`` and
+#    always will be; live occupational employment comes from
+#    ``bls_coverage.refresh_soc_catalog`` (831 occupations) instead, and live
+#    *vacancy* data from ``services/labor_tightness.py``, which uses JOLTS —
+#    a survey the API does serve.
 BLS_SERIES_MAP: dict[str, str] = {
     "OEUS000015-2011100001": "fin_credit_analyst",
-    "OEUS000023-2011200001": "fin_financial_advisor",
-    "OEUS000015-1011200001": "tech_software_engineer",
-    "OEUS000011-2911200001": "hlt_radiologist",
-    "OEUS000023-2312300001": "leg_paralegal",
+    "OEUS000015-1011200001": "tech_software_eng",
+    "OEUS000011-2911200001": "hc_radiologist",
+    "OEUS000023-2312300001": "legal_paralegal",
     "OEUS000027-4011100001": "ret_cashier",
-    "OEUS000025-4131100001": "log_truck_driver",
+    "OEUS000025-4131100001": "log_last_mile_delivery",
 }
 
 _BLS_API_URL = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
