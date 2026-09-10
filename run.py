@@ -25,6 +25,11 @@
                                                        # patches, revert regressions
   python run.py query-agent rollback-check --dry-run  # report only, exit 1 if any found
   python run.py query-agent ledger [n]                # print last n provenance events
+  python run.py query-agent claims score              # Brier record of the agent's
+                                                       # own patches (per type)
+  python run.py query-agent claims resolve            # judge due claims vs external
+                                                       # evidence (--dry-run to preview)
+  python run.py query-agent claims list [n]           # last n staked claims
 """
 from __future__ import annotations
 
@@ -239,6 +244,45 @@ def cmd_query_agent(
         limit = int(extra_args[0]) if extra_args else 20
         events = provenance.load_events(ledger_path)[-limit:]
         print(json.dumps(events, indent=2, ensure_ascii=False))
+    elif subcmd == "claims":
+        from services.job_query_agent import claims as qa_claims
+
+        action = extra_args[0] if extra_args else "score"
+        if action == "score":
+            print(json.dumps(
+                qa_claims.claim_scoreboard(cfg), indent=2, ensure_ascii=False,
+            ))
+        elif action == "resolve":
+            import job_radar as _jr
+
+            _kb = cfg.get("job_radar", {}).get("kb_path", "data/jobs_kb.json")
+            jobs_by_id = {j["id"]: j for j in _jr.load_knowledge_base(_kb)}
+            summary = qa_claims.resolve_due_claims(
+                cfg, agent_cfg=agent_cfg, jobs_by_id=jobs_by_id, dry_run=dry_run,
+            )
+            print(json.dumps(summary, indent=2, ensure_ascii=False))
+        elif action == "list":
+            limit = int(extra_args[1]) if len(extra_args) > 1 else 20
+            store = qa_claims.store_for(cfg)
+            rows = sorted(store.load(), key=lambda c: c.created_at)[-limit:]
+            print(json.dumps([
+                {
+                    "id": c.id,
+                    "type": c.patch_type,
+                    "query": c.query,
+                    "target_id": c.target_id,
+                    "confidence": c.confidence,
+                    "resolution_date": c.resolution_date.isoformat(),
+                    "status": c.status.value,
+                    "outcome": c.outcome,
+                    "brier": c.brier,
+                    "why": c.judged_rationale,
+                }
+                for c in rows
+            ], indent=2, ensure_ascii=False))
+        else:
+            print(f"usage: query-agent claims [score|resolve|list]", file=sys.stderr)
+            sys.exit(2)
     elif subcmd == "ingest-logs":
         from services.job_query_agent.search_log import merge_search_logs
 

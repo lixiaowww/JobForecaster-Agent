@@ -47,3 +47,29 @@ def isolated_registry(isolated_db):
             assert isolated_registry.scoreboard()["total"] == 1
     """
     return Registry(engine=isolated_db)
+
+
+@pytest.fixture(autouse=True)
+def _no_search_log_writes_to_production(tmp_path, monkeypatch):
+    """Keep the test suite out of ``data/radar_search_log.jsonl`` (HR-1).
+
+    ``ui/tabs/radar.py`` records every search to the production log, so any
+    test that renders the radar tab with a query used to append real-looking
+    rows to it. That was untidy before; it is a correctness problem now that
+    ``services/job_query_agent/claims.py`` reads that log as *external
+    evidence* when grading the agent's own patches — a test run could
+    manufacture the corroboration a claim needs.
+
+    Redirects only the default destination: calls that pass an explicit
+    ``path`` (most of ``test_job_query_agent.py``) are untouched.
+    """
+    from services.job_query_agent import search_log as _sl
+
+    real = _sl.record_search_log
+    default_dest = tmp_path / "radar_search_log.jsonl"
+
+    def _redirected(query, *, path=None, **kwargs):
+        return real(query, path=path or default_dest, **kwargs)
+
+    monkeypatch.setattr(_sl, "record_search_log", _redirected)
+    yield

@@ -19,7 +19,7 @@ of historical extrapolation.
 [![CI](https://github.com/your-org/forecaster-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/forecaster-agent/actions)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![License](https://img.shields.io/badge/license-BUSL--1.1-green)
-![Tests](https://img.shields.io/badge/tests-190%20offline-brightgreen)
+![Tests](https://img.shields.io/badge/tests-229%20offline-brightgreen)
 
 ---
 
@@ -81,6 +81,40 @@ diffusion speed, absorbing sector, productivity capture, task-frontier openness)
 Emits an `EvolutionPrior` — including a Mahalanobis-distance OOD signal that tells
 the forecaster when it is extrapolating outside all historical precedent.
 
+**Job query agent** (`services/job_query_agent/`)
+The self-mutating half: discovers job-search queries the KB answers badly, proposes
+alias / config / new-profile patches, gates them, applies the safe ones, records every
+write in an append-only provenance ledger, and auto-reverts regressions.  What it
+changes is data and config — never its own code.
+
+### Grading the agent's own edits
+
+The query agent's pre-apply gate scores a patch by similarity against the same KB the
+patch is about to edit.  For a patch that *adds* the matching alias — or invents the
+matching profile outright — that check is very nearly tautological: the agent writes the
+answer key and then marks its own paper.  Run long enough, such a loop grows more
+self-consistent without growing more correct.
+
+So every auto-applied patch is restated as a `PatchClaim`: a sentence that could turn
+out false, a `resolution_date`, an explicit confidence the agent must **stake**, and
+resolution criteria naming external evidence only.  When the horizon elapses, the claim
+is judged against things the KB cannot influence — post-patch user search behaviour,
+human feedback naming the role, BLS occupation data — and scored with the same
+`brier_score` the AI-economy forecasts use.  The realised record then feeds back into
+the gate: a patch type that has been confidently wrong loses the right to auto-apply.
+
+Three properties hold the design together:
+
+| Property | Why it is there |
+|---|---|
+| No evidence resolves **ambiguous**, never true | else the agent earns a spotless record by emitting unfalsifiable patches |
+| Ambiguous claims still count as **outstanding** | else unfalsifiable patches are not merely unpunished — they are free.  Too many uncorroborated claims suspends auto-apply on their own |
+| The gate **fails open** | a bug in the scoring path may only ever make the agent more conservative, never wedge the cycle |
+
+Claims live in their own table.  The machinery is shared (`Status`, `brier_score`, the
+calibration buckets); the ledgers are not — the public track record must stay an
+AI-economy track record, not be diluted by the agent's internal housekeeping.
+
 ---
 
 ## Theoretical foundations
@@ -112,7 +146,7 @@ cp .env.example .env          # GROQ_API_KEY (free) or ANTHROPIC_API_KEY
 
 **Run the offline test suite first (no API key needed):**
 ```bash
-python -m pytest tests/       # 190 tests, ~22s, zero network
+python -m pytest tests/       # 229 tests, ~26s, zero network
 ```
 
 Then run a single cycle:
@@ -141,6 +175,12 @@ python run.py query-agent ingest-logs f.jsonl  # merge HF/Radar search log expor
 
 # Phase 10 — transition self-evolution
 python run.py query-agent transition-eval [N]  # LLM-evaluate up to N uncached pairs
+
+# Phase 11 — Brier-scored claims over the agent's own patches
+python run.py query-agent claims score       # calibration record, per patch type
+python run.py query-agent claims resolve     # judge due claims vs external evidence
+python run.py query-agent claims resolve --dry-run
+python run.py query-agent claims list [N]    # last N staked claims
 ```
 
 ### MCP (read-only, optional)

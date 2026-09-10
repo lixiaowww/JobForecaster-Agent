@@ -97,6 +97,31 @@ job_query_agent:
     tavily_daily_budget: 20      # Tavily credits per day (1 credit = 1 role generated)
     # Budget math: 20/day × 30 days = 600/month; 400 remaining for reactive kb_gap fills
     # BLS_API_KEY env var: optional, enables monthly employment-level refresh from BLS API
+  # ---- Brier-scored claims over the agent's own patches -------------------
+  # Every auto-applied patch is restated as a dated, falsifiable claim and
+  # graded later against evidence the KB cannot influence (post-patch user
+  # search behaviour, human feedback, BLS). The realised Brier feeds back into
+  # the auto-apply gate. See services/job_query_agent/claims.py.
+  claims:
+    enabled: true
+    horizon_days: 30            # how long the world gets to corroborate a patch
+    min_satisfied_searches: 3   # weak-evidence bar for a TRUE verdict
+    reformulation_window_minutes: 10
+    gate:
+      enabled: true
+      min_resolved: 5           # no veto until a type has a real track record
+      max_mean_brier: 0.35      # worse than this → auto-apply suspended for the type
+      warn_mean_brier: 0.25     # worse than this → min_sim_after raised
+      min_sim_penalty: 0.05
+      max_outstanding: 25       # unconfirmed claims piling up → human review
+    stake:                      # priors for the staked confidence, to be tuned
+      base:                     # from the realised calibration curve
+        alias_patch: 0.75
+        title_alias: 0.70
+        kb_profile_new: 0.55
+      expected_id_bonus: 0.10
+      sim_weight: 0.15
+      occurrence_bonus: 0.05
   auto_apply:
     enabled: true
     types:

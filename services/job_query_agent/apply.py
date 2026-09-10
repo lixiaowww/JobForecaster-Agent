@@ -108,9 +108,28 @@ def can_auto_apply(
     if proposal.type not in allowed:
         return False, f"type {proposal.type} not auto-eligible"
 
+    # Realised track record veto. Everything below this point grades the patch
+    # against the KB it is about to edit, which for an alias/profile patch is
+    # very nearly circular. This is the one check anchored outside that loop:
+    # ``gate_verdict`` reads Brier scores earned by *previous* patches of this
+    # type against external evidence, and suspends a type that has been
+    # confidently wrong — or whose claims the world keeps failing to confirm.
+    # It fails open by construction, so it can only ever add conservatism.
+    from services.job_query_agent import claims as _claims
+
+    record_ok, record_reason, min_sim_override = _claims.gate_verdict(
+        proposal.type,
+        cfg=agent_cfg.get("_cfg") or {},
+        agent_cfg=agent_cfg,
+    )
+    if not record_ok:
+        return False, f"track record: {record_reason}"
+
     job_radar_cfg = agent_cfg.get("_job_radar_cfg") or {}
     search_cfg = job_radar.resolve_search_config(job_radar_cfg)
     min_sim = float(auto.get("min_sim_after", search_cfg.get("tier_weak", 0.55)))
+    if min_sim_override is not None:
+        min_sim = max(min_sim, min_sim_override)
     if sim_after < min_sim:
         return False, f"sim_after {sim_after:.3f} < {min_sim}"
 
@@ -500,6 +519,29 @@ def try_auto_apply_kb_profile_new(
             "type": proposal.type,
             "auto_applied": False,
             "reason": "kb_profile_new not in auto_apply.types",
+            "sim_before": sim_before,
+            "sim_after": 0.0,
+        }
+
+    # Realised track record veto, checked before anything expensive runs.
+    # kb_profile_new is the type most in need of it: the agent invents the
+    # profile *and* the alias that matches it, so every KB-side check it then
+    # passes is a check against its own writing. Placing the veto here — ahead
+    # of ``_kb_profile_preview`` and any LLM generation — also means a
+    # suspended type stops costing tokens, not just stops shipping.
+    from services.job_query_agent import claims as _claims
+
+    record_ok, record_reason, _min_sim_override = _claims.gate_verdict(
+        "kb_profile_new",
+        cfg=agent_cfg.get("_cfg") or {},
+        agent_cfg=agent_cfg,
+    )
+    if not record_ok:
+        return {
+            "proposal_id": proposal.proposal_id,
+            "type": proposal.type,
+            "auto_applied": False,
+            "reason": f"track record: {record_reason}",
             "sim_before": sim_before,
             "sim_after": 0.0,
         }

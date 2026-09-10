@@ -19,6 +19,20 @@ class Status(str, Enum):
     ambiguous = "ambiguous"     # could not be judged cleanly
 
 
+def brier_score(confidence: float, outcome: Optional[bool]) -> Optional[float]:
+    """``(confidence - outcome)^2`` — the single Brier definition in this codebase.
+
+    An ``None`` outcome (ambiguous / unjudgeable) scores ``None`` on purpose: a
+    claim nobody could grade must not be able to improve *or* damage a track
+    record. Both :class:`Prediction` (AI-economy forecasts) and
+    :class:`PatchClaim` (the query agent's own self-mutations) score through
+    here, so "graded by Brier" means the same thing everywhere.
+    """
+    if outcome is None:
+        return None
+    return (confidence - (1.0 if outcome else 0.0)) ** 2
+
+
 class Signal(SQLModel):
     """A single piece of evidence ingested from the world."""
     source: str
@@ -96,7 +110,80 @@ class Prediction(SQLModel, table=True):
         else:
             self.outcome = outcome
             self.status = Status.resolved_true if outcome else Status.resolved_false
-            self.brier = (self.confidence - (1.0 if outcome else 0.0)) ** 2
+            self.brier = brier_score(self.confidence, outcome)
+        return self
+
+
+class PatchClaim(SQLModel, table=True):
+    __table_args__ = {"extend_existing": True}
+    """A self-applied KB/config patch, restated as a dated falsifiable claim.
+
+    The query agent's pre-apply gate (``can_auto_apply``) grades a patch by
+    similarity against the very KB the patch is about to edit. For a patch that
+    *adds* the matching alias or profile, that check is close to tautological:
+    the agent writes the answer key and then marks its own paper. It is a
+    useful sanity gate, but it is not evidence.
+
+    This table is the other half. Every auto-applied patch stakes a
+    ``confidence`` on a claim that only *later, external* evidence can settle —
+    real user search behaviour, human feedback naming the role, BLS presence —
+    and is then scored with the same ``brier_score`` the AI-economy forecasts
+    use. Unjudgeable claims resolve ambiguous, never true, so the agent cannot
+    earn a clean record by emitting unfalsifiable patches.
+
+    Kept in its own table rather than mixed into :class:`Prediction`: the
+    forecaster's public track record must stay an AI-economy track record, not
+    be diluted by the agent's internal housekeeping. The *machinery* is shared
+    (``Status``, ``brier_score``, ``scoreboard_subset``); the ledgers are not.
+    """
+    id: str = Field(default="", primary_key=True)   # == provenance patch_id
+    patch_type: str                          # alias_patch | title_alias | kb_profile_new
+    query: str                               # the user query the patch is about
+    target_id: str = ""                      # KB profile the patch asserts as correct
+    source: str = ""                         # how the query was discovered
+    statement: str                           # the falsifiable claim, in words
+    resolution_criteria: str                 # the external test that settles it
+    confidence: float = Field(ge=0.0, le=1.0)   # the agent's stake
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    resolution_date: date                    # when external evidence gets checked
+
+    status: Status = Field(default=Status.open)
+    outcome: Optional[bool] = None
+    brier: Optional[float] = None
+    judged_rationale: str = ""
+    resolved_at: Optional[datetime] = None
+    evidence: dict = Field(default_factory=dict, sa_type=JSON)   # what the judge saw
+
+    @field_validator("confidence")
+    @classmethod
+    def _clamp_stake(cls, v: float) -> float:
+        return max(0.0, min(1.0, v))
+
+    @classmethod
+    def model_validate(cls, obj, **kwargs) -> "PatchClaim":
+        if isinstance(obj, dict):
+            if isinstance(obj.get("resolution_date"), str):
+                obj["resolution_date"] = date.fromisoformat(obj["resolution_date"])
+            for key in ("created_at", "resolved_at"):
+                if isinstance(obj.get(key), str):
+                    obj[key] = datetime.fromisoformat(obj[key].replace("Z", "+00:00"))
+        return super().model_validate(obj, **kwargs)
+
+    def resolve(self, outcome: Optional[bool], rationale: str,
+                evidence: Optional[dict] = None) -> "PatchClaim":
+        """Settle the claim. Mirrors :meth:`Prediction.resolve` exactly."""
+        self.resolved_at = datetime.now(timezone.utc)
+        self.judged_rationale = rationale
+        if evidence is not None:
+            self.evidence = evidence
+        if outcome is None:
+            self.status = Status.ambiguous
+            self.outcome = None
+            self.brier = None
+        else:
+            self.outcome = outcome
+            self.status = Status.resolved_true if outcome else Status.resolved_false
+            self.brier = brier_score(self.confidence, outcome)
         return self
 
 

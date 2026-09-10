@@ -6,6 +6,7 @@ from typing import Any
 
 import job_radar
 from services import provenance
+from services.job_query_agent import claims
 from services.job_query_agent.apply import try_auto_apply_proposal
 from services.job_query_agent.discover import discover_queries
 from services.job_query_agent.evaluate import QueryVerdict, evaluate_query
@@ -72,6 +73,7 @@ def run_calibration_cycle(
                 ctx_agent = {
                     **agent_cfg,
                     "_discovered_occurrences": item.occurrences,
+                    "_cfg": cfg,   # lets the gate reach the claims DB
                 }
                 action = try_auto_apply_proposal(
                     proposal,
@@ -85,6 +87,13 @@ def run_calibration_cycle(
                     ledger_path=ledger_path,
                 )
                 if action:
+                    # Context the claim needs but the apply layer does not
+                    # return: what was asked, whether a human-labelled anchor
+                    # existed, and how much organic demand backed it.
+                    action["_query"] = verdict.query
+                    action["_expected_id"] = verdict.expected_id
+                    action["_occurrences"] = item.occurrences
+                    action["_source"] = verdict.source
                     applied_actions.append(action)
                     if action.get("auto_applied"):
                         round_applied += 1
@@ -96,6 +105,30 @@ def run_calibration_cycle(
 
         if round_applied == 0:
             break
+
+    # Stake a dated, falsifiable claim on every patch just auto-applied.
+    # The gate that let these through scored them against the KB they edit;
+    # these claims are how the same patches get scored against the world
+    # instead, ~horizon_days from now. See services/job_query_agent/claims.py.
+    staked: list[dict[str, Any]] = []
+    if not dry_run and claims.is_enabled(agent_cfg):
+        jobs_now = {j["id"]: j for j in job_radar.load_knowledge_base(str(kb_path))}
+        staked = [
+            {
+                "claim_id": c.id,
+                "patch_type": c.patch_type,
+                "query": c.query,
+                "target_id": c.target_id,
+                "confidence": c.confidence,
+                "resolution_date": c.resolution_date.isoformat(),
+            }
+            for c in claims.open_claims_for_actions(
+                applied_actions,
+                cfg=cfg,
+                agent_cfg=agent_cfg,
+                jobs_by_id=jobs_now,
+            )
+        ]
 
     # Post-apply regression sweep: re-check every previously auto-applied,
     # still-active patch against the KB as it stands *now* (including
@@ -146,10 +179,30 @@ def run_calibration_cycle(
             transition_summary = run_evaluation_pass(
                 fresh_jobs,
                 kb_path=str(kb_path),
+                # Follow the configured cache, not the module default: a cycle
+                # pointed at a sandbox KB must not write pair verdicts for
+                # sandbox job ids into the production cache.
+                cache_path=str(agent_cfg.get(
+                    "transition_eval_cache_path", "data/transition_eval_cache.json")),
                 max_pairs=int(agent_cfg.get("transition_eval_max_pairs", 40)),
             )
         except Exception:
             pass  # non-fatal; transitions improve incrementally
+
+    # Judge claims whose horizon has elapsed against external evidence. This
+    # is the only step in the whole cycle whose verdict the KB cannot sway —
+    # its inputs are user search behaviour, human feedback, and BLS data.
+    claim_resolution: dict[str, Any] = {}
+    if claims.is_enabled(agent_cfg):
+        try:
+            claim_resolution = claims.resolve_due_claims(
+                cfg,
+                agent_cfg=agent_cfg,
+                jobs_by_id={j["id"]: j for j in jobs},
+                dry_run=dry_run,
+            )
+        except Exception:
+            pass  # non-fatal, same policy as the regression monitor
 
     return {
         "rounds": round_idx + 1 if round_idx >= 0 else 0,
@@ -159,6 +212,8 @@ def run_calibration_cycle(
         "coverage_enrichment": coverage_summary,
         "transition_eval": transition_summary,
         "regression_monitor": regression_monitor,
+        "claims_staked": staked,
+        "claims_resolved": claim_resolution,
         "final": {
             "queries": len(final_verdicts),
             "ok": sum(1 for v in final_verdicts if v.ok),
