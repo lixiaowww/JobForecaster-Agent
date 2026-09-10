@@ -342,6 +342,26 @@ def judge_claim(
     )
     feedback = ev.feedback_corroboration(titles, since=since, engine=engine)
     bls = ev.bls_presence(job)
+
+    # BLS presence proves the *occupation* is real. It says nothing about
+    # whether this *query* means that occupation — so it can only settle a
+    # claim whose subject is the occupation itself. For kb_profile_new, where
+    # the agent invented the profile, "does this role exist at all" is exactly
+    # the claim. For alias_patch / title_alias the claim is about the mapping,
+    # and letting BLS carry it would make any alias pointing at a BLS-stamped
+    # row trivially TRUE — a fresh way to earn a clean Brier for free.
+    verdict_signals = [satisfied, reformulated, feedback]
+    if claim.patch_type == "kb_profile_new":
+        verdict_signals.append(bls)
+    else:
+        bls = ev.Signal(
+            name=bls.name, direction="neutral", found=bls.found, count=bls.count,
+            strength="context",
+            detail=f"{bls.detail} (context only: proves the role exists, "
+                   f"not that {claim.query!r} means it)",
+            extra=bls.extra,
+        )
+
     signals = [satisfied, reformulated, feedback, bls]
     payload = {"signals": [s.as_dict() for s in signals]}
 
@@ -353,7 +373,7 @@ def judge_claim(
             f"{satisfied.count} satisfied search(es) — users did not get what they meant"
         ), payload
 
-    strong = [s for s in signals
+    strong = [s for s in verdict_signals
               if s.direction == "positive" and s.found and s.strength == "strong"]
     if strong:
         payload["verdict_basis"] = "strong"

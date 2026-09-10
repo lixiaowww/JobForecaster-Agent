@@ -442,3 +442,99 @@ def test_dry_run_cycle_stakes_nothing(tmp_path):
     summary = run_calibration_cycle(cfg, write_traces=False, dry_run=True)
     assert summary["claims_staked"] == []
     assert qa.ClaimStore(cfg["database_path"]).load() == []
+
+
+# --- BLS ground truth, the anchor bls_presence depends on -------------------
+def test_soc_backfill_never_matches_through_agent_mutable_aliases():
+    """An alias the agent added must not be able to earn its row a SOC code.
+
+    Otherwise the agent writes an alias, the alias buys external "ground truth",
+    and that ground truth is then used to grade the agent's own patches — the
+    exact circularity claims.py exists to break.
+    """
+    from services.bls_coverage import soc_backfill_matches
+
+    jobs = [{"id": "fin_credit_analyst", "title": "Credit Analyst",
+             "search_aliases": ["financial analyst"]}]
+    assert soc_backfill_matches(jobs) == []      # 13-2051 must NOT be stamped
+
+    jobs[0]["title"] = "Accountant"              # a real title match still works
+    assert [m["soc_code"] for m in soc_backfill_matches(jobs)] == ["13-2011"]
+
+
+def test_soc_backfill_drops_non_injective_matches():
+    """Two SOC codes reaching one row is a guess, and a bad anchor beats no anchor."""
+    from services.bls_coverage import soc_backfill_matches
+
+    jobs = [
+        {"id": "a", "title": "Software Developer"},
+        {"id": "b", "title": "Web Developer"},
+    ]
+    got = {m["job_id"]: m["soc_code"] for m in soc_backfill_matches(jobs)}
+    assert got == {"a": "15-1252", "b": "15-1254"}      # distinct rows: fine
+
+    collapsed = [{"id": "only", "title": "Software Developer"},
+                 {"id": "only2", "title": "Software Developer"}]
+    assert soc_backfill_matches(collapsed) == []        # one SOC, two rows: dropped
+
+
+def test_soc_backfill_is_idempotent_and_ledgered(tmp_path):
+    from services import provenance
+    from services.bls_coverage import run_soc_backfill
+
+    kb = tmp_path / "kb.json"
+    kb.write_text(json.dumps([{"id": "accountant", "title": "Accountant"}]))
+    ledger = tmp_path / "ledger.jsonl"
+    cfg = {"job_radar": {"kb_path": str(kb)}}
+
+    first = run_soc_backfill(cfg, ledger_path=ledger)
+    assert first["stamped"] == 1
+    row = json.loads(kb.read_text())[0]
+    assert row["soc_code"] == "13-2011" and row["bls_employment"] > 0
+
+    second = run_soc_backfill(cfg, ledger_path=ledger)
+    assert second["stamped"] == 0 and second["already_stamped"] == 1
+
+    events = [e for e in provenance.load_events(ledger)
+              if e.get("type") == "soc_backfill"]
+    assert len(events) == 1
+
+
+def test_stamped_row_makes_bls_presence_a_working_signal(tmp_path):
+    """The whole point of the backfill: turn a skipped signal into a real one."""
+    from services.bls_coverage import run_soc_backfill
+
+    kb = tmp_path / "kb.json"
+    kb.write_text(json.dumps([{"id": "accountant", "title": "Accountant"}]))
+    cfg = {"job_radar": {"kb_path": str(kb)}}
+
+    before = json.loads(kb.read_text())[0]
+    assert ev.bls_presence(before).strength == "skipped"
+
+    run_soc_backfill(cfg, ledger_path=tmp_path / "l.jsonl")
+    after = json.loads(kb.read_text())[0]
+    sig = ev.bls_presence(after)
+    assert sig.found is True and sig.strength == "strong"
+
+
+def test_bls_presence_cannot_settle_a_mapping_claim(tmp_path, isolated_db):
+    """A SOC code proves the role exists, not that the query means that role."""
+    jobs = {"accountant": {"id": "accountant", "title": "Accountant",
+                           "soc_code": "13-2011", "bls_employment": 1435770}}
+    kwargs = dict(agent_cfg=_cfg(), jobs_by_id=jobs,
+                  log_path=tmp_path / "empty.jsonl",
+                  ledger_path=tmp_path / "l.jsonl", engine=isolated_db)
+
+    # alias_patch claims a *mapping* — BLS must not carry it
+    alias = _claim(cid="a1", ctype="alias_patch", query="bookkeeper",
+                   target="accountant")
+    outcome, _why, payload = qa.judge_claim(alias, **kwargs)
+    assert outcome is None and payload["verdict_basis"] == "insufficient"
+    bls = next(s for s in payload["signals"] if s["name"] == "bls_presence")
+    assert bls["direction"] == "neutral" and bls["strength"] == "context"
+
+    # kb_profile_new claims the *role exists* — BLS is exactly that test
+    invented = _claim(cid="k1", ctype="kb_profile_new", query="bookkeeper",
+                      target="accountant")
+    outcome, _why, payload = qa.judge_claim(invented, **kwargs)
+    assert outcome is True and payload["verdict_basis"] == "strong"

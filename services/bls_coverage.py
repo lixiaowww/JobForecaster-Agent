@@ -155,6 +155,24 @@ def coverage_gaps(
     return gaps
 
 
+def _stamp_soc(jobs: list[dict], job_id: str, occ: dict, kb_path: str) -> None:
+    """Write the known SOC code + employment onto a freshly generated KB row."""
+    emp_cache = _load_emp_cache(_CACHE_PATH)
+    for job in jobs:
+        if job.get("id") != job_id:
+            continue
+        job["soc_code"] = occ["soc"]
+        job["bls_title"] = occ["title"]
+        emp = emp_cache.get(occ["soc"])
+        if emp is None and occ.get("emp_k"):
+            emp = int(occ["emp_k"]) * 1000
+        if emp is not None:
+            job["bls_employment"] = emp
+        Path(kb_path).write_text(
+            json.dumps(jobs, ensure_ascii=False, indent=2), encoding="utf-8")
+        return
+
+
 def run_coverage_enrichment(
     cfg: dict,
     *,
@@ -201,6 +219,13 @@ def run_coverage_enrichment(
         if profile:
             # Reload jobs so next coverage_gaps call sees the new entry
             jobs = job_radar.load_knowledge_base(kb_path)
+            # Stamp the SOC code we already know. This row is generated *for* a
+            # specific BLS occupation, so the mapping is certain here in a way
+            # no later matching pass can recover — and it is the only external
+            # anchor an LLM-generated profile will ever have. It was previously
+            # discarded, which left every generated row permanently unverifiable
+            # by ``evidence.bls_presence``.
+            _stamp_soc(jobs, profile["id"], occ, kb_path)
             results.append({
                 "query": occ["query"],
                 "emp_k": occ["emp_k"],
@@ -337,3 +362,143 @@ def _save_emp_cache(path: str, data: dict) -> None:
         Path(path).write_text(json.dumps(data, indent=2), encoding="utf-8")
     except Exception:
         pass
+
+
+# ---------------------------------------------------------------------------
+# SOC backfill — stamping external occupational ground truth onto KB rows
+# ---------------------------------------------------------------------------
+def _norm_title(text: str) -> str:
+    import re
+    return re.sub(r"[^a-z0-9]+", " ", (text or "").lower()).strip()
+
+
+def soc_backfill_matches(jobs: list[dict]) -> list[dict]:
+    """KB rows that can be stamped with a BLS SOC code, high-precision only.
+
+    Two restrictions, both deliberate, both costing recall on purpose:
+
+    **Titles only — never ``search_aliases``.** Aliases are the field the query
+    agent mutates. Matching through them would let the agent add an alias, have
+    that alias earn the profile a SOC code, and then have that SOC code count as
+    *external evidence* when grading its own patches — precisely the circularity
+    ``services/job_query_agent/claims.py`` exists to break. Measured on the
+    current KB, the alias path produced 8 wrong stamps out of 28, including
+    ``13-2051 Financial Analyst → fin_credit_analyst`` (Credit Analyst is
+    13-2041) via an alias.
+
+    **Injective only.** A KB row claimed by two SOC codes, or a SOC code
+    claiming two rows, is dropped rather than guessed at (e.g. 15-1252 Software
+    Developer and 15-1254 Web Developer both reaching one "Software Engineer"
+    row). An anchor that is sometimes wrong is worse than no anchor: a bad
+    ground truth does not merely fail to catch drift, it certifies it.
+
+    Fuzzy similarity was evaluated for this and rejected outright — at a 0.70
+    cutoff it mapped IT Manager and Operations Manager onto the HR Manager row
+    and Systems Analyst onto Credit Analyst, while scoring an exact Receptionist
+    match at 0.064.
+    """
+    import collections
+
+    by_title: dict[str, list[str]] = collections.defaultdict(list)
+    for job in jobs:
+        by_title[_norm_title(job.get("title", ""))].append(job["id"])
+
+    pairs: set[tuple[str, str, str]] = set()
+    for occ in HIGH_COVERAGE_OCCUPATIONS:
+        for key in {_norm_title(occ["title"]), _norm_title(occ["query"])}:
+            if not key:
+                continue
+            for job_id in by_title.get(key, []):
+                pairs.add((occ["soc"], occ["title"], job_id))
+
+    soc_per_job: dict[str, set[str]] = collections.defaultdict(set)
+    job_per_soc: dict[str, set[str]] = collections.defaultdict(set)
+    for soc, _title, job_id in pairs:
+        soc_per_job[job_id].add(soc)
+        job_per_soc[soc].add(job_id)
+
+    emp_cache = _load_emp_cache(_CACHE_PATH)
+    out: list[dict] = []
+    for soc, title, job_id in sorted(pairs):
+        if len(soc_per_job[job_id]) != 1 or len(job_per_soc[soc]) != 1:
+            continue
+        out.append({
+            "job_id": job_id,
+            "soc_code": soc,
+            "bls_title": title,
+            "bls_employment": emp_cache.get(soc),
+        })
+    return out
+
+
+def run_soc_backfill(
+    cfg: dict,
+    *,
+    dry_run: bool = False,
+    refresh_employment: bool = False,
+    ledger_path: str | None = None,
+) -> dict[str, Any]:
+    """Stamp ``soc_code`` / ``bls_employment`` onto KB rows that match a SOC code.
+
+    This is what turns ``evidence.bls_presence`` from a permanently-skipped
+    signal into a working one: without a SOC code on the row there is nothing
+    for a patch claim to be corroborated against.
+
+    Idempotent — rows that already carry a ``soc_code`` are left alone, so this
+    can run on a schedule. Recorded in the provenance ledger like every other
+    automatic write to the KB.
+    """
+    try:
+        import job_radar
+    except ImportError:
+        return {"skipped": True, "reason": "job_radar not available"}
+
+    from services import provenance
+
+    kb_path = cfg.get("job_radar", {}).get("kb_path", "data/jobs_kb.json")
+    ledger_path = ledger_path or cfg.get("job_query_agent", {}).get(
+        "provenance_path", provenance.DEFAULT_LEDGER_PATH)
+
+    if refresh_employment:
+        refresh_employment_from_bls()   # network; falls back to cache on failure
+
+    jobs = job_radar.load_knowledge_base(kb_path)
+    by_id = {j["id"]: j for j in jobs}
+    matches = soc_backfill_matches(jobs)
+
+    stamped: list[dict] = []
+    already: list[str] = []
+    for m in matches:
+        job = by_id.get(m["job_id"])
+        if job is None:
+            continue
+        if job.get("soc_code"):
+            already.append(m["job_id"])
+            continue
+        stamped.append(m)
+        if not dry_run:
+            job["soc_code"] = m["soc_code"]
+            job["bls_title"] = m["bls_title"]
+            if m["bls_employment"] is not None:
+                job["bls_employment"] = m["bls_employment"]
+
+    if stamped and not dry_run:
+        Path(kb_path).write_text(
+            json.dumps(jobs, ensure_ascii=False, indent=2), encoding="utf-8")
+        provenance.record_patch(
+            subsystem="bls_coverage",
+            patch_type="soc_backfill",
+            reason=f"stamped {len(stamped)} KB row(s) with BLS SOC ground truth",
+            before=[{"id": m["job_id"]} for m in stamped],
+            after=stamped,
+            path=ledger_path,
+        )
+
+    return {
+        "matches": len(matches),
+        "stamped": len(stamped),
+        "already_stamped": len(already),
+        "with_employment": sum(1 for m in stamped if m["bls_employment"] is not None),
+        "dry_run": dry_run,
+        "results": stamped,
+    }

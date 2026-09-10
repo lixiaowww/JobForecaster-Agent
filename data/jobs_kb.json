@@ -610,7 +610,10 @@
         "retrain_months": 8,
         "salary_delta": 0.1
       }
-    ]
+    ],
+    "soc_code": "15-2051",
+    "bls_title": "Data Scientist",
+    "bls_employment": 192710
   },
   {
     "id": "tech_project_manager",
@@ -2167,7 +2170,10 @@
     "search_aliases": [
       "legal assistant",
       "律师"
-    ]
+    ],
+    "soc_code": "23-2011",
+    "bls_title": "Paralegal",
+    "bls_employment": 354890
   },
   {
     "id": "legal_compliance_officer",
@@ -2998,7 +3004,10 @@
       "BLS: Cashiers",
       "O*NET 41-2011.00 - Cashiers",
       "Frey & Osborne: Cashier Automation Risk = 97%"
-    ]
+    ],
+    "soc_code": "41-2011",
+    "bls_title": "Cashier",
+    "bls_employment": 3298660
   },
   {
     "id": "ret_personal_stylist",
@@ -3688,7 +3697,10 @@
       "BLS: Social Workers",
       "O*NET 21-1021.00 - Child, Family, and School Social Workers",
       "NASW: Social Work Workforce Report"
-    ]
+    ],
+    "soc_code": "21-1021",
+    "bls_title": "Child / Family Social Worker",
+    "bls_employment": 352160
   },
   {
     "id": "gov_policy_analyst",
@@ -4446,7 +4458,10 @@
       "ap manager",
       "a/p manager",
       "accounts payable"
-    ]
+    ],
+    "soc_code": "13-2011",
+    "bls_title": "Accountant",
+    "bls_employment": 1435770
   },
   {
     "id": "civil_engineer",
@@ -4496,7 +4511,10 @@
         "retrain_months": null,
         "salary_delta": null
       }
-    ]
+    ],
+    "soc_code": "17-2051",
+    "bls_title": "Civil Engineer",
+    "bls_employment": 327950
   },
   {
     "id": "cloud_architect",
@@ -4778,7 +4796,10 @@
     "search_aliases": [
       "lawyer",
       "律师"
-    ]
+    ],
+    "soc_code": "23-1011",
+    "bls_title": "Lawyer",
+    "bls_employment": 731340
   },
   {
     "id": "marketing_manager",
@@ -4828,7 +4849,10 @@
         "retrain_months": null,
         "salary_delta": null
       }
-    ]
+    ],
+    "soc_code": "11-2021",
+    "bls_title": "Marketing Manager",
+    "bls_employment": 368940
   },
   {
     "id": "mechanical_engineer",
@@ -4884,7 +4908,10 @@
         "retrain_months": null,
         "salary_delta": null
       }
-    ]
+    ],
+    "soc_code": "17-2141",
+    "bls_title": "Mechanical Engineer",
+    "bls_employment": 281290
   },
   {
     "id": "sales_representative",
@@ -4934,7 +4961,10 @@
         "retrain_months": null,
         "salary_delta": null
       }
-    ]
+    ],
+    "soc_code": "41-4011",
+    "bls_title": "Sales Representative (B2B)",
+    "bls_employment": 311780
   },
   {
     "id": "ai_engineer",
@@ -5244,7 +5274,10 @@
       "Retail Salesperson | Social Sciences and Humanities | Research Starters | EBSCO Research",
       "Retail Sales Associate Job Description Template | Monster.com"
     ],
-    "transition_targets": []
+    "transition_targets": [],
+    "soc_code": "41-2031",
+    "bls_title": "Retail Salesperson",
+    "bls_employment": 3684740
   },
   {
     "id": "fast_food_worker",
@@ -5287,7 +5320,10 @@
       "BLS",
       "O*NET"
     ],
-    "transition_targets": []
+    "transition_targets": [],
+    "soc_code": "35-3023",
+    "bls_title": "Fast Food Worker",
+    "bls_employment": 3676580
   },
   {
     "id": "office_clerk",
@@ -5332,7 +5368,10 @@
       "Truity",
       "BLS"
     ],
-    "transition_targets": []
+    "transition_targets": [],
+    "soc_code": "43-9061",
+    "bls_title": "Office Clerk",
+    "bls_employment": 2496370
   },
   {
     "id": "home_health_aide",
@@ -5375,7 +5414,9 @@
       "BLS",
       "WHO"
     ],
-    "transition_targets": []
+    "transition_targets": [],
+    "soc_code": "31-1121",
+    "bls_title": "Home Health Aide"
   },
   {
     "id": "janitor",
@@ -5419,7 +5460,10 @@
       "O*NET",
       "Job Description Samples"
     ],
-    "transition_targets": []
+    "transition_targets": [],
+    "soc_code": "37-2011",
+    "bls_title": "Janitor / Cleaner",
+    "bls_employment": 2172500
   },
   {
     "id": "waiter",
@@ -5463,7 +5507,10 @@
       "Indeed",
       "Glassdoor"
     ],
-    "transition_targets": []
+    "transition_targets": [],
+    "soc_code": "35-3031",
+    "bls_title": "Waiter / Waitress",
+    "bls_employment": 2237850
   },
   {
     "id": "administrative_assistant",
@@ -5507,7 +5554,10 @@
       "Hays",
       "Monster.com"
     ],
-    "transition_targets": []
+    "transition_targets": [],
+    "soc_code": "43-6014",
+    "bls_title": "Administrative Assistant",
+    "bls_employment": 1785430
   },
   {
     "id": "construction_laborer",
@@ -5551,7 +5601,10 @@
       "ONET",
       "Merrill Construction Group"
     ],
-    "transition_targets": []
+    "transition_targets": [],
+    "soc_code": "47-2061",
+    "bls_title": "Construction Laborer",
+    "bls_employment": 1019090
   },
   {
     "id": "elementary_school_teacher",
@@ -5596,7 +5649,10 @@
       "Teachers Of Tomorrow",
       "University of Phoenix"
     ],
-    "transition_targets": []
+    "transition_targets": [],
+    "soc_code": "25-2021",
+    "bls_title": "Elementary School Teacher",
+    "bls_employment": 1410070
   },
   {
     "id": "restaurant_cook",
@@ -5641,7 +5697,10 @@
       "Workstream ATS",
       "Restaurant Industry Job Descriptions"
     ],
-    "transition_targets": []
+    "transition_targets": [],
+    "soc_code": "35-2014",
+    "bls_title": "Restaurant Cook",
+    "bls_employment": 1412350
   },
   {
     "id": "accounts_receivable_manager",

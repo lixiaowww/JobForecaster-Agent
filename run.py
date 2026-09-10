@@ -30,6 +30,9 @@
   python run.py query-agent claims resolve            # judge due claims vs external
                                                        # evidence (--dry-run to preview)
   python run.py query-agent claims list [n]           # last n staked claims
+  python run.py query-agent bls-backfill              # stamp SOC ground truth onto
+  python run.py query-agent bls-backfill --dry-run    # KB rows (--refresh to pull
+                                                       # the annual OES flat file)
 """
 from __future__ import annotations
 
@@ -283,6 +286,15 @@ def cmd_query_agent(
         else:
             print(f"usage: query-agent claims [score|resolve|list]", file=sys.stderr)
             sys.exit(2)
+    elif subcmd == "bls-backfill":
+        from services.bls_coverage import run_soc_backfill
+
+        summary = run_soc_backfill(
+            cfg,
+            dry_run=dry_run,
+            refresh_employment="--refresh" in extra_args,
+        )
+        print(json.dumps(summary, indent=2, ensure_ascii=False))
     elif subcmd == "ingest-logs":
         from services.job_query_agent.search_log import merge_search_logs
 

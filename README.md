@@ -19,7 +19,7 @@ of historical extrapolation.
 [![CI](https://github.com/your-org/forecaster-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/forecaster-agent/actions)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![License](https://img.shields.io/badge/license-BUSL--1.1-green)
-![Tests](https://img.shields.io/badge/tests-229%20offline-brightgreen)
+![Tests](https://img.shields.io/badge/tests-234%20offline-brightgreen)
 
 ---
 
@@ -115,6 +115,35 @@ Claims live in their own table.  The machinery is shared (`Status`, `brier_score
 calibration buckets); the ledgers are not — the public track record must stay an
 AI-economy track record, not be diluted by the agent's internal housekeeping.
 
+Evidence is scoped to what it can actually settle.  A BLS SOC code proves the
+*occupation* is real; it says nothing about whether a given query *means* that
+occupation.  So it can carry a `kb_profile_new` verdict — where "does this role exist
+at all" is precisely the claim — and is recorded as context only for `alias_patch` /
+`title_alias`, whose claim is about the mapping.  Otherwise any alias pointing at a
+BLS-stamped row would be trivially true.
+
+### Where the external ground truth comes from
+
+`query-agent bls-backfill` stamps `soc_code` / `bls_employment` onto KB rows that match
+a BLS occupation, which is what turns `bls_presence` from a permanently-skipped signal
+into a working one.  Matching is deliberately high-precision and low-recall:
+
+* **Titles only, never `search_aliases`** — aliases are the field the agent mutates.
+  Matching through them lets the agent add an alias, have that alias buy its row a SOC
+  code, and have that code then grade the agent's own patches.  On the current KB the
+  alias path produced 8 wrong stamps out of 28, including `13-2051 Financial Analyst →
+  Credit Analyst` (which is 13-2041).
+* **Injective only** — a row claimed by two SOC codes, or a code claiming two rows, is
+  dropped rather than guessed.
+* **No fuzzy similarity** — evaluated and rejected: at a 0.70 cutoff it put IT Manager
+  and Operations Manager on the HR Manager row and Systems Analyst on Credit Analyst,
+  while scoring an exact Receptionist match at 0.064.
+
+A bad anchor is worse than no anchor: it does not merely fail to catch drift, it
+certifies it.  20 of 92 KB rows currently qualify.  `run_coverage_enrichment` also
+stamps the SOC code it already knows onto each row it generates — previously discarded,
+which left every generated row permanently unverifiable.
+
 ---
 
 ## Theoretical foundations
@@ -146,7 +175,7 @@ cp .env.example .env          # GROQ_API_KEY (free) or ANTHROPIC_API_KEY
 
 **Run the offline test suite first (no API key needed):**
 ```bash
-python -m pytest tests/       # 229 tests, ~26s, zero network
+python -m pytest tests/       # 234 tests, ~25s, zero network
 ```
 
 Then run a single cycle:
@@ -181,6 +210,9 @@ python run.py query-agent claims score       # calibration record, per patch typ
 python run.py query-agent claims resolve     # judge due claims vs external evidence
 python run.py query-agent claims resolve --dry-run
 python run.py query-agent claims list [N]    # last N staked claims
+python run.py query-agent bls-backfill       # stamp SOC ground truth onto KB rows
+python run.py query-agent bls-backfill --dry-run
+python run.py query-agent bls-backfill --refresh   # pull the annual OES flat file
 ```
 
 ### MCP (read-only, optional)
