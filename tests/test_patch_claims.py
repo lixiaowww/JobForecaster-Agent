@@ -538,3 +538,132 @@ def test_bls_presence_cannot_settle_a_mapping_claim(tmp_path, isolated_db):
                       target="accountant")
     outcome, _why, payload = qa.judge_claim(invented, **kwargs)
     assert outcome is True and payload["verdict_basis"] == "strong"
+
+
+# --- citation-based anchoring ----------------------------------------------
+_CAT = {
+    "23-1011": {"title": "Lawyers", "employment": 731340},
+    "13-2041": {"title": "Credit Analysts", "employment": 73200},
+    "15-1299": {"title": "Computer Occupations, All Other", "employment": 400000},
+    "13-1081": {"title": "Logisticians", "employment": 200000},
+}
+
+
+def test_cited_soc_needs_exactly_one_code():
+    from services.bls_coverage import cited_soc
+
+    assert cited_soc({"sources": ["O*NET 13-2041.00 - Credit Analysts"]}) == "13-2041"
+    assert cited_soc({"sources": ["BLS Handbook: Credit Analysts"]}) is None
+    assert cited_soc({"sources": ["O*NET 13-2041.00", "O*NET 13-2051.00"]}) is None
+    assert cited_soc({}) is None
+
+
+def test_agent_written_sources_can_never_buy_an_anchor(tmp_path):
+    """Else the agent mints the citation that grades its own patches."""
+    from services import provenance
+    from services.bls_coverage import agent_generated_ids, soc_backfill_matches
+
+    generated = {"id": "invented", "title": "Synthetic Role",
+                 "sources": ["O*NET 23-1011.00 - Lawyers"], "origin": "agent"}
+    assert soc_backfill_matches([generated], catalog=_CAT) == []
+
+    # The ledger is the second, independent marker — the origin field can be
+    # absent on rows written before it existed.
+    ledger = tmp_path / "ledger.jsonl"
+    pid = provenance.record_patch(
+        subsystem="job_query_agent", patch_type="kb_profile_new", reason="t",
+        after={"id": "ledgered"}, path=ledger)
+    assert pid
+    ledgered = {"id": "ledgered", "title": "Another Synthetic Role",
+                "sources": ["O*NET 13-2041.00 - Credit Analysts"]}
+    assert agent_generated_ids([ledgered], ledger_path=ledger) == {"ledgered"}
+    assert soc_backfill_matches([ledgered], catalog=_CAT, ledger_path=ledger) == []
+
+
+def test_curated_citation_is_accepted_and_validated_against_the_catalog():
+    from services.bls_coverage import soc_backfill_matches
+
+    good = {"id": "fin_credit_analyst", "title": "Credit Analyst",
+            "sources": ["O*NET 13-2041.00 - Credit Analysts"]}
+    got = soc_backfill_matches([good], catalog=_CAT)
+    assert [(m["soc_code"], m["soc_source"]) for m in got] == [("13-2041", "citation")]
+
+    # A code that is not a real occupation must not become ground truth.
+    bogus = {"id": "x", "title": "X", "sources": ["O*NET 99-9999.00 - Invented"]}
+    assert soc_backfill_matches([bogus], catalog=_CAT) == []
+
+
+def test_catch_all_residual_codes_are_refused():
+    """'Computer Occupations, All Other' names a leftover bucket, not a job."""
+    from services.bls_coverage import soc_backfill_matches
+
+    job = {"id": "tech_prompt_eng", "title": "Prompt Engineer",
+           "sources": ["O*NET 15-1299.00 - Computer Occupations, All Other"]}
+    assert soc_backfill_matches([job], catalog=_CAT) == []
+
+
+def test_exact_title_match_outranks_a_colliding_citation():
+    """An emerging role citing a parent code must not cost the parent its anchor."""
+    from services.bls_coverage import soc_backfill_matches
+
+    jobs = [
+        {"id": "lawyer", "title": "Lawyer"},                     # title match
+        {"id": "legal_ai_forensics", "title": "AI Legal Forensics Specialist",
+         "sources": ["O*NET 23-1011.00 - Lawyers"]},             # citation, collides
+    ]
+    got = {m["job_id"]: m["soc_source"] for m in soc_backfill_matches(jobs, catalog=_CAT)}
+    assert got == {"lawyer": "title"}
+
+
+def test_two_citations_colliding_drops_both():
+    """Nothing breaks the tie, so neither row gets a guess."""
+    from services.bls_coverage import soc_backfill_matches
+
+    jobs = [
+        {"id": "a", "title": "Supply Chain Analyst",
+         "sources": ["O*NET 13-1081.00 - Logisticians"]},
+        {"id": "b", "title": "Green Logistics Planner",
+         "sources": ["O*NET 13-1081.00 - Logisticians"]},
+    ]
+    assert soc_backfill_matches(jobs, catalog=_CAT) == []
+
+
+def test_generated_kb_rows_are_marked_as_agent_origin(tmp_path):
+    import job_radar
+
+    kb = tmp_path / "kb.json"
+    kb.write_text(json.dumps([]))
+    job_radar._append_to_kb(
+        {"id": "new_role", "title": "New Role", "transition_targets": []}, str(kb))
+    assert json.loads(kb.read_text())[0]["origin"] == "agent"
+
+
+def test_stale_soc_code_is_recovered_from_the_official_title():
+    """SOC 2010 citations fail validation correctly, but need not be wasted."""
+    from services.bls_coverage import soc_backfill_matches, soc_from_source_titles
+
+    catalog = {"29-1224": {"title": "Radiologists", "employment": 40000}}
+    job = {"id": "hc_radiologist", "title": "Radiologist",
+           "sources": ["O*NET 29-1067.00 - Radiologists"]}   # 29-1067 is the 2010 code
+
+    assert soc_from_source_titles(job, catalog) == "29-1224"
+    got = soc_backfill_matches([job], catalog=catalog)
+    assert [(m["soc_code"], m["soc_source"]) for m in got] == [("29-1224", "source_title")]
+
+
+def test_source_title_recovery_is_exact_never_fuzzy():
+    from services.bls_coverage import soc_from_source_titles
+
+    catalog = {"29-1224": {"title": "Radiologists", "employment": 40000}}
+    assert soc_from_source_titles(
+        {"sources": ["O*NET 29-1067.00 - Radiology Technicians"]}, catalog) is None
+    assert soc_from_source_titles({"sources": ["Gartner", "Forrester"]}, catalog) is None
+
+
+def test_agent_rows_are_excluded_from_source_title_recovery_too():
+    from services.bls_coverage import soc_backfill_matches
+
+    catalog = {"29-1224": {"title": "Radiologists", "employment": 40000}}
+    job = {"id": "invented", "title": "Synthetic", "origin": "agent",
+           "sources": ["O*NET 29-1067.00 - Radiologists"]}
+    assert soc_backfill_matches([job], catalog=catalog) == []

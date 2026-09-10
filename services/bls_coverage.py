@@ -255,6 +255,123 @@ def run_coverage_enrichment(
 # Released each May; contains national_M{YEAR}_dl.xlsx with TOT_EMP by SOC.
 # ---------------------------------------------------------------------------
 
+_SOC_CATALOG_PATH = "data/bls_soc_catalog.json"
+_OES_URL = "https://www.bls.gov/oes/special.requests/oesm{yy}nat.zip"
+_OES_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
+    "Referer": "https://www.bls.gov/oes/",
+}
+
+
+def _fetch_oes_rows(year: int | None = None, *, max_lookback: int = 4):
+    """Download the OES national flat file. Returns (year, headers, row_iter) or None.
+
+    Walks the year backwards until a real ZIP comes back. BLS publishes the
+    file each May and removes nothing, but the *newest* year is not up yet for
+    most of the calendar year — and a missing year answers 200 with an HTML
+    error page, not a 404. The previous single-shot guess therefore failed
+    silently every time it ran before that year's May release, which is why
+    the employment cache never advanced.
+    """
+    if year is None:
+        y = date.today().year
+        year = y - 1 if date.today().month < 6 else y
+
+    try:
+        import io
+        import zipfile
+
+        import openpyxl
+        import requests
+    except ImportError:
+        return None
+
+    for candidate in range(year, year - max_lookback, -1):
+        url = _OES_URL.format(yy=str(candidate)[2:])
+        try:
+            resp = requests.get(url, headers=_OES_HEADERS, timeout=90)
+            if resp.status_code != 200 or resp.content[:2] != b"PK":
+                continue
+            z = zipfile.ZipFile(io.BytesIO(resp.content))
+            xlsx_name = next((n for n in z.namelist() if n.endswith(".xlsx")), None)
+            if not xlsx_name:
+                continue
+            wb = openpyxl.load_workbook(
+                z.open(xlsx_name), read_only=True, data_only=True)
+            rows = wb.active.iter_rows(values_only=True)
+            headers = [str(c).strip() if c else "" for c in next(rows)]
+            return candidate, headers, rows
+        except Exception:
+            continue
+    return None
+
+
+def soc_catalog(path: str = _SOC_CATALOG_PATH) -> dict[str, dict]:
+    """The cached BLS SOC catalog: {soc_code: {"title", "employment"}}.
+
+    Offline-safe — returns ``{}`` when the cache has never been built, which
+    simply means citation-based backfill is unavailable rather than wrong.
+    """
+    try:
+        raw = json.loads(Path(path).read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return {k: v for k, v in raw.items() if not k.startswith("_")}
+
+
+def refresh_soc_catalog(
+    *,
+    year: int | None = None,
+    path: str = _SOC_CATALOG_PATH,
+) -> dict[str, dict]:
+    """Build the full detailed-occupation catalog from the OES flat file.
+
+    ``HIGH_COVERAGE_OCCUPATIONS`` is a hand-curated list of 57 large
+    occupations, useful for deciding *what to generate next* but far too narrow
+    to validate an arbitrary SOC code cited by a KB row. This pulls all ~830
+    detailed occupations, which is what makes ``cited_soc`` checkable: a code
+    that is not in the official catalog is a typo or an invention, and either
+    way must not become ground truth.
+    """
+    fetched = _fetch_oes_rows(year)
+    if fetched is None:
+        return soc_catalog(path)
+    resolved_year, headers, rows = fetched
+    try:
+        occ_i = headers.index("OCC_CODE")
+        title_i = headers.index("OCC_TITLE")
+        emp_i = headers.index("TOT_EMP")
+        group_i = headers.index("O_GROUP") if "O_GROUP" in headers else None
+        naics_i = headers.index("NAICS") if "NAICS" in headers else None
+
+        out: dict[str, dict] = {}
+        for row in rows:
+            if group_i is not None and str(row[group_i]).strip() != "detailed":
+                continue
+            naics = str(row[naics_i]).strip() if naics_i is not None else "000000"
+            if naics not in ("000000", "Cross-industry"):
+                continue
+            soc = str(row[occ_i]).strip() if row[occ_i] else ""
+            if not soc or soc in out:
+                continue
+            try:
+                employment = int(str(row[emp_i]).replace(",", ""))
+            except (TypeError, ValueError):
+                employment = None
+            out[soc] = {"title": str(row[title_i]).strip(), "employment": employment}
+
+        if out:
+            payload = {**out,
+                       "_fetched_at": date.today().isoformat(),
+                       "_oes_year": resolved_year}
+            Path(path).parent.mkdir(parents=True, exist_ok=True)
+            Path(path).write_text(
+                json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        return out
+    except Exception:
+        return soc_catalog(path)
+
+
 def refresh_employment_from_bls(
     *,
     year: int | None = None,
@@ -279,42 +396,11 @@ def refresh_employment_from_bls(
         except Exception:
             pass
 
-    if year is None:
-        # Use previous year (OES released in May; current year not yet available before May)
-        y = date.today().year
-        year = y - 1 if date.today().month < 6 else y
-
-    yy = str(year)[2:]  # "2023" → "23"
-    url = f"https://www.bls.gov/oes/special.requests/oesm{yy}nat.zip"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
-        "Referer": "https://www.bls.gov/oes/",
-    }
-
+    fetched = _fetch_oes_rows(year)
+    if fetched is None:
+        return {}
+    year, col_headers, rows = fetched
     try:
-        import io
-        import requests
-        import zipfile
-
-        resp = requests.get(url, headers=headers, timeout=60)
-        resp.raise_for_status()
-        if resp.content[:2] != b"PK":
-            return {}  # not a ZIP (got HTML redirect)
-
-        z = zipfile.ZipFile(io.BytesIO(resp.content))
-        xlsx_name = next((n for n in z.namelist() if n.endswith(".xlsx")), None)
-        if not xlsx_name:
-            return {}
-
-        try:
-            import openpyxl
-        except ImportError:
-            return {}  # openpyxl optional
-
-        wb = openpyxl.load_workbook(z.open(xlsx_name), read_only=True, data_only=True)
-        ws = wb.active
-        rows = ws.iter_rows(values_only=True)
-        col_headers = [str(c).strip() if c else "" for c in next(rows)]
 
         occ_idx = col_headers.index("OCC_CODE")
         emp_idx = col_headers.index("TOT_EMP")
@@ -372,7 +458,103 @@ def _norm_title(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", (text or "").lower()).strip()
 
 
-def soc_backfill_matches(jobs: list[dict]) -> list[dict]:
+_SOC_RE = None
+
+
+def cited_soc(job: dict) -> str | None:
+    """The single SOC code a KB row's own ``sources`` cite, or None.
+
+    Most curated rows carry an O*NET citation like
+    ``"O*NET 41-2011.00 - Cashiers"``. That is a human librarian's judgement
+    about which occupation the row describes — independent of the retrieval
+    machinery, and far more reliable than any title match.
+
+    Two rows are refused outright:
+
+    * rows citing more than one distinct code (the row is about a blend, and
+      picking one would be a guess);
+    * rows the agent generated — see ``agent_generated_ids``. An LLM writes the
+      ``sources`` list for those, so reading a code out of it would let the
+      agent mint the citation that buys its own row an external anchor, and
+      that anchor would then be used to grade the agent's own patches.
+    """
+    global _SOC_RE
+    if _SOC_RE is None:
+        import re
+        _SOC_RE = re.compile(r"\b(\d{2}-\d{4})(?:\.\d{2})?\b")
+
+    codes = set()
+    for source in (job.get("sources") or []):
+        codes.update(_SOC_RE.findall(str(source)))
+    return codes.pop() if len(codes) == 1 else None
+
+
+def soc_from_source_titles(job: dict, catalog: dict[str, dict]) -> str | None:
+    """Recover a SOC code from the occupation *title* a row's sources spell out.
+
+    Some curated rows cite SOC 2010 codes — ``"O*NET 29-1067.00 - Radiologists"``
+    — which correctly fail catalog validation because the current code is
+    29-1224. Rejecting them is right; losing them is a waste, because the same
+    string carries the official occupation title, and that title is stable
+    across SOC revisions in a way the number is not.
+
+    Matching is exact against the official catalog title, never fuzzy: the
+    point is to recover a name a human already wrote down, not to guess which
+    occupation a row resembles.
+    """
+    by_title: dict[str, str] = {}
+    for code, entry in catalog.items():
+        by_title.setdefault(entry["title"].strip().lower(), code)
+
+    found: set[str] = set()
+    for source in (job.get("sources") or []):
+        text = str(source)
+        for sep in (" - ", ": ", " – "):
+            if sep in text:
+                candidate = text.split(sep, 1)[1].strip().lower()
+                if candidate in by_title:
+                    found.add(by_title[candidate])
+    return found.pop() if len(found) == 1 else None
+
+
+def agent_generated_ids(
+    jobs: list[dict],
+    *,
+    ledger_path: str | None = None,
+) -> set[str]:
+    """KB row ids this system generated rather than a human curating them.
+
+    Two independent markers, because either alone can go missing: the
+    ``origin: "agent"`` field written by ``job_radar._append_to_kb``, and the
+    ``kb_profile_new`` entries in the provenance ledger (which is gitignored,
+    so a fresh clone has none).
+    """
+    from services import provenance
+
+    out = {j["id"] for j in jobs if j.get("origin") == "agent"}
+    try:
+        events = provenance.load_events(
+            ledger_path or provenance.DEFAULT_LEDGER_PATH)
+    except Exception:
+        return out
+    for event in events:
+        if event.get("type") != "kb_profile_new" or event.get("event") != "applied":
+            continue
+        after = event.get("after") or {}
+        for candidate in (after.get("id") if isinstance(after, dict) else None,
+                          event.get("target_id")):
+            if candidate:
+                out.add(candidate)
+    return out
+
+
+def soc_backfill_matches(
+    jobs: list[dict],
+    *,
+    use_citations: bool = True,
+    catalog: dict[str, dict] | None = None,
+    ledger_path: str | None = None,
+) -> list[dict]:
     """KB rows that can be stamped with a BLS SOC code, high-precision only.
 
     Two restrictions, both deliberate, both costing recall on purpose:
@@ -404,12 +586,62 @@ def soc_backfill_matches(jobs: list[dict]) -> list[dict]:
         by_title[_norm_title(job.get("title", ""))].append(job["id"])
 
     pairs: set[tuple[str, str, str]] = set()
+    origin: dict[tuple[str, str], str] = {}
     for occ in HIGH_COVERAGE_OCCUPATIONS:
         for key in {_norm_title(occ["title"]), _norm_title(occ["query"])}:
             if not key:
                 continue
             for job_id in by_title.get(key, []):
                 pairs.add((occ["soc"], occ["title"], job_id))
+                origin[(occ["soc"], job_id)] = "title"
+
+    # Second pass: the code the row's own curator cited, validated against the
+    # official catalog so a typo or an invented code cannot become an anchor.
+    #
+    # An exact title match outranks a citation rather than annulling it. The
+    # two disagree only where an emerging role cites the broad parent code of a
+    # traditional one — "AI Legal Forensics Specialist" citing 23-1011 Lawyers.
+    # Dropping both would cost the plain "Lawyer" row an anchor it independently
+    # earned, so the citation yields instead. Citations colliding with each
+    # other are all dropped: there is nothing to break the tie.
+    catalog = (catalog if catalog is not None else soc_catalog()) if use_citations else {}
+    if catalog:
+        titled_socs = {soc for soc, _t, _j in pairs}
+        titled_jobs = {job_id for _s, _t, job_id in pairs}
+        excluded = agent_generated_ids(jobs, ledger_path=ledger_path)
+        for job in jobs:
+            if job["id"] in excluded or job["id"] in titled_jobs:
+                continue
+            soc = cited_soc(job)
+            if not soc or soc in titled_socs:
+                continue
+            entry = catalog.get(soc)
+            if entry is None:
+                continue
+            # Catch-all residual codes ("Computer Occupations, All Other") name
+            # a leftover bucket, not an occupation. As ground truth they assert
+            # almost nothing, so they are not worth the risk of asserting it
+            # about the wrong row.
+            if entry["title"].strip().lower().endswith(", all other"):
+                continue
+            pairs.add((soc, entry["title"], job["id"]))
+            origin.setdefault((soc, job["id"]), "citation")
+
+        # Third pass, lowest precedence: rows whose cited code is stale or
+        # absent but whose sources name the occupation outright.
+        cited_socs = {soc for soc, _t, _j in pairs}
+        cited_jobs = {job_id for _s, _t, job_id in pairs}
+        for job in jobs:
+            if job["id"] in excluded or job["id"] in cited_jobs:
+                continue
+            soc = soc_from_source_titles(job, catalog)
+            if not soc or soc in cited_socs:
+                continue
+            entry = catalog[soc]
+            if entry["title"].strip().lower().endswith(", all other"):
+                continue
+            pairs.add((soc, entry["title"], job["id"]))
+            origin.setdefault((soc, job["id"]), "source_title")
 
     soc_per_job: dict[str, set[str]] = collections.defaultdict(set)
     job_per_soc: dict[str, set[str]] = collections.defaultdict(set)
@@ -422,11 +654,15 @@ def soc_backfill_matches(jobs: list[dict]) -> list[dict]:
     for soc, title, job_id in sorted(pairs):
         if len(soc_per_job[job_id]) != 1 or len(job_per_soc[soc]) != 1:
             continue
+        employment = emp_cache.get(soc)
+        if employment is None:
+            employment = (catalog.get(soc) or {}).get("employment")
         out.append({
             "job_id": job_id,
             "soc_code": soc,
             "bls_title": title,
-            "bls_employment": emp_cache.get(soc),
+            "bls_employment": employment,
+            "soc_source": origin.get((soc, job_id), "title"),
         })
     return out
 
@@ -436,6 +672,8 @@ def run_soc_backfill(
     *,
     dry_run: bool = False,
     refresh_employment: bool = False,
+    refresh_catalog: bool = False,
+    use_citations: bool = True,
     ledger_path: str | None = None,
 ) -> dict[str, Any]:
     """Stamp ``soc_code`` / ``bls_employment`` onto KB rows that match a SOC code.
@@ -461,30 +699,41 @@ def run_soc_backfill(
 
     if refresh_employment:
         refresh_employment_from_bls()   # network; falls back to cache on failure
+    if refresh_catalog:
+        refresh_soc_catalog()           # network; falls back to cache on failure
 
     jobs = job_radar.load_knowledge_base(kb_path)
     by_id = {j["id"]: j for j in jobs}
-    matches = soc_backfill_matches(jobs)
+    matches = soc_backfill_matches(
+        jobs, use_citations=use_citations, ledger_path=ledger_path)
 
     stamped: list[dict] = []
     already: list[str] = []
+    backfilled_source = False
     for m in matches:
         job = by_id.get(m["job_id"])
         if job is None:
             continue
         if job.get("soc_code"):
             already.append(m["job_id"])
+            # Fill in provenance for rows stamped before the field existed, so
+            # every anchor records which pass produced it.
+            if not job.get("soc_source") and not dry_run:
+                job["soc_source"] = m["soc_source"]
+                backfilled_source = True
             continue
         stamped.append(m)
         if not dry_run:
             job["soc_code"] = m["soc_code"]
             job["bls_title"] = m["bls_title"]
+            job["soc_source"] = m["soc_source"]
             if m["bls_employment"] is not None:
                 job["bls_employment"] = m["bls_employment"]
 
-    if stamped and not dry_run:
+    if (stamped or backfilled_source) and not dry_run:
         Path(kb_path).write_text(
             json.dumps(jobs, ensure_ascii=False, indent=2), encoding="utf-8")
+    if stamped and not dry_run:
         provenance.record_patch(
             subsystem="bls_coverage",
             patch_type="soc_backfill",
@@ -499,6 +748,12 @@ def run_soc_backfill(
         "stamped": len(stamped),
         "already_stamped": len(already),
         "with_employment": sum(1 for m in stamped if m["bls_employment"] is not None),
+        "by_source": {
+            "title": sum(1 for m in stamped if m["soc_source"] == "title"),
+            "citation": sum(1 for m in stamped if m["soc_source"] == "citation"),
+        },
+        "unanchored": len(jobs) - len(stamped) - len(already),
+        "catalog_size": len(soc_catalog()),
         "dry_run": dry_run,
         "results": stamped,
     }

@@ -1,0 +1,3328 @@
+{
+  "11-1011": {
+    "title": "Chief Executives",
+    "employment": 211230
+  },
+  "11-1021": {
+    "title": "General and Operations Managers",
+    "employment": 3507810
+  },
+  "11-1031": {
+    "title": "Legislators",
+    "employment": 32460
+  },
+  "11-2011": {
+    "title": "Advertising and Promotions Managers",
+    "employment": 20630
+  },
+  "11-2021": {
+    "title": "Marketing Managers",
+    "employment": 368940
+  },
+  "11-2022": {
+    "title": "Sales Managers",
+    "employment": 575880
+  },
+  "11-2032": {
+    "title": "Public Relations Managers",
+    "employment": 72760
+  },
+  "11-2033": {
+    "title": "Fundraising Managers",
+    "employment": 31810
+  },
+  "11-3012": {
+    "title": "Administrative Services Managers",
+    "employment": 242520
+  },
+  "11-3013": {
+    "title": "Facilities Managers",
+    "employment": 131400
+  },
+  "11-3021": {
+    "title": "Computer and Information Systems Managers",
+    "employment": 592600
+  },
+  "11-3031": {
+    "title": "Financial Managers",
+    "employment": 787340
+  },
+  "11-3051": {
+    "title": "Industrial Production Managers",
+    "employment": 222890
+  },
+  "11-3061": {
+    "title": "Purchasing Managers",
+    "employment": 77530
+  },
+  "11-3071": {
+    "title": "Transportation, Storage, and Distribution Managers",
+    "employment": 198780
+  },
+  "11-3111": {
+    "title": "Compensation and Benefits Managers",
+    "employment": 18690
+  },
+  "11-3121": {
+    "title": "Human Resources Managers",
+    "employment": 200600
+  },
+  "11-3131": {
+    "title": "Training and Development Managers",
+    "employment": 41540
+  },
+  "11-9013": {
+    "title": "Farmers, Ranchers, and Other Agricultural Managers",
+    "employment": 6150
+  },
+  "11-9021": {
+    "title": "Construction Managers",
+    "employment": 329190
+  },
+  "11-9031": {
+    "title": "Education and Childcare Administrators, Preschool and Daycare",
+    "employment": 64090
+  },
+  "11-9032": {
+    "title": "Education Administrators, Kindergarten through Secondary",
+    "employment": 302580
+  },
+  "11-9033": {
+    "title": "Education Administrators, Postsecondary",
+    "employment": 167270
+  },
+  "11-9039": {
+    "title": "Education Administrators, All Other",
+    "employment": 50690
+  },
+  "11-9041": {
+    "title": "Architectural and Engineering Managers",
+    "employment": 207800
+  },
+  "11-9051": {
+    "title": "Food Service Managers",
+    "employment": 246070
+  },
+  "11-9071": {
+    "title": "Gambling Managers",
+    "employment": 4590
+  },
+  "11-9072": {
+    "title": "Entertainment and Recreation Managers, Except Gambling",
+    "employment": 29690
+  },
+  "11-9081": {
+    "title": "Lodging Managers",
+    "employment": 41980
+  },
+  "11-9111": {
+    "title": "Medical and Health Services Managers",
+    "employment": 515100
+  },
+  "11-9121": {
+    "title": "Natural Sciences Managers",
+    "employment": 96520
+  },
+  "11-9131": {
+    "title": "Postmasters and Mail Superintendents",
+    "employment": 13810
+  },
+  "11-9141": {
+    "title": "Property, Real Estate, and Community Association Managers",
+    "employment": 284120
+  },
+  "11-9151": {
+    "title": "Social and Community Service Managers",
+    "employment": 173650
+  },
+  "11-9161": {
+    "title": "Emergency Management Directors",
+    "employment": 11910
+  },
+  "11-9171": {
+    "title": "Funeral Home Managers",
+    "employment": 14200
+  },
+  "11-9179": {
+    "title": "Personal Service Managers, All Other",
+    "employment": 11170
+  },
+  "11-9199": {
+    "title": "Managers, All Other",
+    "employment": 589750
+  },
+  "13-1011": {
+    "title": "Agents and Business Managers of Artists, Performers, and Athletes",
+    "employment": 12870
+  },
+  "13-1020": {
+    "title": "Buyers and Purchasing Agents",
+    "employment": 477980
+  },
+  "13-1031": {
+    "title": "Claims Adjusters, Examiners, and Investigators",
+    "employment": 293780
+  },
+  "13-1032": {
+    "title": "Insurance Appraisers, Auto Damage",
+    "employment": 8670
+  },
+  "13-1041": {
+    "title": "Compliance Officers",
+    "employment": 383620
+  },
+  "13-1051": {
+    "title": "Cost Estimators",
+    "employment": 220970
+  },
+  "13-1071": {
+    "title": "Human Resources Specialists",
+    "employment": 895970
+  },
+  "13-1074": {
+    "title": "Farm Labor Contractors",
+    "employment": 460
+  },
+  "13-1075": {
+    "title": "Labor Relations Specialists",
+    "employment": 62800
+  },
+  "13-1081": {
+    "title": "Logisticians",
+    "employment": 228470
+  },
+  "13-1082": {
+    "title": "Project Management Specialists",
+    "employment": 947630
+  },
+  "13-1111": {
+    "title": "Management Analysts",
+    "employment": 838140
+  },
+  "13-1121": {
+    "title": "Meeting, Convention, and Event Planners",
+    "employment": 122130
+  },
+  "13-1131": {
+    "title": "Fundraisers",
+    "employment": 101730
+  },
+  "13-1141": {
+    "title": "Compensation, Benefits, and Job Analysis Specialists",
+    "employment": 99850
+  },
+  "13-1151": {
+    "title": "Training and Development Specialists",
+    "employment": 403480
+  },
+  "13-1161": {
+    "title": "Market Research Analysts and Marketing Specialists",
+    "employment": 846370
+  },
+  "13-1199": {
+    "title": "Business Operations Specialists, All Other",
+    "employment": 1103440
+  },
+  "13-2011": {
+    "title": "Accountants and Auditors",
+    "employment": 1435770
+  },
+  "13-2020": {
+    "title": "Property Appraisers and Assessors",
+    "employment": 62090
+  },
+  "13-2031": {
+    "title": "Budget Analysts",
+    "employment": 47310
+  },
+  "13-2041": {
+    "title": "Credit Analysts",
+    "employment": 73200
+  },
+  "13-2051": {
+    "title": "Financial and Investment Analysts",
+    "employment": 325220
+  },
+  "13-2052": {
+    "title": "Personal Financial Advisors",
+    "employment": 272190
+  },
+  "13-2053": {
+    "title": "Insurance Underwriters",
+    "employment": 101310
+  },
+  "13-2054": {
+    "title": "Financial Risk Specialists",
+    "employment": 55290
+  },
+  "13-2061": {
+    "title": "Financial Examiners",
+    "employment": 63440
+  },
+  "13-2071": {
+    "title": "Credit Counselors",
+    "employment": 27950
+  },
+  "13-2072": {
+    "title": "Loan Officers",
+    "employment": 321090
+  },
+  "13-2081": {
+    "title": "Tax Examiners and Collectors, and Revenue Agents",
+    "employment": 50250
+  },
+  "13-2082": {
+    "title": "Tax Preparers",
+    "employment": 81650
+  },
+  "13-2099": {
+    "title": "Financial Specialists, All Other",
+    "employment": 122730
+  },
+  "15-1211": {
+    "title": "Computer Systems Analysts",
+    "employment": 498810
+  },
+  "15-1212": {
+    "title": "Information Security Analysts",
+    "employment": 175350
+  },
+  "15-1221": {
+    "title": "Computer and Information Research Scientists",
+    "employment": 35210
+  },
+  "15-1231": {
+    "title": "Computer Network Support Specialists",
+    "employment": 158720
+  },
+  "15-1232": {
+    "title": "Computer User Support Specialists",
+    "employment": 689700
+  },
+  "15-1241": {
+    "title": "Computer Network Architects",
+    "employment": 174100
+  },
+  "15-1242": {
+    "title": "Database Administrators",
+    "employment": 76140
+  },
+  "15-1243": {
+    "title": "Database Architects",
+    "employment": 59920
+  },
+  "15-1244": {
+    "title": "Network and Computer Systems Administrators",
+    "employment": 323020
+  },
+  "15-1251": {
+    "title": "Computer Programmers",
+    "employment": 120370
+  },
+  "15-1252": {
+    "title": "Software Developers",
+    "employment": 1656880
+  },
+  "15-1253": {
+    "title": "Software Quality Assurance Analysts and Testers",
+    "employment": 203040
+  },
+  "15-1254": {
+    "title": "Web Developers",
+    "employment": 85350
+  },
+  "15-1255": {
+    "title": "Web and Digital Interface Designers",
+    "employment": 111060
+  },
+  "15-1299": {
+    "title": "Computer Occupations, All Other",
+    "employment": 437170
+  },
+  "15-2011": {
+    "title": "Actuaries",
+    "employment": 25470
+  },
+  "15-2021": {
+    "title": "Mathematicians",
+    "employment": 2220
+  },
+  "15-2031": {
+    "title": "Operations Research Analysts",
+    "employment": 117880
+  },
+  "15-2041": {
+    "title": "Statisticians",
+    "employment": 29950
+  },
+  "15-2051": {
+    "title": "Data Scientists",
+    "employment": 192710
+  },
+  "15-2099": {
+    "title": "Mathematical Science Occupations, All Other",
+    "employment": 4320
+  },
+  "17-1011": {
+    "title": "Architects, Except Landscape and Naval",
+    "employment": 111170
+  },
+  "17-1012": {
+    "title": "Landscape Architects",
+    "employment": 20370
+  },
+  "17-1021": {
+    "title": "Cartographers and Photogrammetrists",
+    "employment": 12330
+  },
+  "17-1022": {
+    "title": "Surveyors",
+    "employment": 50740
+  },
+  "17-2011": {
+    "title": "Aerospace Engineers",
+    "employment": 66660
+  },
+  "17-2021": {
+    "title": "Agricultural Engineers",
+    "employment": 1860
+  },
+  "17-2031": {
+    "title": "Bioengineers and Biomedical Engineers",
+    "employment": 19320
+  },
+  "17-2041": {
+    "title": "Chemical Engineers",
+    "employment": 21140
+  },
+  "17-2051": {
+    "title": "Civil Engineers",
+    "employment": 327950
+  },
+  "17-2061": {
+    "title": "Computer Hardware Engineers",
+    "employment": 82660
+  },
+  "17-2071": {
+    "title": "Electrical Engineers",
+    "employment": 185430
+  },
+  "17-2072": {
+    "title": "Electronics Engineers, Except Computer",
+    "employment": 96410
+  },
+  "17-2081": {
+    "title": "Environmental Engineers",
+    "employment": 39880
+  },
+  "17-2111": {
+    "title": "Health and Safety Engineers, Except Mining Safety Engineers and Inspectors",
+    "employment": 22510
+  },
+  "17-2112": {
+    "title": "Industrial Engineers",
+    "employment": 332870
+  },
+  "17-2121": {
+    "title": "Marine Engineers and Naval Architects",
+    "employment": 9960
+  },
+  "17-2131": {
+    "title": "Materials Engineers",
+    "employment": 24630
+  },
+  "17-2141": {
+    "title": "Mechanical Engineers",
+    "employment": 281290
+  },
+  "17-2151": {
+    "title": "Mining and Geological Engineers, Including Mining Safety Engineers",
+    "employment": 7040
+  },
+  "17-2161": {
+    "title": "Nuclear Engineers",
+    "employment": 12710
+  },
+  "17-2171": {
+    "title": "Petroleum Engineers",
+    "employment": 20390
+  },
+  "17-2199": {
+    "title": "Engineers, All Other",
+    "employment": 150990
+  },
+  "17-3011": {
+    "title": "Architectural and Civil Drafters",
+    "employment": 111070
+  },
+  "17-3012": {
+    "title": "Electrical and Electronics Drafters",
+    "employment": 20680
+  },
+  "17-3013": {
+    "title": "Mechanical Drafters",
+    "employment": 44850
+  },
+  "17-3019": {
+    "title": "Drafters, All Other",
+    "employment": 16580
+  },
+  "17-3021": {
+    "title": "Aerospace Engineering and Operations Technologists and Technicians",
+    "employment": 10640
+  },
+  "17-3022": {
+    "title": "Civil Engineering Technologists and Technicians",
+    "employment": 63560
+  },
+  "17-3023": {
+    "title": "Electrical and Electronic Engineering Technologists and Technicians",
+    "employment": 97420
+  },
+  "17-3024": {
+    "title": "Electro-Mechanical and Mechatronics Technologists and Technicians",
+    "employment": 15360
+  },
+  "17-3025": {
+    "title": "Environmental Engineering Technologists and Technicians",
+    "employment": 13780
+  },
+  "17-3026": {
+    "title": "Industrial Engineering Technologists and Technicians",
+    "employment": 73020
+  },
+  "17-3027": {
+    "title": "Mechanical Engineering Technologists and Technicians",
+    "employment": 38930
+  },
+  "17-3028": {
+    "title": "Calibration Technologists and Technicians",
+    "employment": 13220
+  },
+  "17-3029": {
+    "title": "Engineering Technologists and Technicians, Except Drafters, All Other",
+    "employment": 66200
+  },
+  "17-3031": {
+    "title": "Surveying and Mapping Technicians",
+    "employment": 56050
+  },
+  "19-1011": {
+    "title": "Animal Scientists",
+    "employment": 2460
+  },
+  "19-1012": {
+    "title": "Food Scientists and Technologists",
+    "employment": 14100
+  },
+  "19-1013": {
+    "title": "Soil and Plant Scientists",
+    "employment": 15800
+  },
+  "19-1021": {
+    "title": "Biochemists and Biophysicists",
+    "employment": 33180
+  },
+  "19-1022": {
+    "title": "Microbiologists",
+    "employment": 21540
+  },
+  "19-1023": {
+    "title": "Zoologists and Wildlife Biologists",
+    "employment": 17100
+  },
+  "19-1029": {
+    "title": "Biological Scientists, All Other",
+    "employment": 61220
+  },
+  "19-1031": {
+    "title": "Conservation Scientists",
+    "employment": 22790
+  },
+  "19-1032": {
+    "title": "Foresters",
+    "employment": 9450
+  },
+  "19-1041": {
+    "title": "Epidemiologists",
+    "employment": 10230
+  },
+  "19-1042": {
+    "title": "Medical Scientists, Except Epidemiologists",
+    "employment": 136620
+  },
+  "19-1099": {
+    "title": "Life Scientists, All Other",
+    "employment": 7490
+  },
+  "19-2011": {
+    "title": "Astronomers",
+    "employment": 2080
+  },
+  "19-2012": {
+    "title": "Physicists",
+    "employment": 18350
+  },
+  "19-2021": {
+    "title": "Atmospheric and Space Scientists",
+    "employment": 9310
+  },
+  "19-2031": {
+    "title": "Chemists",
+    "employment": 83530
+  },
+  "19-2032": {
+    "title": "Materials Scientists",
+    "employment": 8810
+  },
+  "19-2041": {
+    "title": "Environmental Scientists and Specialists, Including Health",
+    "employment": 80730
+  },
+  "19-2042": {
+    "title": "Geoscientists, Except Hydrologists and Geographers",
+    "employment": 24620
+  },
+  "19-2043": {
+    "title": "Hydrologists",
+    "employment": 6150
+  },
+  "19-2099": {
+    "title": "Physical Scientists, All Other",
+    "employment": 20820
+  },
+  "19-3011": {
+    "title": "Economists",
+    "employment": 16420
+  },
+  "19-3022": {
+    "title": "Survey Researchers",
+    "employment": 8190
+  },
+  "19-3032": {
+    "title": "Industrial-Organizational Psychologists",
+    "employment": 1030
+  },
+  "19-3033": {
+    "title": "Clinical and Counseling Psychologists",
+    "employment": 71730
+  },
+  "19-3034": {
+    "title": "School Psychologists",
+    "employment": 62790
+  },
+  "19-3039": {
+    "title": "Psychologists, All Other",
+    "employment": 14480
+  },
+  "19-3041": {
+    "title": "Sociologists",
+    "employment": 2890
+  },
+  "19-3051": {
+    "title": "Urban and Regional Planners",
+    "employment": 42690
+  },
+  "19-3091": {
+    "title": "Anthropologists and Archeologists",
+    "employment": 7720
+  },
+  "19-3092": {
+    "title": "Geographers",
+    "employment": 1460
+  },
+  "19-3093": {
+    "title": "Historians",
+    "employment": 3040
+  },
+  "19-3094": {
+    "title": "Political Scientists",
+    "employment": 5580
+  },
+  "19-3099": {
+    "title": "Social Scientists and Related Workers, All Other",
+    "employment": 35210
+  },
+  "19-4012": {
+    "title": "Agricultural Technicians",
+    "employment": 13150
+  },
+  "19-4013": {
+    "title": "Food Science Technicians",
+    "employment": 15190
+  },
+  "19-4021": {
+    "title": "Biological Technicians",
+    "employment": 76990
+  },
+  "19-4031": {
+    "title": "Chemical Technicians",
+    "employment": 55880
+  },
+  "19-4042": {
+    "title": "Environmental Science and Protection Technicians, Including Health",
+    "employment": 32390
+  },
+  "19-4043": {
+    "title": "Geological Technicians, Except Hydrologic Technicians",
+    "employment": 8860
+  },
+  "19-4044": {
+    "title": "Hydrologic Technicians",
+    "employment": 3000
+  },
+  "19-4051": {
+    "title": "Nuclear Technicians",
+    "employment": 5400
+  },
+  "19-4061": {
+    "title": "Social Science Research Assistants",
+    "employment": 30890
+  },
+  "19-4071": {
+    "title": "Forest and Conservation Technicians",
+    "employment": 28740
+  },
+  "19-4092": {
+    "title": "Forensic Science Technicians",
+    "employment": 17520
+  },
+  "19-4099": {
+    "title": "Life, Physical, and Social Science Technicians, All Other",
+    "employment": 72230
+  },
+  "19-5011": {
+    "title": "Occupational Health and Safety Specialists",
+    "employment": 122300
+  },
+  "19-5012": {
+    "title": "Occupational Health and Safety Technicians",
+    "employment": 27270
+  },
+  "21-1012": {
+    "title": "Educational, Guidance, and Career Counselors and Advisors",
+    "employment": 327660
+  },
+  "21-1013": {
+    "title": "Marriage and Family Therapists",
+    "employment": 63340
+  },
+  "21-1015": {
+    "title": "Rehabilitation Counselors",
+    "employment": 84750
+  },
+  "21-1018": {
+    "title": "Substance Abuse, Behavioral Disorder, and Mental Health Counselors",
+    "employment": 397880
+  },
+  "21-1019": {
+    "title": "Counselors, All Other",
+    "employment": 35580
+  },
+  "21-1021": {
+    "title": "Child, Family, and School Social Workers",
+    "employment": 352160
+  },
+  "21-1022": {
+    "title": "Healthcare Social Workers",
+    "employment": 185020
+  },
+  "21-1023": {
+    "title": "Mental Health and Substance Abuse Social Workers",
+    "employment": 114680
+  },
+  "21-1029": {
+    "title": "Social Workers, All Other",
+    "employment": 58460
+  },
+  "21-1091": {
+    "title": "Health Education Specialists",
+    "employment": 57800
+  },
+  "21-1092": {
+    "title": "Probation Officers and Correctional Treatment Specialists",
+    "employment": 85870
+  },
+  "21-1093": {
+    "title": "Social and Human Service Assistants",
+    "employment": 409310
+  },
+  "21-1094": {
+    "title": "Community Health Workers",
+    "employment": 58550
+  },
+  "21-1099": {
+    "title": "Community and Social Service Specialists, All Other",
+    "employment": 95310
+  },
+  "21-2011": {
+    "title": "Clergy",
+    "employment": 56640
+  },
+  "21-2021": {
+    "title": "Directors, Religious Activities and Education",
+    "employment": 23270
+  },
+  "21-2099": {
+    "title": "Religious Workers, All Other",
+    "employment": 11870
+  },
+  "23-1011": {
+    "title": "Lawyers",
+    "employment": 731340
+  },
+  "23-1012": {
+    "title": "Judicial Law Clerks",
+    "employment": 14680
+  },
+  "23-1021": {
+    "title": "Administrative Law Judges, Adjudicators, and Hearing Officers",
+    "employment": 14670
+  },
+  "23-1022": {
+    "title": "Arbitrators, Mediators, and Conciliators",
+    "employment": 7060
+  },
+  "23-1023": {
+    "title": "Judges, Magistrate Judges, and Magistrates",
+    "employment": 24470
+  },
+  "23-2011": {
+    "title": "Paralegals and Legal Assistants",
+    "employment": 354890
+  },
+  "23-2093": {
+    "title": "Title Examiners, Abstractors, and Searchers",
+    "employment": 49760
+  },
+  "23-2099": {
+    "title": "Legal Support Workers, All Other",
+    "employment": 43760
+  },
+  "25-1011": {
+    "title": "Business Teachers, Postsecondary",
+    "employment": 82980
+  },
+  "25-1021": {
+    "title": "Computer Science Teachers, Postsecondary",
+    "employment": 36150
+  },
+  "25-1022": {
+    "title": "Mathematical Science Teachers, Postsecondary",
+    "employment": 48230
+  },
+  "25-1031": {
+    "title": "Architecture Teachers, Postsecondary",
+    "employment": 8350
+  },
+  "25-1032": {
+    "title": "Engineering Teachers, Postsecondary",
+    "employment": 38370
+  },
+  "25-1041": {
+    "title": "Agricultural Sciences Teachers, Postsecondary",
+    "employment": 7550
+  },
+  "25-1042": {
+    "title": "Biological Science Teachers, Postsecondary",
+    "employment": 52050
+  },
+  "25-1043": {
+    "title": "Forestry and Conservation Science Teachers, Postsecondary",
+    "employment": 1260
+  },
+  "25-1051": {
+    "title": "Atmospheric, Earth, Marine, and Space Sciences Teachers, Postsecondary",
+    "employment": 11770
+  },
+  "25-1052": {
+    "title": "Chemistry Teachers, Postsecondary",
+    "employment": 20210
+  },
+  "25-1053": {
+    "title": "Environmental Science Teachers, Postsecondary",
+    "employment": 7120
+  },
+  "25-1054": {
+    "title": "Physics Teachers, Postsecondary",
+    "employment": 14030
+  },
+  "25-1061": {
+    "title": "Anthropology and Archeology Teachers, Postsecondary",
+    "employment": 5030
+  },
+  "25-1062": {
+    "title": "Area, Ethnic, and Cultural Studies Teachers, Postsecondary",
+    "employment": 11570
+  },
+  "25-1063": {
+    "title": "Economics Teachers, Postsecondary",
+    "employment": 12210
+  },
+  "25-1064": {
+    "title": "Geography Teachers, Postsecondary",
+    "employment": 3480
+  },
+  "25-1065": {
+    "title": "Political Science Teachers, Postsecondary",
+    "employment": 17090
+  },
+  "25-1066": {
+    "title": "Psychology Teachers, Postsecondary",
+    "employment": 40610
+  },
+  "25-1067": {
+    "title": "Sociology Teachers, Postsecondary",
+    "employment": 12870
+  },
+  "25-1069": {
+    "title": "Social Sciences Teachers, Postsecondary, All Other",
+    "employment": 16900
+  },
+  "25-1071": {
+    "title": "Health Specialties Teachers, Postsecondary",
+    "employment": 225360
+  },
+  "25-1072": {
+    "title": "Nursing Instructors and Teachers, Postsecondary",
+    "employment": 72700
+  },
+  "25-1081": {
+    "title": "Education Teachers, Postsecondary",
+    "employment": 60860
+  },
+  "25-1082": {
+    "title": "Library Science Teachers, Postsecondary",
+    "employment": 4220
+  },
+  "25-1111": {
+    "title": "Criminal Justice and Law Enforcement Teachers, Postsecondary",
+    "employment": 13390
+  },
+  "25-1112": {
+    "title": "Law Teachers, Postsecondary",
+    "employment": 14570
+  },
+  "25-1113": {
+    "title": "Social Work Teachers, Postsecondary",
+    "employment": 11730
+  },
+  "25-1121": {
+    "title": "Art, Drama, and Music Teachers, Postsecondary",
+    "employment": 101500
+  },
+  "25-1122": {
+    "title": "Communications Teachers, Postsecondary",
+    "employment": 28520
+  },
+  "25-1123": {
+    "title": "English Language and Literature Teachers, Postsecondary",
+    "employment": 57600
+  },
+  "25-1124": {
+    "title": "Foreign Language and Literature Teachers, Postsecondary",
+    "employment": 20820
+  },
+  "25-1125": {
+    "title": "History Teachers, Postsecondary",
+    "employment": 20610
+  },
+  "25-1126": {
+    "title": "Philosophy and Religion Teachers, Postsecondary",
+    "employment": 20320
+  },
+  "25-1192": {
+    "title": "Family and Consumer Sciences Teachers, Postsecondary",
+    "employment": 2660
+  },
+  "25-1193": {
+    "title": "Recreation and Fitness Studies Teachers, Postsecondary",
+    "employment": 13270
+  },
+  "25-1194": {
+    "title": "Career/Technical Education Teachers, Postsecondary",
+    "employment": 111180
+  },
+  "25-1199": {
+    "title": "Postsecondary Teachers, All Other",
+    "employment": 166980
+  },
+  "25-2011": {
+    "title": "Preschool Teachers, Except Special Education",
+    "employment": 430240
+  },
+  "25-2012": {
+    "title": "Kindergarten Teachers, Except Special Education",
+    "employment": 118580
+  },
+  "25-2021": {
+    "title": "Elementary School Teachers, Except Special Education",
+    "employment": 1410070
+  },
+  "25-2022": {
+    "title": "Middle School Teachers, Except Special and Career/Technical Education",
+    "employment": 626690
+  },
+  "25-2023": {
+    "title": "Career/Technical Education Teachers, Middle School",
+    "employment": 12210
+  },
+  "25-2031": {
+    "title": "Secondary School Teachers, Except Special and Career/Technical Education",
+    "employment": 1045170
+  },
+  "25-2032": {
+    "title": "Career/Technical Education Teachers, Secondary School",
+    "employment": 90070
+  },
+  "25-2051": {
+    "title": "Special Education Teachers, Preschool",
+    "employment": 24850
+  },
+  "25-2052": {
+    "title": "Special Education Teachers, Kindergarten and Elementary School",
+    "employment": 212850
+  },
+  "25-2057": {
+    "title": "Special Education Teachers, Middle School",
+    "employment": 88850
+  },
+  "25-2058": {
+    "title": "Special Education Teachers, Secondary School",
+    "employment": 158150
+  },
+  "25-2059": {
+    "title": "Special Education Teachers, All Other",
+    "employment": 43700
+  },
+  "25-3011": {
+    "title": "Adult Basic Education, Adult Secondary Education, and English as a Second Language Instructors",
+    "employment": 36890
+  },
+  "25-3021": {
+    "title": "Self-Enrichment Teachers",
+    "employment": 272110
+  },
+  "25-3031": {
+    "title": "Substitute Teachers, Short-Term",
+    "employment": 444530
+  },
+  "25-3041": {
+    "title": "Tutors",
+    "employment": 162300
+  },
+  "25-3099": {
+    "title": "Teachers and Instructors, All Other",
+    "employment": 118290
+  },
+  "25-4011": {
+    "title": "Archivists",
+    "employment": 7150
+  },
+  "25-4012": {
+    "title": "Curators",
+    "employment": 12510
+  },
+  "25-4013": {
+    "title": "Museum Technicians and Conservators",
+    "employment": 12670
+  },
+  "25-4022": {
+    "title": "Librarians and Media Collections Specialists",
+    "employment": 133760
+  },
+  "25-4031": {
+    "title": "Library Technicians",
+    "employment": 76670
+  },
+  "25-9021": {
+    "title": "Farm and Home Management Educators",
+    "employment": 8110
+  },
+  "25-9031": {
+    "title": "Instructional Coordinators",
+    "employment": 207270
+  },
+  "25-9044": {
+    "title": "Teaching Assistants, Postsecondary",
+    "employment": 145960
+  },
+  "25-9045": {
+    "title": "Teaching Assistants, Except Postsecondary",
+    "employment": 1337320
+  },
+  "25-9099": {
+    "title": "Educational Instruction and Library Workers, All Other",
+    "employment": 113490
+  },
+  "27-1011": {
+    "title": "Art Directors",
+    "employment": 51200
+  },
+  "27-1012": {
+    "title": "Craft Artists",
+    "employment": 5830
+  },
+  "27-1013": {
+    "title": "Fine Artists, Including Painters, Sculptors, and Illustrators",
+    "employment": 10910
+  },
+  "27-1014": {
+    "title": "Special Effects Artists and Animators",
+    "employment": 29940
+  },
+  "27-1019": {
+    "title": "Artists and Related Workers, All Other",
+    "employment": 7420
+  },
+  "27-1021": {
+    "title": "Commercial and Industrial Designers",
+    "employment": 30810
+  },
+  "27-1022": {
+    "title": "Fashion Designers",
+    "employment": 19940
+  },
+  "27-1023": {
+    "title": "Floral Designers",
+    "employment": 43350
+  },
+  "27-1024": {
+    "title": "Graphic Designers",
+    "employment": 212720
+  },
+  "27-1025": {
+    "title": "Interior Designers",
+    "employment": 67760
+  },
+  "27-1026": {
+    "title": "Merchandise Displayers and Window Trimmers",
+    "employment": 175790
+  },
+  "27-1027": {
+    "title": "Set and Exhibit Designers",
+    "employment": 10090
+  },
+  "27-1029": {
+    "title": "Designers, All Other",
+    "employment": 9880
+  },
+  "27-2011": {
+    "title": "Actors",
+    "employment": 62560
+  },
+  "27-2012": {
+    "title": "Producers and Directors",
+    "employment": 154470
+  },
+  "27-2021": {
+    "title": "Athletes and Sports Competitors",
+    "employment": 14930
+  },
+  "27-2022": {
+    "title": "Coaches and Scouts",
+    "employment": 238980
+  },
+  "27-2023": {
+    "title": "Umpires, Referees, and Other Sports Officials",
+    "employment": 14840
+  },
+  "27-2031": {
+    "title": "Dancers",
+    "employment": 11510
+  },
+  "27-2032": {
+    "title": "Choreographers",
+    "employment": 4190
+  },
+  "27-2041": {
+    "title": "Music Directors and Composers",
+    "employment": 10770
+  },
+  "27-2042": {
+    "title": "Musicians and Singers",
+    "employment": 35520
+  },
+  "27-2091": {
+    "title": "Disc Jockeys, Except Radio",
+    "employment": 7190
+  },
+  "27-2099": {
+    "title": "Entertainers and Performers, Sports and Related Workers, All Other",
+    "employment": 14720
+  },
+  "27-3011": {
+    "title": "Broadcast Announcers and Radio Disc Jockeys",
+    "employment": 25070
+  },
+  "27-3023": {
+    "title": "News Analysts, Reporters, and Journalists",
+    "employment": 45020
+  },
+  "27-3031": {
+    "title": "Public Relations Specialists",
+    "employment": 275550
+  },
+  "27-3041": {
+    "title": "Editors",
+    "employment": 95700
+  },
+  "27-3042": {
+    "title": "Technical Writers",
+    "employment": 47970
+  },
+  "27-3043": {
+    "title": "Writers and Authors",
+    "employment": 49450
+  },
+  "27-3091": {
+    "title": "Interpreters and Translators",
+    "employment": 51560
+  },
+  "27-3092": {
+    "title": "Court Reporters and Simultaneous Captioners",
+    "employment": 12390
+  },
+  "27-3099": {
+    "title": "Media and Communication Workers, All Other",
+    "employment": 23230
+  },
+  "27-4011": {
+    "title": "Audio and Video Technicians",
+    "employment": 66700
+  },
+  "27-4012": {
+    "title": "Broadcast Technicians",
+    "employment": 26190
+  },
+  "27-4014": {
+    "title": "Sound Engineering Technicians",
+    "employment": 14600
+  },
+  "27-4015": {
+    "title": "Lighting Technicians",
+    "employment": 9520
+  },
+  "27-4021": {
+    "title": "Photographers",
+    "employment": 53630
+  },
+  "27-4031": {
+    "title": "Camera Operators, Television, Video, and Film",
+    "employment": 23940
+  },
+  "27-4032": {
+    "title": "Film and Video Editors",
+    "employment": 29240
+  },
+  "27-4099": {
+    "title": "Media and Communication Equipment Workers, All Other",
+    "employment": 11430
+  },
+  "29-1011": {
+    "title": "Chiropractors",
+    "employment": 41480
+  },
+  "29-1021": {
+    "title": "Dentists, General",
+    "employment": 121640
+  },
+  "29-1022": {
+    "title": "Oral and Maxillofacial Surgeons",
+    "employment": 4160
+  },
+  "29-1023": {
+    "title": "Orthodontists",
+    "employment": 6400
+  },
+  "29-1024": {
+    "title": "Prosthodontists",
+    "employment": 570
+  },
+  "29-1029": {
+    "title": "Dentists, All Other Specialists",
+    "employment": 5920
+  },
+  "29-1031": {
+    "title": "Dietitians and Nutritionists",
+    "employment": 73860
+  },
+  "29-1041": {
+    "title": "Optometrists",
+    "employment": 41390
+  },
+  "29-1051": {
+    "title": "Pharmacists",
+    "employment": 331700
+  },
+  "29-1071": {
+    "title": "Physician Assistants",
+    "employment": 145740
+  },
+  "29-1081": {
+    "title": "Podiatrists",
+    "employment": 9470
+  },
+  "29-1122": {
+    "title": "Occupational Therapists",
+    "employment": 144840
+  },
+  "29-1123": {
+    "title": "Physical Therapists",
+    "employment": 240820
+  },
+  "29-1124": {
+    "title": "Radiation Therapists",
+    "employment": 16640
+  },
+  "29-1125": {
+    "title": "Recreational Therapists",
+    "employment": 15540
+  },
+  "29-1126": {
+    "title": "Respiratory Therapists",
+    "employment": 129750
+  },
+  "29-1127": {
+    "title": "Speech-Language Pathologists",
+    "employment": 172100
+  },
+  "29-1128": {
+    "title": "Exercise Physiologists",
+    "employment": 8060
+  },
+  "29-1129": {
+    "title": "Therapists, All Other",
+    "employment": 16490
+  },
+  "29-1131": {
+    "title": "Veterinarians",
+    "employment": 78220
+  },
+  "29-1141": {
+    "title": "Registered Nurses",
+    "employment": 3175390
+  },
+  "29-1151": {
+    "title": "Nurse Anesthetists",
+    "employment": 47810
+  },
+  "29-1161": {
+    "title": "Nurse Midwives",
+    "employment": 6960
+  },
+  "29-1171": {
+    "title": "Nurse Practitioners",
+    "employment": 280140
+  },
+  "29-1181": {
+    "title": "Audiologists",
+    "employment": 13880
+  },
+  "29-1211": {
+    "title": "Anesthesiologists",
+    "employment": 33470
+  },
+  "29-1212": {
+    "title": "Cardiologists",
+    "employment": 15190
+  },
+  "29-1213": {
+    "title": "Dermatologists",
+    "employment": 12040
+  },
+  "29-1214": {
+    "title": "Emergency Medicine Physicians",
+    "employment": 35100
+  },
+  "29-1215": {
+    "title": "Family Medicine Physicians",
+    "employment": 112010
+  },
+  "29-1216": {
+    "title": "General Internal Medicine Physicians",
+    "employment": 67210
+  },
+  "29-1217": {
+    "title": "Neurologists",
+    "employment": 9350
+  },
+  "29-1218": {
+    "title": "Obstetricians and Gynecologists",
+    "employment": 19820
+  },
+  "29-1221": {
+    "title": "Pediatricians, General",
+    "employment": 34870
+  },
+  "29-1222": {
+    "title": "Physicians, Pathologists",
+    "employment": 11020
+  },
+  "29-1223": {
+    "title": "Psychiatrists",
+    "employment": 24830
+  },
+  "29-1224": {
+    "title": "Radiologists",
+    "employment": 31960
+  },
+  "29-1229": {
+    "title": "Physicians, All Other",
+    "employment": 310080
+  },
+  "29-1241": {
+    "title": "Ophthalmologists, Except Pediatric",
+    "employment": 11530
+  },
+  "29-1242": {
+    "title": "Orthopedic Surgeons, Except Pediatric",
+    "employment": 14820
+  },
+  "29-1243": {
+    "title": "Pediatric Surgeons",
+    "employment": 1180
+  },
+  "29-1249": {
+    "title": "Surgeons, All Other",
+    "employment": 26370
+  },
+  "29-1291": {
+    "title": "Acupuncturists",
+    "employment": 9370
+  },
+  "29-1292": {
+    "title": "Dental Hygienists",
+    "employment": 211630
+  },
+  "29-1299": {
+    "title": "Healthcare Diagnosing or Treating Practitioners, All Other",
+    "employment": 31100
+  },
+  "29-2010": {
+    "title": "Clinical Laboratory Technologists and Technicians",
+    "employment": 334380
+  },
+  "29-2031": {
+    "title": "Cardiovascular Technologists and Technicians",
+    "employment": 55660
+  },
+  "29-2032": {
+    "title": "Diagnostic Medical Sonographers",
+    "employment": 82780
+  },
+  "29-2033": {
+    "title": "Nuclear Medicine Technologists",
+    "employment": 16560
+  },
+  "29-2034": {
+    "title": "Radiologic Technologists and Technicians",
+    "employment": 221170
+  },
+  "29-2035": {
+    "title": "Magnetic Resonance Imaging Technologists",
+    "employment": 41340
+  },
+  "29-2036": {
+    "title": "Medical Dosimetrists",
+    "employment": 3900
+  },
+  "29-2042": {
+    "title": "Emergency Medical Technicians",
+    "employment": 167040
+  },
+  "29-2043": {
+    "title": "Paramedics",
+    "employment": 98770
+  },
+  "29-2051": {
+    "title": "Dietetic Technicians",
+    "employment": 24240
+  },
+  "29-2052": {
+    "title": "Pharmacy Technicians",
+    "employment": 460280
+  },
+  "29-2053": {
+    "title": "Psychiatric Technicians",
+    "employment": 115940
+  },
+  "29-2055": {
+    "title": "Surgical Technologists",
+    "employment": 110320
+  },
+  "29-2056": {
+    "title": "Veterinary Technologists and Technicians",
+    "employment": 122000
+  },
+  "29-2057": {
+    "title": "Ophthalmic Medical Technicians",
+    "employment": 73390
+  },
+  "29-2061": {
+    "title": "Licensed Practical and Licensed Vocational Nurses",
+    "employment": 630250
+  },
+  "29-2072": {
+    "title": "Medical Records Specialists",
+    "employment": 185690
+  },
+  "29-2081": {
+    "title": "Opticians, Dispensing",
+    "employment": 76770
+  },
+  "29-2091": {
+    "title": "Orthotists and Prosthetists",
+    "employment": 8820
+  },
+  "29-2092": {
+    "title": "Hearing Aid Specialists",
+    "employment": 10250
+  },
+  "29-2099": {
+    "title": "Health Technologists and Technicians, All Other",
+    "employment": 171110
+  },
+  "29-9021": {
+    "title": "Health Information Technologists and Medical Registrars",
+    "employment": 34430
+  },
+  "29-9091": {
+    "title": "Athletic Trainers",
+    "employment": 28480
+  },
+  "29-9092": {
+    "title": "Genetic Counselors",
+    "employment": 3050
+  },
+  "29-9093": {
+    "title": "Surgical Assistants",
+    "employment": 18780
+  },
+  "29-9099": {
+    "title": "Healthcare Practitioners and Technical Workers, All Other",
+    "employment": 36900
+  },
+  "31-1120": {
+    "title": "Home Health and Personal Care Aides",
+    "employment": 3689350
+  },
+  "31-1131": {
+    "title": "Nursing Assistants",
+    "employment": 1351760
+  },
+  "31-1132": {
+    "title": "Orderlies",
+    "employment": 48710
+  },
+  "31-1133": {
+    "title": "Psychiatric Aides",
+    "employment": 32310
+  },
+  "31-2011": {
+    "title": "Occupational Therapy Assistants",
+    "employment": 46090
+  },
+  "31-2012": {
+    "title": "Occupational Therapy Aides",
+    "employment": 4430
+  },
+  "31-2021": {
+    "title": "Physical Therapist Assistants",
+    "employment": 104000
+  },
+  "31-2022": {
+    "title": "Physical Therapist Aides",
+    "employment": 42390
+  },
+  "31-9011": {
+    "title": "Massage Therapists",
+    "employment": 92650
+  },
+  "31-9091": {
+    "title": "Dental Assistants",
+    "employment": 370690
+  },
+  "31-9092": {
+    "title": "Medical Assistants",
+    "employment": 763040
+  },
+  "31-9093": {
+    "title": "Medical Equipment Preparers",
+    "employment": 66790
+  },
+  "31-9094": {
+    "title": "Medical Transcriptionists",
+    "employment": 52420
+  },
+  "31-9095": {
+    "title": "Pharmacy Aides",
+    "employment": 43830
+  },
+  "31-9096": {
+    "title": "Veterinary Assistants and Laboratory Animal Caretakers",
+    "employment": 115770
+  },
+  "31-9097": {
+    "title": "Phlebotomists",
+    "employment": 137080
+  },
+  "31-9099": {
+    "title": "Healthcare Support Workers, All Other",
+    "employment": 102230
+  },
+  "33-1011": {
+    "title": "First-Line Supervisors of Correctional Officers",
+    "employment": 52280
+  },
+  "33-1012": {
+    "title": "First-Line Supervisors of Police and Detectives",
+    "employment": 138140
+  },
+  "33-1021": {
+    "title": "First-Line Supervisors of Firefighting and Prevention Workers",
+    "employment": 84120
+  },
+  "33-1091": {
+    "title": "First-Line Supervisors of Security Workers",
+    "employment": 64900
+  },
+  "33-1099": {
+    "title": "First-Line Supervisors of Protective Service Workers, All Other",
+    "employment": 19620
+  },
+  "33-2011": {
+    "title": "Firefighters",
+    "employment": 315460
+  },
+  "33-2021": {
+    "title": "Fire Inspectors and Investigators",
+    "employment": 14200
+  },
+  "33-2022": {
+    "title": "Forest Fire Inspectors and Prevention Specialists",
+    "employment": 2270
+  },
+  "33-3011": {
+    "title": "Bailiffs",
+    "employment": 15900
+  },
+  "33-3012": {
+    "title": "Correctional Officers and Jailers",
+    "employment": 351420
+  },
+  "33-3021": {
+    "title": "Detectives and Criminal Investigators",
+    "employment": 106730
+  },
+  "33-3031": {
+    "title": "Fish and Game Wardens",
+    "employment": 6290
+  },
+  "33-3041": {
+    "title": "Parking Enforcement Workers",
+    "employment": 7420
+  },
+  "33-3051": {
+    "title": "Police and Sheriff's Patrol Officers",
+    "employment": 646310
+  },
+  "33-3052": {
+    "title": "Transit and Railroad Police",
+    "employment": 2360
+  },
+  "33-9011": {
+    "title": "Animal Control Workers",
+    "employment": 11600
+  },
+  "33-9021": {
+    "title": "Private Detectives and Investigators",
+    "employment": 34600
+  },
+  "33-9031": {
+    "title": "Gambling Surveillance Officers and Gambling Investigators",
+    "employment": 10660
+  },
+  "33-9032": {
+    "title": "Security Guards",
+    "employment": 1202940
+  },
+  "33-9091": {
+    "title": "Crossing Guards and Flaggers",
+    "employment": 90780
+  },
+  "33-9092": {
+    "title": "Lifeguards, Ski Patrol, and Other Recreational Protective Service Workers",
+    "employment": 123560
+  },
+  "33-9093": {
+    "title": "Transportation Security Screeners",
+    "employment": 47950
+  },
+  "33-9094": {
+    "title": "School Bus Monitors",
+    "employment": 72320
+  },
+  "33-9099": {
+    "title": "Protective Service Workers, All Other",
+    "employment": 82500
+  },
+  "35-1011": {
+    "title": "Chefs and Head Cooks",
+    "employment": 172370
+  },
+  "35-1012": {
+    "title": "First-Line Supervisors of Food Preparation and Serving Workers",
+    "employment": 1176540
+  },
+  "35-2011": {
+    "title": "Cooks, Fast Food",
+    "employment": 673490
+  },
+  "35-2012": {
+    "title": "Cooks, Institution and Cafeteria",
+    "employment": 435640
+  },
+  "35-2013": {
+    "title": "Cooks, Private Household",
+    "employment": 740
+  },
+  "35-2014": {
+    "title": "Cooks, Restaurant",
+    "employment": 1412350
+  },
+  "35-2015": {
+    "title": "Cooks, Short Order",
+    "employment": 126370
+  },
+  "35-2019": {
+    "title": "Cooks, All Other",
+    "employment": 18650
+  },
+  "35-2021": {
+    "title": "Food Preparation Workers",
+    "employment": 879610
+  },
+  "35-3011": {
+    "title": "Bartenders",
+    "employment": 711140
+  },
+  "35-3023": {
+    "title": "Fast Food and Counter Workers",
+    "employment": 3676580
+  },
+  "35-3031": {
+    "title": "Waiters and Waitresses",
+    "employment": 2237850
+  },
+  "35-3041": {
+    "title": "Food Servers, Nonrestaurant",
+    "employment": 267840
+  },
+  "35-9011": {
+    "title": "Dining Room and Cafeteria Attendants and Bartender Helpers",
+    "employment": 483390
+  },
+  "35-9021": {
+    "title": "Dishwashers",
+    "employment": 463940
+  },
+  "35-9031": {
+    "title": "Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop",
+    "employment": 425020
+  },
+  "35-9099": {
+    "title": "Food Preparation and Serving Related Workers, All Other",
+    "employment": 86350
+  },
+  "37-1011": {
+    "title": "First-Line Supervisors of Housekeeping and Janitorial Workers",
+    "employment": 171120
+  },
+  "37-1012": {
+    "title": "First-Line Supervisors of Landscaping, Lawn Service, and Groundskeeping Workers",
+    "employment": 126020
+  },
+  "37-2011": {
+    "title": "Janitors and Cleaners, Except Maids and Housekeeping Cleaners",
+    "employment": 2172500
+  },
+  "37-2012": {
+    "title": "Maids and Housekeeping Cleaners",
+    "employment": 836230
+  },
+  "37-2019": {
+    "title": "Building Cleaning Workers, All Other",
+    "employment": 13740
+  },
+  "37-2021": {
+    "title": "Pest Control Workers",
+    "employment": 93760
+  },
+  "37-3011": {
+    "title": "Landscaping and Groundskeeping Workers",
+    "employment": 929930
+  },
+  "37-3012": {
+    "title": "Pesticide Handlers, Sprayers, and Applicators, Vegetation",
+    "employment": 23520
+  },
+  "37-3013": {
+    "title": "Tree Trimmers and Pruners",
+    "employment": 50270
+  },
+  "37-3019": {
+    "title": "Grounds Maintenance Workers, All Other",
+    "employment": 11980
+  },
+  "39-1013": {
+    "title": "First-Line Supervisors of Gambling Services Workers",
+    "employment": 25100
+  },
+  "39-1014": {
+    "title": "First-Line Supervisors of Entertainment and Recreation Workers, Except Gambling Services",
+    "employment": 88140
+  },
+  "39-1022": {
+    "title": "First-Line Supervisors of Personal Service Workers",
+    "employment": 106440
+  },
+  "39-2011": {
+    "title": "Animal Trainers",
+    "employment": 19240
+  },
+  "39-2021": {
+    "title": "Animal Caretakers",
+    "employment": 268830
+  },
+  "39-3011": {
+    "title": "Gambling Dealers",
+    "employment": 80570
+  },
+  "39-3012": {
+    "title": "Gambling and Sports Book Writers and Runners",
+    "employment": 8700
+  },
+  "39-3019": {
+    "title": "Gambling Service Workers, All Other",
+    "employment": 13300
+  },
+  "39-3021": {
+    "title": "Motion Picture Projectionists",
+    "employment": 2610
+  },
+  "39-3031": {
+    "title": "Ushers, Lobby Attendants, and Ticket Takers",
+    "employment": 117560
+  },
+  "39-3091": {
+    "title": "Amusement and Recreation Attendants",
+    "employment": 361680
+  },
+  "39-3092": {
+    "title": "Costume Attendants",
+    "employment": 6300
+  },
+  "39-3093": {
+    "title": "Locker Room, Coatroom, and Dressing Room Attendants",
+    "employment": 14720
+  },
+  "39-3099": {
+    "title": "Entertainment Attendants and Related Workers, All Other",
+    "employment": 7320
+  },
+  "39-4011": {
+    "title": "Embalmers",
+    "employment": 3380
+  },
+  "39-4012": {
+    "title": "Crematory Operators",
+    "employment": 3220
+  },
+  "39-4021": {
+    "title": "Funeral Attendants",
+    "employment": 32620
+  },
+  "39-4031": {
+    "title": "Morticians, Undertakers, and Funeral Arrangers",
+    "employment": 24200
+  },
+  "39-5011": {
+    "title": "Barbers",
+    "employment": 15990
+  },
+  "39-5012": {
+    "title": "Hairdressers, Hairstylists, and Cosmetologists",
+    "employment": 294840
+  },
+  "39-5091": {
+    "title": "Makeup Artists, Theatrical and Performance",
+    "employment": 4130
+  },
+  "39-5092": {
+    "title": "Manicurists and Pedicurists",
+    "employment": 144810
+  },
+  "39-5093": {
+    "title": "Shampooers",
+    "employment": 7360
+  },
+  "39-5094": {
+    "title": "Skincare Specialists",
+    "employment": 65270
+  },
+  "39-6011": {
+    "title": "Baggage Porters and Bellhops",
+    "employment": 28780
+  },
+  "39-6012": {
+    "title": "Concierges",
+    "employment": 41020
+  },
+  "39-7010": {
+    "title": "Tour and Travel Guides",
+    "employment": 46760
+  },
+  "39-9011": {
+    "title": "Childcare Workers",
+    "employment": 497450
+  },
+  "39-9031": {
+    "title": "Exercise Trainers and Group Fitness Instructors",
+    "employment": 279450
+  },
+  "39-9032": {
+    "title": "Recreation Workers",
+    "employment": 281750
+  },
+  "39-9041": {
+    "title": "Residential Advisors",
+    "employment": 88700
+  },
+  "39-9099": {
+    "title": "Personal Care and Service Workers, All Other",
+    "employment": 60390
+  },
+  "41-1011": {
+    "title": "First-Line Supervisors of Retail Sales Workers",
+    "employment": 1087890
+  },
+  "41-1012": {
+    "title": "First-Line Supervisors of Non-Retail Sales Workers",
+    "employment": 227150
+  },
+  "41-2011": {
+    "title": "Cashiers",
+    "employment": 3298660
+  },
+  "41-2012": {
+    "title": "Gambling Change Persons and Booth Cashiers",
+    "employment": 20560
+  },
+  "41-2021": {
+    "title": "Counter and Rental Clerks",
+    "employment": 390300
+  },
+  "41-2022": {
+    "title": "Parts Salespersons",
+    "employment": 260770
+  },
+  "41-2031": {
+    "title": "Retail Salespersons",
+    "employment": 3684740
+  },
+  "41-3011": {
+    "title": "Advertising Sales Agents",
+    "employment": 108100
+  },
+  "41-3021": {
+    "title": "Insurance Sales Agents",
+    "employment": 457510
+  },
+  "41-3031": {
+    "title": "Securities, Commodities, and Financial Services Sales Agents",
+    "employment": 479630
+  },
+  "41-3041": {
+    "title": "Travel Agents",
+    "employment": 58250
+  },
+  "41-3091": {
+    "title": "Sales Representatives of Services, Except Advertising, Insurance, Financial Services, and Travel",
+    "employment": 1142020
+  },
+  "41-4011": {
+    "title": "Sales Representatives, Wholesale and Manufacturing, Technical and Scientific Products",
+    "employment": 311780
+  },
+  "41-4012": {
+    "title": "Sales Representatives, Wholesale and Manufacturing, Except Technical and Scientific Products",
+    "employment": 1288920
+  },
+  "41-9011": {
+    "title": "Demonstrators and Product Promoters",
+    "employment": 50790
+  },
+  "41-9012": {
+    "title": "Models",
+    "employment": 3090
+  },
+  "41-9021": {
+    "title": "Real Estate Brokers",
+    "employment": 51350
+  },
+  "41-9022": {
+    "title": "Real Estate Sales Agents",
+    "employment": 197720
+  },
+  "41-9031": {
+    "title": "Sales Engineers",
+    "employment": 59340
+  },
+  "41-9041": {
+    "title": "Telemarketers",
+    "employment": 81580
+  },
+  "41-9091": {
+    "title": "Door-to-Door Sales Workers, News and Street Vendors, and Related Workers",
+    "employment": 6220
+  },
+  "41-9099": {
+    "title": "Sales and Related Workers, All Other",
+    "employment": 114280
+  },
+  "43-1011": {
+    "title": "First-Line Supervisors of Office and Administrative Support Workers",
+    "employment": 1504570
+  },
+  "43-2011": {
+    "title": "Switchboard Operators, Including Answering Service",
+    "employment": 43830
+  },
+  "43-2021": {
+    "title": "Telephone Operators",
+    "employment": 4600
+  },
+  "43-2099": {
+    "title": "Communications Equipment Operators, All Other",
+    "employment": 1380
+  },
+  "43-3011": {
+    "title": "Bill and Account Collectors",
+    "employment": 190910
+  },
+  "43-3021": {
+    "title": "Billing and Posting Clerks",
+    "employment": 430220
+  },
+  "43-3031": {
+    "title": "Bookkeeping, Accounting, and Auditing Clerks",
+    "employment": 1501910
+  },
+  "43-3041": {
+    "title": "Gambling Cage Workers",
+    "employment": 12560
+  },
+  "43-3051": {
+    "title": "Payroll and Timekeeping Clerks",
+    "employment": 157230
+  },
+  "43-3061": {
+    "title": "Procurement Clerks",
+    "employment": 61580
+  },
+  "43-3071": {
+    "title": "Tellers",
+    "employment": 340820
+  },
+  "43-3099": {
+    "title": "Financial Clerks, All Other",
+    "employment": 44520
+  },
+  "43-4011": {
+    "title": "Brokerage Clerks",
+    "employment": 48060
+  },
+  "43-4021": {
+    "title": "Correspondence Clerks",
+    "employment": 4650
+  },
+  "43-4031": {
+    "title": "Court, Municipal, and License Clerks",
+    "employment": 157960
+  },
+  "43-4041": {
+    "title": "Credit Authorizers, Checkers, and Clerks",
+    "employment": 14290
+  },
+  "43-4051": {
+    "title": "Customer Service Representatives",
+    "employment": 2858710
+  },
+  "43-4061": {
+    "title": "Eligibility Interviewers, Government Programs",
+    "employment": 150190
+  },
+  "43-4071": {
+    "title": "File Clerks",
+    "employment": 82290
+  },
+  "43-4081": {
+    "title": "Hotel, Motel, and Resort Desk Clerks",
+    "employment": 263800
+  },
+  "43-4111": {
+    "title": "Interviewers, Except Eligibility and Loan",
+    "employment": 160550
+  },
+  "43-4121": {
+    "title": "Library Assistants, Clerical",
+    "employment": 83680
+  },
+  "43-4131": {
+    "title": "Loan Interviewers and Clerks",
+    "employment": 203940
+  },
+  "43-4141": {
+    "title": "New Accounts Clerks",
+    "employment": 41180
+  },
+  "43-4151": {
+    "title": "Order Clerks",
+    "employment": 91830
+  },
+  "43-4161": {
+    "title": "Human Resources Assistants, Except Payroll and Timekeeping",
+    "employment": 101440
+  },
+  "43-4171": {
+    "title": "Receptionists and Information Clerks",
+    "employment": 1003820
+  },
+  "43-4181": {
+    "title": "Reservation and Transportation Ticket Agents and Travel Clerks",
+    "employment": 119270
+  },
+  "43-4199": {
+    "title": "Information and Record Clerks, All Other",
+    "employment": 151760
+  },
+  "43-5011": {
+    "title": "Cargo and Freight Agents",
+    "employment": 105220
+  },
+  "43-5021": {
+    "title": "Couriers and Messengers",
+    "employment": 72010
+  },
+  "43-5031": {
+    "title": "Public Safety Telecommunicators",
+    "employment": 97820
+  },
+  "43-5032": {
+    "title": "Dispatchers, Except Police, Fire, and Ambulance",
+    "employment": 206090
+  },
+  "43-5041": {
+    "title": "Meter Readers, Utilities",
+    "employment": 19900
+  },
+  "43-5051": {
+    "title": "Postal Service Clerks",
+    "employment": 78130
+  },
+  "43-5052": {
+    "title": "Postal Service Mail Carriers",
+    "employment": 331600
+  },
+  "43-5053": {
+    "title": "Postal Service Mail Sorters, Processors, and Processing Machine Operators",
+    "employment": 116540
+  },
+  "43-5061": {
+    "title": "Production, Planning, and Expediting Clerks",
+    "employment": 393980
+  },
+  "43-5071": {
+    "title": "Shipping, Receiving, and Inventory Clerks",
+    "employment": 844120
+  },
+  "43-5111": {
+    "title": "Weighers, Measurers, Checkers, and Samplers, Recordkeeping",
+    "employment": 51250
+  },
+  "43-6011": {
+    "title": "Executive Secretaries and Executive Administrative Assistants",
+    "employment": 483570
+  },
+  "43-6012": {
+    "title": "Legal Secretaries and Administrative Assistants",
+    "employment": 152790
+  },
+  "43-6013": {
+    "title": "Medical Secretaries and Administrative Assistants",
+    "employment": 749500
+  },
+  "43-6014": {
+    "title": "Secretaries and Administrative Assistants, Except Legal, Medical, and Executive",
+    "employment": 1785430
+  },
+  "43-9021": {
+    "title": "Data Entry Keyers",
+    "employment": 154230
+  },
+  "43-9022": {
+    "title": "Word Processors and Typists",
+    "employment": 37200
+  },
+  "43-9031": {
+    "title": "Desktop Publishers",
+    "employment": 5220
+  },
+  "43-9041": {
+    "title": "Insurance Claims and Policy Processing Clerks",
+    "employment": 241650
+  },
+  "43-9051": {
+    "title": "Mail Clerks and Mail Machine Operators, Except Postal Service",
+    "employment": 66600
+  },
+  "43-9061": {
+    "title": "Office Clerks, General",
+    "employment": 2496370
+  },
+  "43-9071": {
+    "title": "Office Machine Operators, Except Computer",
+    "employment": 27960
+  },
+  "43-9081": {
+    "title": "Proofreaders and Copy Markers",
+    "employment": 5490
+  },
+  "43-9111": {
+    "title": "Statistical Assistants",
+    "employment": 7200
+  },
+  "43-9199": {
+    "title": "Office and Administrative Support Workers, All Other",
+    "employment": 172020
+  },
+  "45-1011": {
+    "title": "First-Line Supervisors of Farming, Fishing, and Forestry Workers",
+    "employment": 27150
+  },
+  "45-2011": {
+    "title": "Agricultural Inspectors",
+    "employment": 12660
+  },
+  "45-2021": {
+    "title": "Animal Breeders",
+    "employment": 1360
+  },
+  "45-2041": {
+    "title": "Graders and Sorters, Agricultural Products",
+    "employment": 23430
+  },
+  "45-2091": {
+    "title": "Agricultural Equipment Operators",
+    "employment": 28910
+  },
+  "45-2092": {
+    "title": "Farmworkers and Laborers, Crop, Nursery, and Greenhouse",
+    "employment": 258730
+  },
+  "45-2093": {
+    "title": "Farmworkers, Farm, Ranch, and Aquacultural Animals",
+    "employment": 32590
+  },
+  "45-2099": {
+    "title": "Agricultural Workers, All Other",
+    "employment": 6040
+  },
+  "45-4011": {
+    "title": "Forest and Conservation Workers",
+    "employment": 5750
+  },
+  "45-4021": {
+    "title": "Fallers",
+    "employment": 4800
+  },
+  "45-4022": {
+    "title": "Logging Equipment Operators",
+    "employment": 23720
+  },
+  "45-4023": {
+    "title": "Log Graders and Scalers",
+    "employment": 3640
+  },
+  "45-4029": {
+    "title": "Logging Workers, All Other",
+    "employment": 2540
+  },
+  "47-1011": {
+    "title": "First-Line Supervisors of Construction Trades and Extraction Workers",
+    "employment": 777420
+  },
+  "47-2011": {
+    "title": "Boilermakers",
+    "employment": 11130
+  },
+  "47-2021": {
+    "title": "Brickmasons and Blockmasons",
+    "employment": 56830
+  },
+  "47-2022": {
+    "title": "Stonemasons",
+    "employment": 9790
+  },
+  "47-2031": {
+    "title": "Carpenters",
+    "employment": 700290
+  },
+  "47-2041": {
+    "title": "Carpet Installers",
+    "employment": 15560
+  },
+  "47-2042": {
+    "title": "Floor Layers, Except Carpet, Wood, and Hard Tiles",
+    "employment": 25150
+  },
+  "47-2043": {
+    "title": "Floor Sanders and Finishers",
+    "employment": 5070
+  },
+  "47-2044": {
+    "title": "Tile and Stone Setters",
+    "employment": 42420
+  },
+  "47-2051": {
+    "title": "Cement Masons and Concrete Finishers",
+    "employment": 203560
+  },
+  "47-2053": {
+    "title": "Terrazzo Workers and Finishers",
+    "employment": 1460
+  },
+  "47-2061": {
+    "title": "Construction Laborers",
+    "employment": 1019090
+  },
+  "47-2071": {
+    "title": "Paving, Surfacing, and Tamping Equipment Operators",
+    "employment": 43080
+  },
+  "47-2072": {
+    "title": "Pile Driver Operators",
+    "employment": 3010
+  },
+  "47-2073": {
+    "title": "Operating Engineers and Other Construction Equipment Operators",
+    "employment": 450370
+  },
+  "47-2081": {
+    "title": "Drywall and Ceiling Tile Installers",
+    "employment": 90860
+  },
+  "47-2082": {
+    "title": "Tapers",
+    "employment": 15560
+  },
+  "47-2111": {
+    "title": "Electricians",
+    "employment": 712580
+  },
+  "47-2121": {
+    "title": "Glaziers",
+    "employment": 53390
+  },
+  "47-2131": {
+    "title": "Insulation Workers, Floor, Ceiling, and Wall",
+    "employment": 38510
+  },
+  "47-2132": {
+    "title": "Insulation Workers, Mechanical",
+    "employment": 22850
+  },
+  "47-2141": {
+    "title": "Painters, Construction and Maintenance",
+    "employment": 215910
+  },
+  "47-2142": {
+    "title": "Paperhangers",
+    "employment": 1830
+  },
+  "47-2151": {
+    "title": "Pipelayers",
+    "employment": 34840
+  },
+  "47-2152": {
+    "title": "Plumbers, Pipefitters, and Steamfitters",
+    "employment": 436160
+  },
+  "47-2161": {
+    "title": "Plasterers and Stucco Masons",
+    "employment": 22310
+  },
+  "47-2171": {
+    "title": "Reinforcing Iron and Rebar Workers",
+    "employment": 17400
+  },
+  "47-2181": {
+    "title": "Roofers",
+    "employment": 135140
+  },
+  "47-2211": {
+    "title": "Sheet Metal Workers",
+    "employment": 116190
+  },
+  "47-2221": {
+    "title": "Structural Iron and Steel Workers",
+    "employment": 63780
+  },
+  "47-2231": {
+    "title": "Solar Photovoltaic Installers",
+    "employment": 24510
+  },
+  "47-3011": {
+    "title": "Helpers--Brickmasons, Blockmasons, Stonemasons, and Tile and Marble Setters",
+    "employment": 16460
+  },
+  "47-3012": {
+    "title": "Helpers--Carpenters",
+    "employment": 21770
+  },
+  "47-3013": {
+    "title": "Helpers--Electricians",
+    "employment": 68670
+  },
+  "47-3014": {
+    "title": "Helpers--Painters, Paperhangers, Plasterers, and Stucco Masons",
+    "employment": 7700
+  },
+  "47-3015": {
+    "title": "Helpers--Pipelayers, Plumbers, Pipefitters, and Steamfitters",
+    "employment": 45300
+  },
+  "47-3016": {
+    "title": "Helpers--Roofers",
+    "employment": 4540
+  },
+  "47-3019": {
+    "title": "Helpers, Construction Trades, All Other",
+    "employment": 27250
+  },
+  "47-4011": {
+    "title": "Construction and Building Inspectors",
+    "employment": 133640
+  },
+  "47-4021": {
+    "title": "Elevator and Escalator Installers and Repairers",
+    "employment": 23990
+  },
+  "47-4031": {
+    "title": "Fence Erectors",
+    "employment": 21470
+  },
+  "47-4041": {
+    "title": "Hazardous Materials Removal Workers",
+    "employment": 49960
+  },
+  "47-4051": {
+    "title": "Highway Maintenance Workers",
+    "employment": 150860
+  },
+  "47-4061": {
+    "title": "Rail-Track Laying and Maintenance Equipment Operators",
+    "employment": 18770
+  },
+  "47-4071": {
+    "title": "Septic Tank Servicers and Sewer Pipe Cleaners",
+    "employment": 27900
+  },
+  "47-4090": {
+    "title": "Miscellaneous Construction and Related Workers",
+    "employment": 28930
+  },
+  "47-5011": {
+    "title": "Derrick Operators, Oil and Gas",
+    "employment": 11510
+  },
+  "47-5012": {
+    "title": "Rotary Drill Operators, Oil and Gas",
+    "employment": 12180
+  },
+  "47-5013": {
+    "title": "Service Unit Operators, Oil and Gas",
+    "employment": 46150
+  },
+  "47-5022": {
+    "title": "Excavating and Loading Machine and Dragline Operators, Surface Mining",
+    "employment": 32630
+  },
+  "47-5023": {
+    "title": "Earth Drillers, Except Oil and Gas",
+    "employment": 18010
+  },
+  "47-5032": {
+    "title": "Explosives Workers, Ordnance Handling Experts, and Blasters",
+    "employment": 4610
+  },
+  "47-5041": {
+    "title": "Continuous Mining Machine Operators",
+    "employment": 15700
+  },
+  "47-5043": {
+    "title": "Roof Bolters, Mining",
+    "employment": 1960
+  },
+  "47-5044": {
+    "title": "Loading and Moving Machine Operators, Underground Mining",
+    "employment": 5160
+  },
+  "47-5049": {
+    "title": "Underground Mining Machine Operators, All Other",
+    "employment": 2560
+  },
+  "47-5051": {
+    "title": "Rock Splitters, Quarry",
+    "employment": 3610
+  },
+  "47-5071": {
+    "title": "Roustabouts, Oil and Gas",
+    "employment": 43830
+  },
+  "47-5081": {
+    "title": "Helpers--Extraction Workers",
+    "employment": 7360
+  },
+  "47-5099": {
+    "title": "Extraction Workers, All Other",
+    "employment": 7120
+  },
+  "49-1011": {
+    "title": "First-Line Supervisors of Mechanics, Installers, and Repairers",
+    "employment": 589880
+  },
+  "49-2011": {
+    "title": "Computer, Automated Teller, and Office Machine Repairers",
+    "employment": 77580
+  },
+  "49-2021": {
+    "title": "Radio, Cellular, and Tower Equipment Installers and Repairers",
+    "employment": 11810
+  },
+  "49-2022": {
+    "title": "Telecommunications Equipment Installers and Repairers, Except Line Installers",
+    "employment": 159670
+  },
+  "49-2091": {
+    "title": "Avionics Technicians",
+    "employment": 21280
+  },
+  "49-2092": {
+    "title": "Electric Motor, Power Tool, and Related Repairers",
+    "employment": 16010
+  },
+  "49-2093": {
+    "title": "Electrical and Electronics Installers and Repairers, Transportation Equipment",
+    "employment": 7920
+  },
+  "49-2094": {
+    "title": "Electrical and Electronics Repairers, Commercial and Industrial Equipment",
+    "employment": 58320
+  },
+  "49-2095": {
+    "title": "Electrical and Electronics Repairers, Powerhouse, Substation, and Relay",
+    "employment": 24790
+  },
+  "49-2096": {
+    "title": "Electronic Equipment Installers and Repairers, Motor Vehicles",
+    "employment": 8900
+  },
+  "49-2097": {
+    "title": "Audiovisual Equipment Installers and Repairers",
+    "employment": 24720
+  },
+  "49-2098": {
+    "title": "Security and Fire Alarm Systems Installers",
+    "employment": 83540
+  },
+  "49-3011": {
+    "title": "Aircraft Mechanics and Service Technicians",
+    "employment": 137630
+  },
+  "49-3021": {
+    "title": "Automotive Body and Related Repairers",
+    "employment": 151910
+  },
+  "49-3022": {
+    "title": "Automotive Glass Installers and Repairers",
+    "employment": 16890
+  },
+  "49-3023": {
+    "title": "Automotive Service Technicians and Mechanics",
+    "employment": 676570
+  },
+  "49-3031": {
+    "title": "Bus and Truck Mechanics and Diesel Engine Specialists",
+    "employment": 285030
+  },
+  "49-3041": {
+    "title": "Farm Equipment Mechanics and Service Technicians",
+    "employment": 36830
+  },
+  "49-3042": {
+    "title": "Mobile Heavy Equipment Mechanics, Except Engines",
+    "employment": 177280
+  },
+  "49-3043": {
+    "title": "Rail Car Repairers",
+    "employment": 19480
+  },
+  "49-3051": {
+    "title": "Motorboat Mechanics and Service Technicians",
+    "employment": 23230
+  },
+  "49-3052": {
+    "title": "Motorcycle Mechanics",
+    "employment": 14330
+  },
+  "49-3053": {
+    "title": "Outdoor Power Equipment and Other Small Engine Mechanics",
+    "employment": 36080
+  },
+  "49-3091": {
+    "title": "Bicycle Repairers",
+    "employment": 13980
+  },
+  "49-3092": {
+    "title": "Recreational Vehicle Service Technicians",
+    "employment": 17360
+  },
+  "49-3093": {
+    "title": "Tire Repairers and Changers",
+    "employment": 101520
+  },
+  "49-9011": {
+    "title": "Mechanical Door Repairers",
+    "employment": 27800
+  },
+  "49-9012": {
+    "title": "Control and Valve Installers and Repairers, Except Mechanical Door",
+    "employment": 47780
+  },
+  "49-9021": {
+    "title": "Heating, Air Conditioning, and Refrigeration Mechanics and Installers",
+    "employment": 397450
+  },
+  "49-9031": {
+    "title": "Home Appliance Repairers",
+    "employment": 29950
+  },
+  "49-9041": {
+    "title": "Industrial Machinery Mechanics",
+    "employment": 412650
+  },
+  "49-9043": {
+    "title": "Maintenance Workers, Machinery",
+    "employment": 58040
+  },
+  "49-9044": {
+    "title": "Millwrights",
+    "employment": 37930
+  },
+  "49-9045": {
+    "title": "Refractory Materials Repairers, Except Brickmasons",
+    "employment": 540
+  },
+  "49-9051": {
+    "title": "Electrical Power-Line Installers and Repairers",
+    "employment": 120170
+  },
+  "49-9052": {
+    "title": "Telecommunications Line Installers and Repairers",
+    "employment": 98950
+  },
+  "49-9061": {
+    "title": "Camera and Photographic Equipment Repairers",
+    "employment": 2540
+  },
+  "49-9062": {
+    "title": "Medical Equipment Repairers",
+    "employment": 64400
+  },
+  "49-9063": {
+    "title": "Musical Instrument Repairers and Tuners",
+    "employment": 6170
+  },
+  "49-9064": {
+    "title": "Watch and Clock Repairers",
+    "employment": 1880
+  },
+  "49-9069": {
+    "title": "Precision Instrument and Equipment Repairers, All Other",
+    "employment": 10330
+  },
+  "49-9071": {
+    "title": "Maintenance and Repair Workers, General",
+    "employment": 1503150
+  },
+  "49-9081": {
+    "title": "Wind Turbine Service Technicians",
+    "employment": 9800
+  },
+  "49-9091": {
+    "title": "Coin, Vending, and Amusement Machine Servicers and Repairers",
+    "employment": 36100
+  },
+  "49-9092": {
+    "title": "Commercial Divers",
+    "employment": 2790
+  },
+  "49-9094": {
+    "title": "Locksmiths and Safe Repairers",
+    "employment": 14790
+  },
+  "49-9095": {
+    "title": "Manufactured Building and Mobile Home Installers",
+    "employment": 2910
+  },
+  "49-9096": {
+    "title": "Riggers",
+    "employment": 23870
+  },
+  "49-9097": {
+    "title": "Signal and Track Switch Repairers",
+    "employment": 9200
+  },
+  "49-9098": {
+    "title": "Helpers--Installation, Maintenance, and Repair Workers",
+    "employment": 101890
+  },
+  "49-9099": {
+    "title": "Installation, Maintenance, and Repair Workers, All Other",
+    "employment": 175860
+  },
+  "51-1011": {
+    "title": "First-Line Supervisors of Production and Operating Workers",
+    "employment": 671160
+  },
+  "51-2011": {
+    "title": "Aircraft Structure, Surfaces, Rigging, and Systems Assemblers",
+    "employment": 29810
+  },
+  "51-2021": {
+    "title": "Coil Winders, Tapers, and Finishers",
+    "employment": 11900
+  },
+  "51-2028": {
+    "title": "Electrical, Electronic, and Electromechanical Assemblers, Except Coil Winders, Tapers, and Finishers",
+    "employment": 267440
+  },
+  "51-2031": {
+    "title": "Engine and Other Machine Assemblers",
+    "employment": 47960
+  },
+  "51-2041": {
+    "title": "Structural Metal Fabricators and Fitters",
+    "employment": 57810
+  },
+  "51-2051": {
+    "title": "Fiberglass Laminators and Fabricators",
+    "employment": 20380
+  },
+  "51-2061": {
+    "title": "Timing Device Assemblers and Adjusters",
+    "employment": 400
+  },
+  "51-2090": {
+    "title": "Miscellaneous Assemblers and Fabricators",
+    "employment": 1489280
+  },
+  "51-3011": {
+    "title": "Bakers",
+    "employment": 220230
+  },
+  "51-3021": {
+    "title": "Butchers and Meat Cutters",
+    "employment": 136330
+  },
+  "51-3022": {
+    "title": "Meat, Poultry, and Fish Cutters and Trimmers",
+    "employment": 138300
+  },
+  "51-3023": {
+    "title": "Slaughterers and Meat Packers",
+    "employment": 71310
+  },
+  "51-3091": {
+    "title": "Food and Tobacco Roasting, Baking, and Drying Machine Operators and Tenders",
+    "employment": 19570
+  },
+  "51-3092": {
+    "title": "Food Batchmakers",
+    "employment": 169190
+  },
+  "51-3093": {
+    "title": "Food Cooking Machine Operators and Tenders",
+    "employment": 29730
+  },
+  "51-3099": {
+    "title": "Food Processing Workers, All Other",
+    "employment": 63970
+  },
+  "51-4021": {
+    "title": "Extruding and Drawing Machine Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 63370
+  },
+  "51-4022": {
+    "title": "Forging Machine Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 9170
+  },
+  "51-4023": {
+    "title": "Rolling Machine Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 24750
+  },
+  "51-4031": {
+    "title": "Cutting, Punching, and Press Machine Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 179230
+  },
+  "51-4032": {
+    "title": "Drilling and Boring Machine Tool Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 5740
+  },
+  "51-4033": {
+    "title": "Grinding, Lapping, Polishing, and Buffing Machine Tool Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 75260
+  },
+  "51-4034": {
+    "title": "Lathe and Turning Machine Tool Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 19560
+  },
+  "51-4035": {
+    "title": "Milling and Planing Machine Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 13990
+  },
+  "51-4041": {
+    "title": "Machinists",
+    "employment": 290720
+  },
+  "51-4051": {
+    "title": "Metal-Refining Furnace Operators and Tenders",
+    "employment": 20870
+  },
+  "51-4052": {
+    "title": "Pourers and Casters, Metal",
+    "employment": 5460
+  },
+  "51-4061": {
+    "title": "Model Makers, Metal and Plastic",
+    "employment": 2840
+  },
+  "51-4062": {
+    "title": "Patternmakers, Metal and Plastic",
+    "employment": 2150
+  },
+  "51-4071": {
+    "title": "Foundry Mold and Coremakers",
+    "employment": 11780
+  },
+  "51-4072": {
+    "title": "Molding, Coremaking, and Casting Machine Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 158980
+  },
+  "51-4081": {
+    "title": "Multiple Machine Tool Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 127790
+  },
+  "51-4111": {
+    "title": "Tool and Die Makers",
+    "employment": 58150
+  },
+  "51-4121": {
+    "title": "Welders, Cutters, Solderers, and Brazers",
+    "employment": 421730
+  },
+  "51-4122": {
+    "title": "Welding, Soldering, and Brazing Machine Setters, Operators, and Tenders",
+    "employment": 33020
+  },
+  "51-4191": {
+    "title": "Heat Treating Equipment Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 14950
+  },
+  "51-4192": {
+    "title": "Layout Workers, Metal and Plastic",
+    "employment": 6660
+  },
+  "51-4193": {
+    "title": "Plating Machine Setters, Operators, and Tenders, Metal and Plastic",
+    "employment": 31970
+  },
+  "51-4194": {
+    "title": "Tool Grinders, Filers, and Sharpeners",
+    "employment": 6660
+  },
+  "51-4199": {
+    "title": "Metal Workers and Plastic Workers, All Other",
+    "employment": 20370
+  },
+  "51-5111": {
+    "title": "Prepress Technicians and Workers",
+    "employment": 23590
+  },
+  "51-5112": {
+    "title": "Printing Press Operators",
+    "employment": 151450
+  },
+  "51-5113": {
+    "title": "Print Binding and Finishing Workers",
+    "employment": 38880
+  },
+  "51-6011": {
+    "title": "Laundry and Dry-Cleaning Workers",
+    "employment": 185000
+  },
+  "51-6021": {
+    "title": "Pressers, Textile, Garment, and Related Materials",
+    "employment": 28700
+  },
+  "51-6031": {
+    "title": "Sewing Machine Operators",
+    "employment": 116130
+  },
+  "51-6041": {
+    "title": "Shoe and Leather Workers and Repairers",
+    "employment": 7230
+  },
+  "51-6042": {
+    "title": "Shoe Machine Operators and Tenders",
+    "employment": 4630
+  },
+  "51-6051": {
+    "title": "Sewers, Hand",
+    "employment": 3390
+  },
+  "51-6052": {
+    "title": "Tailors, Dressmakers, and Custom Sewers",
+    "employment": 14950
+  },
+  "51-6061": {
+    "title": "Textile Bleaching and Dyeing Machine Operators and Tenders",
+    "employment": 6650
+  },
+  "51-6062": {
+    "title": "Textile Cutting Machine Setters, Operators, and Tenders",
+    "employment": 9760
+  },
+  "51-6063": {
+    "title": "Textile Knitting and Weaving Machine Setters, Operators, and Tenders",
+    "employment": 15980
+  },
+  "51-6064": {
+    "title": "Textile Winding, Twisting, and Drawing Out Machine Setters, Operators, and Tenders",
+    "employment": 23550
+  },
+  "51-6091": {
+    "title": "Extruding and Forming Machine Setters, Operators, and Tenders, Synthetic and Glass Fibers",
+    "employment": 14520
+  },
+  "51-6092": {
+    "title": "Fabric and Apparel Patternmakers",
+    "employment": 2670
+  },
+  "51-6093": {
+    "title": "Upholsterers",
+    "employment": 25740
+  },
+  "51-6099": {
+    "title": "Textile, Apparel, and Furnishings Workers, All Other",
+    "employment": 15080
+  },
+  "51-7011": {
+    "title": "Cabinetmakers and Bench Carpenters",
+    "employment": 88460
+  },
+  "51-7021": {
+    "title": "Furniture Finishers",
+    "employment": 14380
+  },
+  "51-7031": {
+    "title": "Model Makers, Wood",
+    "employment": 590
+  },
+  "51-7032": {
+    "title": "Patternmakers, Wood",
+    "employment": 260
+  },
+  "51-7041": {
+    "title": "Sawing Machine Setters, Operators, and Tenders, Wood",
+    "employment": 43570
+  },
+  "51-7042": {
+    "title": "Woodworking Machine Setters, Operators, and Tenders, Except Sawing",
+    "employment": 61250
+  },
+  "51-7099": {
+    "title": "Woodworkers, All Other",
+    "employment": 7830
+  },
+  "51-8011": {
+    "title": "Nuclear Power Reactor Operators",
+    "employment": 5760
+  },
+  "51-8012": {
+    "title": "Power Distributors and Dispatchers",
+    "employment": 9040
+  },
+  "51-8013": {
+    "title": "Power Plant Operators",
+    "employment": 31490
+  },
+  "51-8021": {
+    "title": "Stationary Engineers and Boiler Operators",
+    "employment": 33840
+  },
+  "51-8031": {
+    "title": "Water and Wastewater Treatment Plant and System Operators",
+    "employment": 120710
+  },
+  "51-8091": {
+    "title": "Chemical Plant and System Operators",
+    "employment": 17980
+  },
+  "51-8092": {
+    "title": "Gas Plant Operators",
+    "employment": 15930
+  },
+  "51-8093": {
+    "title": "Petroleum Pump System Operators, Refinery Operators, and Gaugers",
+    "employment": 33360
+  },
+  "51-8099": {
+    "title": "Plant and System Operators, All Other",
+    "employment": 15370
+  },
+  "51-9011": {
+    "title": "Chemical Equipment Operators and Tenders",
+    "employment": 120260
+  },
+  "51-9012": {
+    "title": "Separating, Filtering, Clarifying, Precipitating, and Still Machine Setters, Operators, and Tenders",
+    "employment": 53170
+  },
+  "51-9021": {
+    "title": "Crushing, Grinding, and Polishing Machine Setters, Operators, and Tenders",
+    "employment": 26210
+  },
+  "51-9022": {
+    "title": "Grinding and Polishing Workers, Hand",
+    "employment": 12290
+  },
+  "51-9023": {
+    "title": "Mixing and Blending Machine Setters, Operators, and Tenders",
+    "employment": 105740
+  },
+  "51-9031": {
+    "title": "Cutters and Trimmers, Hand",
+    "employment": 7220
+  },
+  "51-9032": {
+    "title": "Cutting and Slicing Machine Setters, Operators, and Tenders",
+    "employment": 52720
+  },
+  "51-9041": {
+    "title": "Extruding, Forming, Pressing, and Compacting Machine Setters, Operators, and Tenders",
+    "employment": 57080
+  },
+  "51-9051": {
+    "title": "Furnace, Kiln, Oven, Drier, and Kettle Operators and Tenders",
+    "employment": 14820
+  },
+  "51-9061": {
+    "title": "Inspectors, Testers, Sorters, Samplers, and Weighers",
+    "employment": 584630
+  },
+  "51-9071": {
+    "title": "Jewelers and Precious Stone and Metal Workers",
+    "employment": 24060
+  },
+  "51-9081": {
+    "title": "Dental Laboratory Technicians",
+    "employment": 34190
+  },
+  "51-9082": {
+    "title": "Medical Appliance Technicians",
+    "employment": 12550
+  },
+  "51-9083": {
+    "title": "Ophthalmic Laboratory Technicians",
+    "employment": 18240
+  },
+  "51-9111": {
+    "title": "Packaging and Filling Machine Operators and Tenders",
+    "employment": 371600
+  },
+  "51-9123": {
+    "title": "Painting, Coating, and Decorating Workers",
+    "employment": 10700
+  },
+  "51-9124": {
+    "title": "Coating, Painting, and Spraying Machine Setters, Operators, and Tenders",
+    "employment": 155880
+  },
+  "51-9141": {
+    "title": "Semiconductor Processing Technicians",
+    "employment": 26450
+  },
+  "51-9151": {
+    "title": "Photographic Process Workers and Processing Machine Operators",
+    "employment": 5770
+  },
+  "51-9161": {
+    "title": "Computer Numerically Controlled Tool Operators",
+    "employment": 187670
+  },
+  "51-9162": {
+    "title": "Computer Numerically Controlled Tool Programmers",
+    "employment": 28030
+  },
+  "51-9191": {
+    "title": "Adhesive Bonding Machine Operators and Tenders",
+    "employment": 12510
+  },
+  "51-9192": {
+    "title": "Cleaning, Washing, and Metal Pickling Equipment Operators and Tenders",
+    "employment": 15210
+  },
+  "51-9193": {
+    "title": "Cooling and Freezing Equipment Operators and Tenders",
+    "employment": 6500
+  },
+  "51-9194": {
+    "title": "Etchers and Engravers",
+    "employment": 8140
+  },
+  "51-9195": {
+    "title": "Molders, Shapers, and Casters, Except Metal and Plastic",
+    "employment": 38480
+  },
+  "51-9196": {
+    "title": "Paper Goods Machine Setters, Operators, and Tenders",
+    "employment": 96460
+  },
+  "51-9197": {
+    "title": "Tire Builders",
+    "employment": 20660
+  },
+  "51-9198": {
+    "title": "Helpers--Production Workers",
+    "employment": 181810
+  },
+  "51-9199": {
+    "title": "Production Workers, All Other",
+    "employment": 243500
+  },
+  "53-1041": {
+    "title": "Aircraft Cargo Handling Supervisors",
+    "employment": 9020
+  },
+  "53-1047": {
+    "title": "First-Line Supervisors of Transportation and Material Moving Workers, Except Aircraft Cargo Handling Supervisors",
+    "employment": 594330
+  },
+  "53-2011": {
+    "title": "Airline Pilots, Copilots, and Flight Engineers",
+    "employment": 93670
+  },
+  "53-2012": {
+    "title": "Commercial Pilots",
+    "employment": 52750
+  },
+  "53-2021": {
+    "title": "Air Traffic Controllers",
+    "employment": 22310
+  },
+  "53-2022": {
+    "title": "Airfield Operations Specialists",
+    "employment": 18320
+  },
+  "53-2031": {
+    "title": "Flight Attendants",
+    "employment": 126020
+  },
+  "53-3011": {
+    "title": "Ambulance Drivers and Attendants, Except Emergency Medical Technicians",
+    "employment": 11520
+  },
+  "53-3031": {
+    "title": "Driver/Sales Workers",
+    "employment": 463120
+  },
+  "53-3032": {
+    "title": "Heavy and Tractor-Trailer Truck Drivers",
+    "employment": 2044400
+  },
+  "53-3033": {
+    "title": "Light Truck Drivers",
+    "employment": 1003960
+  },
+  "53-3051": {
+    "title": "Bus Drivers, School",
+    "employment": 371530
+  },
+  "53-3052": {
+    "title": "Bus Drivers, Transit and Intercity",
+    "employment": 184990
+  },
+  "53-3053": {
+    "title": "Shuttle Drivers and Chauffeurs",
+    "employment": 204930
+  },
+  "53-3054": {
+    "title": "Taxi Drivers",
+    "employment": 17770
+  },
+  "53-3099": {
+    "title": "Motor Vehicle Operators, All Other",
+    "employment": 51140
+  },
+  "53-4011": {
+    "title": "Locomotive Engineers",
+    "employment": 32390
+  },
+  "53-4013": {
+    "title": "Rail Yard Engineers, Dinkey Operators, and Hostlers",
+    "employment": 2430
+  },
+  "53-4022": {
+    "title": "Railroad Brake, Signal, and Switch Operators and Locomotive Firers",
+    "employment": 13610
+  },
+  "53-4031": {
+    "title": "Railroad Conductors and Yardmasters",
+    "employment": 46490
+  },
+  "53-4041": {
+    "title": "Subway and Streetcar Operators",
+    "employment": 14860
+  },
+  "53-4099": {
+    "title": "Rail Transportation Workers, All Other",
+    "employment": 1830
+  },
+  "53-5011": {
+    "title": "Sailors and Marine Oilers",
+    "employment": 29960
+  },
+  "53-5021": {
+    "title": "Captains, Mates, and Pilots of Water Vessels",
+    "employment": 34520
+  },
+  "53-5022": {
+    "title": "Motorboat Operators",
+    "employment": 2710
+  },
+  "53-5031": {
+    "title": "Ship Engineers",
+    "employment": 8860
+  },
+  "53-6011": {
+    "title": "Bridge and Lock Tenders",
+    "employment": 3460
+  },
+  "53-6021": {
+    "title": "Parking Attendants",
+    "employment": 118130
+  },
+  "53-6031": {
+    "title": "Automotive and Watercraft Service Attendants",
+    "employment": 92530
+  },
+  "53-6032": {
+    "title": "Aircraft Service Attendants",
+    "employment": 24940
+  },
+  "53-6041": {
+    "title": "Traffic Technicians",
+    "employment": 7530
+  },
+  "53-6051": {
+    "title": "Transportation Inspectors",
+    "employment": 27670
+  },
+  "53-6061": {
+    "title": "Passenger Attendants",
+    "employment": 20190
+  },
+  "53-6099": {
+    "title": "Transportation Workers, All Other",
+    "employment": 10940
+  },
+  "53-7011": {
+    "title": "Conveyor Operators and Tenders",
+    "employment": 24660
+  },
+  "53-7021": {
+    "title": "Crane and Tower Operators",
+    "employment": 42260
+  },
+  "53-7031": {
+    "title": "Dredge Operators",
+    "employment": 940
+  },
+  "53-7041": {
+    "title": "Hoist and Winch Operators",
+    "employment": 2230
+  },
+  "53-7051": {
+    "title": "Industrial Truck and Tractor Operators",
+    "employment": 778920
+  },
+  "53-7061": {
+    "title": "Cleaners of Vehicles and Equipment",
+    "employment": 365290
+  },
+  "53-7062": {
+    "title": "Laborers and Freight, Stock, and Material Movers, Hand",
+    "employment": 3008300
+  },
+  "53-7063": {
+    "title": "Machine Feeders and Offbearers",
+    "employment": 44500
+  },
+  "53-7064": {
+    "title": "Packers and Packagers, Hand",
+    "employment": 645210
+  },
+  "53-7065": {
+    "title": "Stockers and Order Fillers",
+    "employment": 2872680
+  },
+  "53-7071": {
+    "title": "Gas Compressor and Gas Pumping Station Operators",
+    "employment": 4400
+  },
+  "53-7072": {
+    "title": "Pump Operators, Except Wellhead Pumpers",
+    "employment": 11570
+  },
+  "53-7073": {
+    "title": "Wellhead Pumpers",
+    "employment": 18230
+  },
+  "53-7081": {
+    "title": "Refuse and Recyclable Material Collectors",
+    "employment": 135430
+  },
+  "53-7121": {
+    "title": "Tank Car, Truck, and Ship Loaders",
+    "employment": 11400
+  },
+  "53-7199": {
+    "title": "Material Moving Workers, All Other",
+    "employment": 23970
+  },
+  "_fetched_at": "2026-09-09",
+  "_oes_year": 2023
+}

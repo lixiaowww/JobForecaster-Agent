@@ -64,7 +64,11 @@
     "search_aliases": [
       "loan analyst",
       "financial analyst"
-    ]
+    ],
+    "soc_code": "13-2041",
+    "bls_title": "Credit Analysts",
+    "soc_source": "citation",
+    "bls_employment": 73200
   },
   {
     "id": "fin_wealth_manager",
@@ -131,7 +135,11 @@
     "search_aliases": [
       "financial advisor",
       "investment advisor"
-    ]
+    ],
+    "soc_code": "13-2052",
+    "bls_title": "Personal Financial Advisors",
+    "soc_source": "citation",
+    "bls_employment": 272190
   },
   {
     "id": "fin_risk_manager",
@@ -198,7 +206,11 @@
     "search_aliases": [
       "risk analyst",
       "risk manager"
-    ]
+    ],
+    "soc_code": "13-2051",
+    "bls_title": "Financial and Investment Analysts",
+    "soc_source": "citation",
+    "bls_employment": 325220
   },
   {
     "id": "fin_algo_trader",
@@ -265,7 +277,11 @@
     "search_aliases": [
       "algorithmic trader",
       "quant trader"
-    ]
+    ],
+    "soc_code": "11-3031",
+    "bls_title": "Financial Managers",
+    "soc_source": "citation",
+    "bls_employment": 787340
   },
   {
     "id": "fin_ai_compliance",
@@ -394,7 +410,11 @@
         "retrain_months": 9,
         "salary_delta": 0.12
       }
-    ]
+    ],
+    "soc_code": "13-2053",
+    "bls_title": "Insurance Underwriters",
+    "soc_source": "citation",
+    "bls_employment": 101310
   },
   {
     "id": "tech_software_eng",
@@ -470,7 +490,11 @@
         "retrain_months": 6,
         "salary_delta": 0.22
       }
-    ]
+    ],
+    "soc_code": "15-1252",
+    "bls_title": "Software Developers",
+    "soc_source": "citation",
+    "bls_employment": 1656880
   },
   {
     "id": "tech_product_manager",
@@ -540,7 +564,11 @@
         "retrain_months": 9,
         "salary_delta": 0.15
       }
-    ]
+    ],
+    "soc_code": "11-3021",
+    "bls_title": "Computer and Information Systems Managers",
+    "soc_source": "citation",
+    "bls_employment": 592600
   },
   {
     "id": "tech_data_scientist",
@@ -613,7 +641,8 @@
     ],
     "soc_code": "15-2051",
     "bls_title": "Data Scientist",
-    "bls_employment": 192710
+    "bls_employment": 192710,
+    "soc_source": "title"
   },
   {
     "id": "tech_project_manager",
@@ -682,7 +711,11 @@
         "retrain_months": 7,
         "salary_delta": 0.08
       }
-    ]
+    ],
+    "soc_code": "13-1082",
+    "bls_title": "Project Management Specialists",
+    "soc_source": "citation",
+    "bls_employment": 947630
   },
   {
     "id": "tech_prompt_eng",
@@ -812,7 +845,11 @@
     "search_aliases": [
       "qa engineer",
       "quality assurance"
-    ]
+    ],
+    "soc_code": "15-1253",
+    "bls_title": "Software Quality Assurance Analysts and Testers",
+    "soc_source": "citation",
+    "bls_employment": 203040
   },
   {
     "id": "tech_ai_infra_eng",
@@ -878,7 +915,11 @@
     ],
     "search_aliases": [
       "mlops engineer"
-    ]
+    ],
+    "soc_code": "15-1241",
+    "bls_title": "Computer Network Architects",
+    "soc_source": "citation",
+    "bls_employment": 174100
   },
   {
     "id": "tech_data_annotator",
@@ -1134,7 +1175,11 @@
         "retrain_months": 4,
         "salary_delta": 0.0
       }
-    ]
+    ],
+    "soc_code": "51-9061",
+    "bls_title": "Inspectors, Testers, Sorters, Samplers, and Weighers",
+    "soc_source": "citation",
+    "bls_employment": 584630
   },
   {
     "id": "mfg_roboticist",
@@ -1263,7 +1308,11 @@
         "retrain_months": 3,
         "salary_delta": 0.0
       }
-    ]
+    ],
+    "soc_code": "49-9041",
+    "bls_title": "Industrial Machinery Mechanics",
+    "soc_source": "citation",
+    "bls_employment": 412650
   },
   {
     "id": "mfg_digital_twin_eng",
@@ -1329,7 +1378,11 @@
     ],
     "search_aliases": [
       "digital twin engineer"
-    ]
+    ],
+    "soc_code": "17-2061",
+    "bls_title": "Computer Hardware Engineers",
+    "soc_source": "citation",
+    "bls_employment": 82660
   },
   {
     "id": "mfg_machinist",
@@ -1395,7 +1448,11 @@
     ],
     "search_aliases": [
       "cnc operator"
-    ]
+    ],
+    "soc_code": "51-4041",
+    "bls_title": "Machinists",
+    "soc_source": "citation",
+    "bls_employment": 290720
   },
   {
     "id": "hc_radiologist",
@@ -1459,7 +1516,11 @@
         "salary_delta": 0.0
       }
     ],
-    "search_aliases": []
+    "search_aliases": [],
+    "soc_code": "29-1224",
+    "bls_title": "Radiologists",
+    "soc_source": "source_title",
+    "bls_employment": 31960
   },
   {
     "id": "hc_care_coordinator",
@@ -1585,7 +1646,11 @@
         "retrain_months": 11,
         "salary_delta": 0.14
       }
-    ]
+    ],
+    "soc_code": "31-9094",
+    "bls_title": "Medical Transcriptionists",
+    "soc_source": "citation",
+    "bls_employment": 52420
   },
   {
     "id": "hc_surgical_roboticist",
@@ -1648,7 +1713,11 @@
         "retrain_months": 3,
         "salary_delta": 0.1
       }
-    ]
+    ],
+    "soc_code": "29-2055",
+    "bls_title": "Surgical Technologists",
+    "soc_source": "citation",
+    "bls_employment": 110320
   },
   {
     "id": "hc_clinical_coder",
@@ -1710,7 +1779,11 @@
         "retrain_months": 9,
         "salary_delta": 0.12
       }
-    ]
+    ],
+    "soc_code": "29-2072",
+    "bls_title": "Medical Records Specialists",
+    "soc_source": "citation",
+    "bls_employment": 185690
   },
   {
     "id": "hc_general_practitioner",
@@ -1778,7 +1851,11 @@
       "doctor",
       "physician",
       "医生"
-    ]
+    ],
+    "soc_code": "29-1215",
+    "bls_title": "Family Medicine Physicians",
+    "soc_source": "citation",
+    "bls_employment": 112010
   },
   {
     "id": "edu_tutor",
@@ -1844,7 +1921,11 @@
     ],
     "search_aliases": [
       "教师"
-    ]
+    ],
+    "soc_code": "25-3031",
+    "bls_title": "Substitute Teachers, Short-Term",
+    "soc_source": "citation",
+    "bls_employment": 444530
   },
   {
     "id": "edu_curriculum_designer",
@@ -2103,7 +2184,11 @@
         "retrain_months": 3,
         "salary_delta": 0.0
       }
-    ]
+    ],
+    "soc_code": "13-1151",
+    "bls_title": "Training and Development Specialists",
+    "soc_source": "citation",
+    "bls_employment": 403480
   },
   {
     "id": "legal_paralegal",
@@ -2173,7 +2258,8 @@
     ],
     "soc_code": "23-2011",
     "bls_title": "Paralegal",
-    "bls_employment": 354890
+    "bls_employment": 354890,
+    "soc_source": "title"
   },
   {
     "id": "legal_compliance_officer",
@@ -2236,7 +2322,11 @@
         "retrain_months": 3,
         "salary_delta": 0.17
       }
-    ]
+    ],
+    "soc_code": "13-1041",
+    "bls_title": "Compliance Officers",
+    "soc_source": "citation",
+    "bls_employment": 383620
   },
   {
     "id": "legal_contracts_analyst",
@@ -2494,7 +2584,11 @@
     ],
     "search_aliases": [
       "warehouse worker"
-    ]
+    ],
+    "soc_code": "53-7064",
+    "bls_title": "Packers and Packagers, Hand",
+    "soc_source": "citation",
+    "bls_employment": 645210
   },
   {
     "id": "log_dispatcher",
@@ -2560,7 +2654,11 @@
     ],
     "search_aliases": [
       "logistics coordinator"
-    ]
+    ],
+    "soc_code": "43-5032",
+    "bls_title": "Dispatchers, Except Police, Fire, and Ambulance",
+    "soc_source": "citation",
+    "bls_employment": 206090
   },
   {
     "id": "log_supply_chain_analyst",
@@ -2686,7 +2784,11 @@
         "retrain_months": 3,
         "salary_delta": 0.1
       }
-    ]
+    ],
+    "soc_code": "53-2012",
+    "bls_title": "Commercial Pilots",
+    "soc_source": "citation",
+    "bls_employment": 52750
   },
   {
     "id": "log_last_mile_delivery",
@@ -2752,7 +2854,11 @@
     ],
     "search_aliases": [
       "truck driver"
-    ]
+    ],
+    "soc_code": "53-3033",
+    "bls_title": "Light Truck Drivers",
+    "soc_source": "citation",
+    "bls_employment": 1003960
   },
   {
     "id": "log_sustainability_planner",
@@ -2878,7 +2984,11 @@
       "BLS: First-Line Supervisors of Retail Sales Workers",
       "O*NET 41-1011.00",
       "NRF: Future of Retail Workforce 2024"
-    ]
+    ],
+    "soc_code": "41-1011",
+    "bls_title": "First-Line Supervisors of Retail Sales Workers",
+    "soc_source": "citation",
+    "bls_employment": 1087890
   },
   {
     "id": "ret_buyer_merchandiser",
@@ -2941,7 +3051,11 @@
       "BLS: Buyers and Purchasing Agents",
       "O*NET 13-1022.00 - Wholesale and Retail Buyers",
       "Deloitte: Retail Futures Workforce"
-    ]
+    ],
+    "soc_code": "13-1020",
+    "bls_title": "Buyers and Purchasing Agents",
+    "soc_source": "source_title",
+    "bls_employment": 477980
   },
   {
     "id": "ret_cashier",
@@ -3007,7 +3121,8 @@
     ],
     "soc_code": "41-2011",
     "bls_title": "Cashier",
-    "bls_employment": 3298660
+    "bls_employment": 3298660,
+    "soc_source": "title"
   },
   {
     "id": "ret_personal_stylist",
@@ -3070,7 +3185,11 @@
       "BLS: Fashion Designers and Personal Stylists",
       "O*NET 39-5012.00 - Hairdressers, Hairstylists, and Cosmetologists",
       "McKinsey: State of Fashion 2024 Report"
-    ]
+    ],
+    "soc_code": "39-5012",
+    "bls_title": "Hairdressers, Hairstylists, and Cosmetologists",
+    "soc_source": "citation",
+    "bls_employment": 294840
   },
   {
     "id": "agr_farmer",
@@ -3133,7 +3252,11 @@
       "FAO: Future of Food and Agriculture",
       "O*NET 45-2093.00 - Farmworkers",
       "USDA Economic Research Service: Farm Sector Labor"
-    ]
+    ],
+    "soc_code": "45-2093",
+    "bls_title": "Farmworkers, Farm, Ranch, and Aquacultural Animals",
+    "soc_source": "citation",
+    "bls_employment": 32590
   },
   {
     "id": "agr_agronomist",
@@ -3319,7 +3442,11 @@
     ],
     "search_aliases": [
       "construction manager"
-    ]
+    ],
+    "soc_code": "47-1011",
+    "bls_title": "First-Line Supervisors of Construction Trades and Extraction Workers",
+    "soc_source": "citation",
+    "bls_employment": 777420
   },
   {
     "id": "con_electrician",
@@ -3382,7 +3509,11 @@
       "BLS: Electricians",
       "O*NET 47-2111.00 - Electricians",
       "IBEW Workforce Data Outlook"
-    ]
+    ],
+    "soc_code": "47-2111",
+    "bls_title": "Electricians",
+    "soc_source": "citation",
+    "bls_employment": 712580
   },
   {
     "id": "con_green_building_certifier",
@@ -3508,7 +3639,11 @@
       "BLS: Chefs and Head Cooks",
       "O*NET 35-1011.00 - Chefs and Head Cooks",
       "NRA: Restaurant Industry 2024 Outlook"
-    ]
+    ],
+    "soc_code": "35-1011",
+    "bls_title": "Chefs and Head Cooks",
+    "soc_source": "citation",
+    "bls_employment": 172370
   },
   {
     "id": "hos_hotel_manager",
@@ -3571,7 +3706,11 @@
       "BLS: Lodging Managers",
       "O*NET 11-9081.00 - Lodging Managers",
       "STR / CoStar: Global Hotel Workforce Outlook"
-    ]
+    ],
+    "soc_code": "11-9081",
+    "bls_title": "Lodging Managers",
+    "soc_source": "citation",
+    "bls_employment": 41980
   },
   {
     "id": "hos_travel_experience_designer",
@@ -3634,7 +3773,11 @@
       "UNWTO: Global Tourism Outlook",
       "O*NET 41-3041.00 - Travel Agents",
       "Skift Research: Future of Luxury Travel"
-    ]
+    ],
+    "soc_code": "41-3041",
+    "bls_title": "Travel Agents",
+    "soc_source": "citation",
+    "bls_employment": 58250
   },
   {
     "id": "gov_social_worker",
@@ -3700,7 +3843,8 @@
     ],
     "soc_code": "21-1021",
     "bls_title": "Child / Family Social Worker",
-    "bls_employment": 352160
+    "bls_employment": 352160,
+    "soc_source": "title"
   },
   {
     "id": "gov_policy_analyst",
@@ -3763,7 +3907,11 @@
       "BLS: Political Scientists and Policy Analysts",
       "O*NET 19-3094.00 - Political Scientists",
       "OECD: Government at a Glance"
-    ]
+    ],
+    "soc_code": "19-3094",
+    "bls_title": "Political Scientists",
+    "soc_source": "citation",
+    "bls_employment": 5580
   },
   {
     "id": "gov_tax_inspector",
@@ -3826,7 +3974,11 @@
       "BLS: Tax Examiners and Collectors",
       "O*NET 13-2081.00 - Tax Examiners and Collectors",
       "IRS: Future of Compliance Technology"
-    ]
+    ],
+    "soc_code": "13-2081",
+    "bls_title": "Tax Examiners and Collectors, and Revenue Agents",
+    "soc_source": "citation",
+    "bls_employment": 50250
   },
   {
     "id": "gov_climate_policy_officer",
@@ -3889,7 +4041,11 @@
       "IPCC: Policy Brief on Carbon Markets",
       "O*NET 19-2041.00 - Environmental Scientists",
       "World Bank: State and Trends of Carbon Pricing 2024"
-    ]
+    ],
+    "soc_code": "19-2041",
+    "bls_title": "Environmental Scientists and Specialists, Including Health",
+    "soc_source": "citation",
+    "bls_employment": 80730
   },
   {
     "id": "med_journalist",
@@ -3952,7 +4108,11 @@
       "Reuters Institute: Digital News Report",
       "O*NET 27-3023.00 - News Analysts, Reporters, and Journalists",
       "Columbia Journalism Review: State of the News Industry"
-    ]
+    ],
+    "soc_code": "27-3023",
+    "bls_title": "News Analysts, Reporters, and Journalists",
+    "soc_source": "citation",
+    "bls_employment": 45020
   },
   {
     "id": "med_film_director",
@@ -4015,7 +4175,11 @@
       "BLS: Film and Video Editors and Camera Operators",
       "O*NET 27-2012.02 - Directors, Stage, Motion Pictures, TV, and Radio",
       "DGA: Director Workforce Survey"
-    ]
+    ],
+    "soc_code": "27-2012",
+    "bls_title": "Producers and Directors",
+    "soc_source": "citation",
+    "bls_employment": 154470
   },
   {
     "id": "med_creator_economy_manager",
@@ -4078,7 +4242,11 @@
       "Influencer Marketing Hub: Creator Economy Report 2024",
       "O*NET 11-2011.00 - Advertising and Promotions Managers",
       "Goldman Sachs: The Creator Economy Report"
-    ]
+    ],
+    "soc_code": "11-2011",
+    "bls_title": "Advertising and Promotions Managers",
+    "soc_source": "citation",
+    "bls_employment": 20630
   },
   {
     "id": "hc_mental_health_counsellor",
@@ -4145,7 +4313,11 @@
     "search_aliases": [
       "mental health counselor",
       "therapist"
-    ]
+    ],
+    "soc_code": "21-1018",
+    "bls_title": "Substance Abuse, Behavioral Disorder, and Mental Health Counselors",
+    "soc_source": "source_title",
+    "bls_employment": 397880
   },
   {
     "id": "hc_palliative_care_nurse",
@@ -4279,7 +4451,11 @@
     ],
     "search_aliases": [
       "teacher"
-    ]
+    ],
+    "soc_code": "25-2051",
+    "bls_title": "Special Education Teachers, Preschool",
+    "soc_source": "citation",
+    "bls_employment": 24850
   },
   {
     "id": "mfg_industrial_welder",
@@ -4342,7 +4518,11 @@
       "BLS: Welders, Cutters, Solderers, and Brazers",
       "O*NET 51-4121.00 - Welders",
       "American Welding Society: Welder Shortage Analysis"
-    ]
+    ],
+    "soc_code": "51-4121",
+    "bls_title": "Welders, Cutters, Solderers, and Brazers",
+    "soc_source": "citation",
+    "bls_employment": 421730
   },
   {
     "id": "log_customs_broker",
@@ -4405,7 +4585,11 @@
       "BLS: Cargo and Freight Agents",
       "O*NET 43-5011.00 - Cargo and Freight Agents",
       "NCBFAA: Licensed Customs Broker Industry Outlook"
-    ]
+    ],
+    "soc_code": "43-5011",
+    "bls_title": "Cargo and Freight Agents",
+    "soc_source": "citation",
+    "bls_employment": 105220
   },
   {
     "id": "accountant",
@@ -4461,7 +4645,8 @@
     ],
     "soc_code": "13-2011",
     "bls_title": "Accountant",
-    "bls_employment": 1435770
+    "bls_employment": 1435770,
+    "soc_source": "title"
   },
   {
     "id": "civil_engineer",
@@ -4514,7 +4699,8 @@
     ],
     "soc_code": "17-2051",
     "bls_title": "Civil Engineer",
-    "bls_employment": 327950
+    "bls_employment": 327950,
+    "soc_source": "title"
   },
   {
     "id": "cloud_architect",
@@ -4799,7 +4985,8 @@
     ],
     "soc_code": "23-1011",
     "bls_title": "Lawyer",
-    "bls_employment": 731340
+    "bls_employment": 731340,
+    "soc_source": "title"
   },
   {
     "id": "marketing_manager",
@@ -4852,7 +5039,8 @@
     ],
     "soc_code": "11-2021",
     "bls_title": "Marketing Manager",
-    "bls_employment": 368940
+    "bls_employment": 368940,
+    "soc_source": "title"
   },
   {
     "id": "mechanical_engineer",
@@ -4911,7 +5099,8 @@
     ],
     "soc_code": "17-2141",
     "bls_title": "Mechanical Engineer",
-    "bls_employment": 281290
+    "bls_employment": 281290,
+    "soc_source": "title"
   },
   {
     "id": "sales_representative",
@@ -4964,7 +5153,8 @@
     ],
     "soc_code": "41-4011",
     "bls_title": "Sales Representative (B2B)",
-    "bls_employment": 311780
+    "bls_employment": 311780,
+    "soc_source": "title"
   },
   {
     "id": "ai_engineer",
@@ -5277,7 +5467,8 @@
     "transition_targets": [],
     "soc_code": "41-2031",
     "bls_title": "Retail Salesperson",
-    "bls_employment": 3684740
+    "bls_employment": 3684740,
+    "soc_source": "title"
   },
   {
     "id": "fast_food_worker",
@@ -5323,7 +5514,8 @@
     "transition_targets": [],
     "soc_code": "35-3023",
     "bls_title": "Fast Food Worker",
-    "bls_employment": 3676580
+    "bls_employment": 3676580,
+    "soc_source": "title"
   },
   {
     "id": "office_clerk",
@@ -5371,7 +5563,8 @@
     "transition_targets": [],
     "soc_code": "43-9061",
     "bls_title": "Office Clerk",
-    "bls_employment": 2496370
+    "bls_employment": 2496370,
+    "soc_source": "title"
   },
   {
     "id": "home_health_aide",
@@ -5416,7 +5609,8 @@
     ],
     "transition_targets": [],
     "soc_code": "31-1121",
-    "bls_title": "Home Health Aide"
+    "bls_title": "Home Health Aide",
+    "soc_source": "title"
   },
   {
     "id": "janitor",
@@ -5463,7 +5657,8 @@
     "transition_targets": [],
     "soc_code": "37-2011",
     "bls_title": "Janitor / Cleaner",
-    "bls_employment": 2172500
+    "bls_employment": 2172500,
+    "soc_source": "title"
   },
   {
     "id": "waiter",
@@ -5510,7 +5705,8 @@
     "transition_targets": [],
     "soc_code": "35-3031",
     "bls_title": "Waiter / Waitress",
-    "bls_employment": 2237850
+    "bls_employment": 2237850,
+    "soc_source": "title"
   },
   {
     "id": "administrative_assistant",
@@ -5557,7 +5753,8 @@
     "transition_targets": [],
     "soc_code": "43-6014",
     "bls_title": "Administrative Assistant",
-    "bls_employment": 1785430
+    "bls_employment": 1785430,
+    "soc_source": "title"
   },
   {
     "id": "construction_laborer",
@@ -5604,7 +5801,8 @@
     "transition_targets": [],
     "soc_code": "47-2061",
     "bls_title": "Construction Laborer",
-    "bls_employment": 1019090
+    "bls_employment": 1019090,
+    "soc_source": "title"
   },
   {
     "id": "elementary_school_teacher",
@@ -5652,7 +5850,8 @@
     "transition_targets": [],
     "soc_code": "25-2021",
     "bls_title": "Elementary School Teacher",
-    "bls_employment": 1410070
+    "bls_employment": 1410070,
+    "soc_source": "title"
   },
   {
     "id": "restaurant_cook",
@@ -5700,7 +5899,8 @@
     "transition_targets": [],
     "soc_code": "35-2014",
     "bls_title": "Restaurant Cook",
-    "bls_employment": 1412350
+    "bls_employment": 1412350,
+    "soc_source": "title"
   },
   {
     "id": "accounts_receivable_manager",

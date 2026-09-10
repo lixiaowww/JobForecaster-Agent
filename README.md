@@ -19,7 +19,7 @@ of historical extrapolation.
 [![CI](https://github.com/your-org/forecaster-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/forecaster-agent/actions)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![License](https://img.shields.io/badge/license-BUSL--1.1-green)
-![Tests](https://img.shields.io/badge/tests-234%20offline-brightgreen)
+![Tests](https://img.shields.io/badge/tests-244%20offline-brightgreen)
 
 ---
 
@@ -124,25 +124,47 @@ BLS-stamped row would be trivially true.
 
 ### Where the external ground truth comes from
 
-`query-agent bls-backfill` stamps `soc_code` / `bls_employment` onto KB rows that match
-a BLS occupation, which is what turns `bls_presence` from a permanently-skipped signal
-into a working one.  Matching is deliberately high-precision and low-recall:
+`query-agent bls-backfill` stamps `soc_code` / `bls_employment` onto KB rows, which is
+what turns `bls_presence` from a permanently-skipped signal into a working one.
+**65 of 92 rows are anchored**; the rest are genuinely new AI-era roles with no SOC
+code, and stay unanchored on purpose.
 
-* **Titles only, never `search_aliases`** — aliases are the field the agent mutates.
-  Matching through them lets the agent add an alias, have that alias buy its row a SOC
-  code, and have that code then grade the agent's own patches.  On the current KB the
-  alias path produced 8 wrong stamps out of 28, including `13-2051 Financial Analyst →
-  Credit Analyst` (which is 13-2041).
-* **Injective only** — a row claimed by two SOC codes, or a code claiming two rows, is
-  dropped rather than guessed.
-* **No fuzzy similarity** — evaluated and rejected: at a 0.70 cutoff it put IT Manager
-  and Operations Manager on the HR Manager row and Systems Analyst on Credit Analyst,
-  while scoring an exact Receptionist match at 0.064.
+Three passes, in strict precedence order, every one an exact match:
+
+| Pass | Source of truth | Rows |
+|---|---|---|
+| `title` | KB title equals a BLS occupation title | 20 |
+| `citation` | the SOC code the row's own `sources` cite, validated against the official catalog | 42 |
+| `source_title` | the occupation *name* spelled out in `sources`, when the cited code is stale | 3 |
+
+The rules that make those passes trustworthy, each one costing recall on purpose:
+
+* **Never `search_aliases`, never agent-written `sources`.** Both are fields this system
+  writes. Reading an anchor out of them lets the agent mint the citation that buys its
+  own row external ground truth — which is then used to grade the agent's own patches.
+  Generated rows are marked `origin: "agent"` at the KB choke point and cross-checked
+  against the provenance ledger. Measured on this KB, the alias path alone gave 8 wrong
+  stamps out of 28, including `13-2051 Financial Analyst → Credit Analyst` (13-2041).
+* **Validated against the full 831-occupation OES catalog**, so a typo or an invented
+  code cannot become ground truth. Stale SOC 2010 citations correctly fail here and are
+  recovered by name instead — `29-1067 Radiologists` → `29-1224`.
+* **Injective, with title outranking citation.** A row claimed by two codes, or a code
+  claiming two rows, is dropped rather than guessed — that is what keeps `23-1011
+  Lawyers` off "AI Legal Forensics Specialist". An exact title match wins such a contest
+  instead of annulling it, so the plain "Lawyer" row keeps the anchor it earned.
+* **No fuzzy similarity, and no catch-all codes.** Similarity was evaluated and
+  rejected: at 0.70 it put IT Manager and Operations Manager on the HR Manager row and
+  Systems Analyst on Credit Analyst, while scoring an exact Receptionist match at 0.064.
+  Residual buckets like "Computer Occupations, All Other" assert almost nothing and are
+  refused.
+
+Where two independent passes both reached a verdict on the current KB, they agreed 4
+times out of 4 and disagreed zero times.
 
 A bad anchor is worse than no anchor: it does not merely fail to catch drift, it
-certifies it.  20 of 92 KB rows currently qualify.  `run_coverage_enrichment` also
-stamps the SOC code it already knows onto each row it generates — previously discarded,
-which left every generated row permanently unverifiable.
+certifies it.  `run_coverage_enrichment` also stamps the SOC code it already knows onto
+each row it generates — previously discarded, which left every generated row
+permanently unverifiable.
 
 ---
 
@@ -175,7 +197,7 @@ cp .env.example .env          # GROQ_API_KEY (free) or ANTHROPIC_API_KEY
 
 **Run the offline test suite first (no API key needed):**
 ```bash
-python -m pytest tests/       # 234 tests, ~25s, zero network
+python -m pytest tests/       # 244 tests, ~26s, zero network
 ```
 
 Then run a single cycle:
@@ -213,6 +235,7 @@ python run.py query-agent claims list [N]    # last N staked claims
 python run.py query-agent bls-backfill       # stamp SOC ground truth onto KB rows
 python run.py query-agent bls-backfill --dry-run
 python run.py query-agent bls-backfill --refresh   # pull the annual OES flat file
+python run.py query-agent bls-backfill --no-citations   # title matches only
 ```
 
 ### MCP (read-only, optional)

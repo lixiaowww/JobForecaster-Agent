@@ -32,7 +32,9 @@
   python run.py query-agent claims list [n]           # last n staked claims
   python run.py query-agent bls-backfill              # stamp SOC ground truth onto
   python run.py query-agent bls-backfill --dry-run    # KB rows (--refresh to pull
-                                                       # the annual OES flat file)
+                                                       # the annual OES flat file;
+                                                       # --no-citations for title
+                                                       # matches only)
 """
 from __future__ import annotations
 
@@ -293,6 +295,8 @@ def cmd_query_agent(
             cfg,
             dry_run=dry_run,
             refresh_employment="--refresh" in extra_args,
+            refresh_catalog="--refresh" in extra_args or "--refresh-catalog" in extra_args,
+            use_citations="--no-citations" not in extra_args,
         )
         print(json.dumps(summary, indent=2, ensure_ascii=False))
     elif subcmd == "ingest-logs":

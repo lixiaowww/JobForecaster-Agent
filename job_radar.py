@@ -1152,7 +1152,13 @@ def _append_to_kb(profile: dict, kb_path: str = "data/jobs_kb.json") -> None:
             if t.get("target_id") in existing_ids
             and kb_by_id[t["target_id"]].get("category") != "at_risk"
         ]
-        profile = {**profile, "transition_targets": valid_targets}
+        # Mark machine-generated rows permanently. services/bls_coverage.py
+        # refuses to read a SOC code out of an agent-written ``sources`` list:
+        # otherwise the agent writes the citation that buys its own row an
+        # external anchor, and that anchor then grades the agent's patches.
+        # A field on the row survives loss of the (gitignored) provenance
+        # ledger, so the exclusion does not depend on it.
+        profile = {**profile, "transition_targets": valid_targets, "origin": "agent"}
         kb.append(profile)
         with open(kb_path, "w", encoding="utf-8") as f:
             json.dump(kb, f, indent=2, ensure_ascii=False)
