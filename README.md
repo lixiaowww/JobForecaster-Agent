@@ -19,7 +19,7 @@ of historical extrapolation.
 [![CI](https://github.com/your-org/forecaster-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/forecaster-agent/actions)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![License](https://img.shields.io/badge/license-BUSL--1.1-green)
-![Tests](https://img.shields.io/badge/tests-260%20offline-brightgreen)
+![Tests](https://img.shields.io/badge/tests-276%20offline-brightgreen)
 
 ---
 
@@ -163,6 +163,58 @@ chosen rather than derived, and says so in the payload
 composite is a prior, written down so a track record can eventually say it was
 wrong — the same discipline the patch-claim stakes follow.
 
+### From industry tide to individual job
+
+Industry tightness cannot say whether *this* job is gettable — Tech and Legal
+share a reading.  `services/occupation_graph.py` supplies the missing side of
+the market: not how many openings there are, but **how many people could
+plausibly take them**.
+
+```
+competition(X) = adjacent labour pool feeding X  /  X's estimated openings
+                 (O*NET Related Occupations       (X's own headcount x its
+                  x BLS employment, tiered)        industry's vacancy rate)
+```
+
+It works because of the SOC anchoring above — before those codes there was
+nothing to join O*NET to.  On the current KB it splits an industry verdict
+apart: Tech is uniformly red ocean at industry level, but Data Scientist ranks
+in the top tercile (59 feeder occupations) while Software Engineer lands in the
+bottom one — a big enough occupation that its openings outrun the people who
+can walk into it.
+
+**Why not the KB's own `transition_targets`.**  Measured, that graph is a
+recommendation artefact, not a competition graph: 21% of its 238 edges point at
+just three targets, 37 of 92 rows have no in-edges, and 16 edges were written
+by this system's own `transition_evaluator`.  A prototype built on it ranked
+Public Policy Analyst the most contested job in the KB — four in-edges landing
+on a 5,580-person occupation — and reported *zero* competition for Accountant
+and Administrative Assistant.  The other KB adjacency candidates fail too, and
+the reasons are recorded in the module so nobody retries them: `required_skills`
+holds 365 distinct free-text strings across 382 slots (0.6% of job pairs share
+one), and the 8-dim `skill_vector` is all-positive and narrow, giving pairwise
+cosine a median of 0.88.
+
+Three honesty rules, all enforced in the payload:
+
+* **Verdicts are ranks, not thresholds.**  The raw ratio inherits the tier
+  weights and scales with how small an occupation is, so a fixed cutoff would
+  mostly measure size.  A cohort ranking is nearly invariant to those weights —
+  there is a test asserting the verdicts survive changing them.
+* **`not_modelled` never collapses into `blue_ocean`.**  No SOC anchor, no
+  employment figure, no known feeders — each is silence, and silence is not
+  good news.  31 of 92 rows are reported as unmodelled with the reason.
+* **Only occupational switchers are counted.**  New entrants from education are
+  invisible, so credentialed professions fed mainly by graduates read as less
+  contested than they are.  Lawyer lands in the bottom tercile for exactly that
+  reason, and `inflow_channel: "occupational_switchers_only"` says so.
+
+```bash
+python run.py competition            # ranked table
+python run.py competition --json
+python run.py competition --refresh  # re-download the O*NET relatedness graph
+```
+
 ### Where the external ground truth comes from
 
 `query-agent bls-backfill` stamps `soc_code` / `bls_employment` onto KB rows, which is
@@ -238,7 +290,7 @@ cp .env.example .env          # GROQ_API_KEY (free) or ANTHROPIC_API_KEY
 
 **Run the offline test suite first (no API key needed):**
 ```bash
-python -m pytest tests/       # 260 tests, ~25s, zero network
+python -m pytest tests/       # 276 tests, ~26s, zero network
 ```
 
 Then run a single cycle:

@@ -34,6 +34,9 @@
   python run.py tightness            # JOLTS labour-market tightness (red/blue ocean)
   python run.py tightness --refresh  # force a live BLS pull (needs BLS_API_KEY)
   python run.py tightness --json     # machine-readable
+  python run.py competition          # per-occupation entry competition (O*NET graph)
+  python run.py competition --json
+  python run.py competition --refresh   # re-download the O*NET relatedness graph
   python run.py query-agent bls-backfill --dry-run    # KB rows (--refresh to pull
                                                        # the annual OES flat file;
                                                        # --no-citations for title
@@ -206,6 +209,36 @@ def cmd_tightness(cfg, *, refresh: bool = False, as_json: bool = False):
               f"  {t['verdict']}")
     print("\nworker_leverage combines measured components with chosen weights; "
           "the components are the evidence, the composite is a prior.")
+
+
+def cmd_competition(cfg, *, refresh: bool = False, as_json: bool = False):
+    """Occupation-level entry competition: adjacent workers per estimated opening."""
+    import job_radar as _jr
+    from services import occupation_graph as og
+
+    if refresh:
+        og.refresh_onet_related()
+    jobs = _jr.load_knowledge_base(
+        cfg.get("job_radar", {}).get("kb_path", "data/jobs_kb.json"))
+    report = og.competition_report(jobs)
+
+    if as_json:
+        print(json.dumps(report, indent=2, ensure_ascii=False))
+        return
+
+    print(f"Entry competition — {report['source']}")
+    print(f"modelled {report['modelled']}, not modelled {report['not_modelled']}")
+    for reason, n in sorted(report["not_modelled_reasons"].items(),
+                            key=lambda kv: -kv[1]):
+        print(f"    {n:>3}  {reason}")
+    print()
+    for line in report["caveats"]:
+        print(f"  ! {line}")
+
+    print(f"\n{'ratio':>9}{'pct':>6}{'feeders':>9}{'openings':>11}  {'verdict':<11} occupation")
+    for x in report["occupations"]:
+        print(f"{x['competition_ratio']:>9.1f}{x['percentile']:>6.2f}{x['feeder_count']:>9}"
+              f"{x['est_openings']:>11,.0f}  {x['verdict']:<11} {x['title']} [{x['industry']}]")
 
 
 def cmd_query_agent(
@@ -438,6 +471,9 @@ def main():
     elif cmd == "tightness":
         cmd_tightness(cfg, refresh="--refresh" in sys.argv,
                       as_json="--json" in sys.argv)
+    elif cmd == "competition":
+        cmd_competition(cfg, refresh="--refresh" in sys.argv,
+                        as_json="--json" in sys.argv)
     elif cmd == "query-agent":
         sub = args[1] if len(args) > 1 else "audit"
         extra = args[2:] if len(args) > 2 else []
