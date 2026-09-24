@@ -43,7 +43,7 @@ def test_ci_config_mock_cycle_writes_site(tmp_path, monkeypatch):
 
     fc.set_mock_mode(True)
     cfg_dict = yaml.safe_load(ci.read_text(encoding="utf-8"))
-    cfg_dict.setdefault("model", "llama-3.3-70b-versatile")
+    cfg_dict.setdefault("model", "openai/gpt-oss-120b")
     cfg_dict.setdefault("evolution", {"n_bootstrap": 10})
     cfg_dict.setdefault("require_review", False)
     orchestrator.run_cycle(cfg_dict)

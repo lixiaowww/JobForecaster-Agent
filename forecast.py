@@ -33,7 +33,7 @@ PROMPT_PATH = Path(__file__).resolve().parent / "forecast_system.md"
 # ---------------------------------------------------------------------------
 
 _GROQ_ENDPOINT = "https://api.groq.com/openai/v1/chat/completions"
-_GROQ_DEFAULT_MODEL = "llama-3.3-70b-versatile"
+_GROQ_DEFAULT_MODEL = "openai/gpt-oss-120b"
 _ANTHROPIC_DEFAULT_MODEL = "claude-sonnet-4-6"
 _MOCK_MODE = False
 
